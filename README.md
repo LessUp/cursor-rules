@@ -1,4 +1,4 @@
-# LessUp/cursor-rules - 为 Cursor 定制的代码审查规则集
+# cursor-rules - 为 Cursor 定制的代码审查规则集
 
 ![GitHub stars](https://img.shields.io/github/stars/LessUp/cursor-rules?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/LessUp/cursor-rules?style=social)
@@ -8,7 +8,7 @@
 
 ---
 
-`LessUp/cursor-rules` 是一个为 [Cursor](https://cursor.sh/) 编辑器量身打造的代码审查与编码规范规则集。我们旨在帮助开发者和团队统一代码风格、提升代码质量，从而更高效地进行协作开发。
+`cursor-rules` 是一个为 [Cursor](https://cursor.sh/) 编辑器量身打造的代码审查与编码规范规则集。我们旨在帮助开发者和团队统一代码风格、提升代码质量，从而更高效地进行协作开发。
 
 如果您觉得这个项目对您有帮助，请给我们一个 ⭐️ Star，这是我们持续维护的最大动力！
 
