@@ -6,81 +6,64 @@ globs: prisma/**/*, src/db/**/*, **/*.prisma, supabase/**/*
 # 数据库最佳实践
 
 ## Prisma 设置
-- 使用正确的模式设计
-- 实现正确的迁移
-- 使用正确的关​​系定义
-- 配置正确的连接
-- 实现正确的种子数据填充
-- 使用正确的客户端设置
+- 在 `prisma/schema.prisma` 中定义数据模型，使用 `datasource` 和 `generator` 块
+- 使用 `npx prisma migrate dev --name <名称>` 创建迁移
+- 使用 `@relation` 显式定义模型间的一对多、多对多关系
+- 在 `DATABASE_URL` 中配置连接字符串，使用连接池参数（如 `?connection_limit=5`）
+- 在 `prisma/seed.ts` 中编写种子脚本，使用 `prisma db seed` 填充初始数据
+- 使用单例模式创建 `PrismaClient` 实例，避免开发环境中热重载导致的连接泄漏
 
 ## Prisma 模型
-- 使用正确的模型命名
-- 实现正确的关​​系
-- 使用正确的字段类型
-- 定义正确的索引
-- 实现正确的约束
-- 使用正确的枚举
+- 模型名使用 PascalCase 单数形式（`User`, `Order`, `Product`）
+- 使用 `@id` 和 `@default(cuid())` 或 `@default(uuid())` 定义主键
+- 选择合适的字段类型：`String`, `Int`, `Float`, `Boolean`, `DateTime`, `Json`
+- 使用 `@@index([fieldName])` 为高频查询字段创建索引
+- 使用 `@@unique([field1, field2])` 创建联合唯一约束
+- 使用 `enum` 定义状态等有限值集合（如 `enum OrderStatus { PENDING SHIPPED DELIVERED }`）
 
 ## Prisma 查询
-- 使用正确的查询优化
-- 实现正确的过滤
-- 使用正确的关​​系加载
-- 正确处理事务
-- 实现正确的分页
-- 使用正确的聚合
+- 使用 `select` 或 `include` 精确控制返回字段，避免过度获取数据
+- 使用 `where` 条件组合 `AND`, `OR`, `NOT` 进行复杂过滤
+- 使用 `include` 加载关联数据，避免手动多次查询（N+1 问题）
+- 使用 `prisma.$transaction()` 包裹需要原子性的多步操作
+- 使用 `skip` + `take` 实现分页，配合 `orderBy` 排序
+- 使用 `_count`, `_sum`, `_avg`, `_min`, `_max` 进行聚合查询
 
 ## Supabase 设置
-- 配置正确的项目设置
-- 实现正确的身份验证
-- 使用正确的数据库设置
-- 配置正确的存储
-- 实现正确的策略
-- 使用正确的客户端设置
+- 使用 `@supabase/supabase-js` 客户端库连接 Supabase 项目
+- 使用 Supabase Auth 内置的邮箱/密码、OAuth、Magic Link 认证
+- 在 Supabase Dashboard 或通过 SQL 迁移管理表结构
+- 使用 Supabase Storage 存储文件，配置 Bucket 的公开/私有策略
+- 通过 SQL 编辑器创建数据库函数和触发器
+- 使用 `SUPABASE_URL` 和 `SUPABASE_ANON_KEY` 环境变量初始化客户端
 
 ## Supabase 安全
-- 实现正确的 RLS 策略
-- 使用正确的身份验证
-- 配置正确的权限
-- 正确处理敏感数据
-- 实现正确的备份
-- 使用正确的加密
-
-## Supabase 查询
-- 使用正确的查询优化
-- 实现正确的过滤
-- 使用正确的连接
-- 正确处理实时数据
-- 实现正确的分页
-- 使用正确的函数
+- 为每张表启用行级安全策略（RLS），使用 `auth.uid()` 限制数据访问
+- 使用 `USING` 子句控制 SELECT 权限，`WITH CHECK` 子句控制写入权限
+- 区分 `anon` 和 `service_role` 密钥的使用场景，前端仅使用 `anon` 密钥
+- 使用 `pgcrypto` 扩展对敏感字段进行加密存储
+- 配置每日自动备份，定期测试备份恢复流程
 
 ## 数据库设计
-- 使用正确的规范化
-- 实现正确的索引
-- 使用正确的约束
-- 定义正确的关​​系
-- 实现正确的级联操作
-- 使用正确的数据类型
+- 遵循第三范式（3NF），在性能需要时适当反规范化
+- 为 WHERE、JOIN、ORDER BY 中频繁使用的列创建 B-tree 索引
+- 使用 `NOT NULL`、`CHECK`、`UNIQUE`、`FOREIGN KEY` 约束保证数据完整性
+- 使用外键定义表间关系，配合 `ON DELETE CASCADE` 或 `ON DELETE SET NULL`
+- 选择合适的数据类型：`UUID` 作为主键、`TIMESTAMPTZ` 存储时间、`JSONB` 存储非结构化数据
+- 为每张表添加 `created_at` 和 `updated_at` 审计字段
 
 ## 性能
-- 使用正确的连接池
-- 实现正确的缓存
-- 使用正确的查询优化
-- 正确处理 N+1 查询问题
-- 实现正确的批处理
-- 监控性能指标
+- 配置连接池（PgBouncer 或 Prisma 内置连接池），避免连接耗尽
+- 使用 Redis 缓存热点查询结果，设置合理的 TTL
+- 使用 `EXPLAIN ANALYZE` 分析慢查询，根据执行计划添加索引
+- 使用 `include` / `JOIN` 一次性加载关联数据，消除 N+1 查询
+- 使用 `createMany` / `updateMany` 批量操作替代循环中的单条操作
+- 监控慢查询日志和连接池使用率
 
 ## 安全
-- 使用正确的身份验证
-- 实现正确的授权
-- 正确处理敏感数据
-- 使用正确的加密
-- 实现正确的备份
-- 监控安全问题
-
-## 最佳实践
-- 遵循数据库约定
-- 使用正确的迁移
-- 实现正确的版本控制
-- 正确处理错误
-- 正确记录模式文档
-- 监控数据库健康状况
+- 使用参数化查询防止 SQL 注入，切勿拼接用户输入到 SQL 中
+- 在应用层实现基于角色的访问控制（RBAC），在数据库层配合 RLS
+- 对密码使用 bcrypt 哈希，对敏感数据使用 AES-256 加密
+- 使用 SSL/TLS 加密数据库连接
+- 实施定期自动备份策略，存储在异地冗余位置
+- 使用最小权限原则为应用创建专用数据库用户

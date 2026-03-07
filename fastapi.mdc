@@ -6,81 +6,75 @@ globs: **/*.py, app/**/*.py, api/**/*.py
 # FastAPI 最佳实践
 
 ## 项目结构
-- 使用正确的目录结构
-- 实现正确的模块组织
-- 使用正确的依赖注入
-- 按域组织路由
-- 实现正确的中间件
-- 使用正确的配置管理
+- 按领域（domain）组织代码：`app/users/`, `app/orders/`, `app/products/`
+- 每个领域包含 `router.py`, `schemas.py`, `service.py`, `models.py`
+- 将依赖项放在 `app/dependencies/` 中
+- 将配置放在 `app/core/config.py`，使用 Pydantic `BaseSettings`
+- 使用 `app/middleware/` 存放自定义中间件
+- 使用 `app/core/exceptions.py` 集中定义异常处理器
 
 ## API 设计
-- 使用正确的 HTTP 方法
-- 实现正确的状态码
-- 使用正确的请求/响应模型
-- 实现正确的验证
-- 使用正确的错误处理
-- 使用 OpenAPI 记录 API
+- GET 获取资源、POST 创建、PUT/PATCH 更新、DELETE 删除
+- 使用 `status.HTTP_201_CREATED` 等语义化状态码常量
+- 使用 Pydantic 模型定义 `response_model`，不要直接返回 ORM 对象
+- 使用 `Query()`, `Path()`, `Body()` 添加参数验证和描述
+- 使用 `HTTPException` 返回标准化错误响应
+- 利用 FastAPI 自动生成的 `/docs` (Swagger) 和 `/redoc` 文档
 
-## 模型
-- 使用 Pydantic 模型
-- 实现正确的验证
-- 使用正确的类型提示
-- 保持模型井然有序
-- 使用正确的继承
-- 实现正确的序列化
+## Pydantic 模型
+- 为创建、更新、响应分别定义模型：`UserCreate`, `UserUpdate`, `UserResponse`
+- 使用 `Field()` 添加验证规则和示例值
+- 使用严格的类型提示：`str`, `int`, `Optional[str]`, `list[str]`
+- 使用模型继承减少重复：`UserBase` -> `UserCreate` / `UserResponse`
+- 使用 `model_config = ConfigDict(from_attributes=True)` 启用 ORM 模式
+- 使用自定义验证器 `@field_validator` 处理复杂校验逻辑
 
 ## 数据库
-- 使用正确的 ORM (SQLAlchemy)
-- 实现正确的迁移
-- 使用正确的连接池
-- 实现正确的事务
-- 使用正确的查询优化
-- 正确处理数据库错误
+- 使用 SQLAlchemy 2.0+ 风格的异步引擎（`create_async_engine`）
+- 使用 Alembic 管理数据库迁移
+- 使用 `asyncpg` 或 `aiosqlite` 作为异步数据库驱动
+- 使用 `async with session.begin()` 管理事务
+- 使用 `selectinload()` 或 `joinedload()` 避免 N+1 查询
+- 在 `finally` 块或上下文管理器中确保连接释放
+
+## 依赖注入
+- 使用 `Depends()` 注入数据库会话、当前用户等公共依赖
+- 使用 `yield` 依赖来管理资源的创建和清理
+- 将认证逻辑封装为可复用的依赖（如 `get_current_user`）
+- 使用依赖覆盖（`app.dependency_overrides`）进行测试
 
 ## 认证
-- 实现正确的 JWT 认证
-- 使用正确的密码哈希
-- 实现正确的基于角色的访问控制
-- 使用正确的会话管理
-- 实现正确的 OAuth2
-- 正确处理认证错误
+- 使用 `python-jose` 实现 JWT 令牌签发和验证
+- 使用 `passlib[bcrypt]` 进行密码哈希
+- 实现 `OAuth2PasswordBearer` 作为认证方案
+- 使用 Scopes 实现细粒度的权限控制
+- 将敏感配置（SECRET_KEY 等）存入环境变量
 
 ## 安全
-- 实现正确的 CORS
-- 使用正确的速率限制
-- 实现正确的输入验证
-- 使用正确的安全头
-- 正确处理安全错误
-- 实现正确的日志记录
+- 使用 `CORSMiddleware` 配置允许的源、方法和头
+- 使用 `slowapi` 或自定义中间件实现速率限制
+- 对所有用户输入通过 Pydantic 模型自动验证
+- 使用 `starlette.middleware.trustedhost` 限制可信主机
+- 使用 `python-multipart` 处理文件上传时限制文件大小和类型
 
 ## 性能
-- 使用正确的缓存
-- 实现正确的异步操作
-- 使用正确的后台任务
-- 实现正确的连接池
-- 使用正确的查询优化
-- 监控性能指标
+- 路由处理函数使用 `async def`，数据库操作使用异步驱动
+- 使用 `BackgroundTasks` 处理邮件发送、日志记录等耗时操作
+- 使用 `redis` 或 `aiocache` 实现响应缓存
+- 配置数据库连接池大小（`pool_size`, `max_overflow`）
+- 使用 `orjson` 或 `ujson` 替代默认 JSON 序列化器以提升性能
 
 ## 测试
-- 编写正确的单元测试
-- 实现正确的集成测试
-- 使用正确的测试夹具
-- 实现正确的模拟
-- 测试错误场景
-- 使用正确的测试覆盖率
+- 使用 `pytest` + `httpx.AsyncClient` 测试异步端点
+- 使用 `pytest-asyncio` 支持异步测试函数
+- 使用 `TestClient` (同步) 或 `AsyncClient` (异步) 发送请求
+- 使用 `conftest.py` 定义可复用的 fixtures（测试数据库、测试客户端等）
+- 使用 `app.dependency_overrides` 注入模拟依赖
+- 使用 `pytest-cov` 确保核心业务逻辑的测试覆盖率
 
 ## 部署
-- 使用正确的 Docker 配置
-- 实现正确的 CI/CD
-- 使用正确的环境变量
-- 实现正确的日志记录
-- 使用正确的监控
-- 正确处理部署错误
-
-## 文档
-- 使用正确的文档字符串
-- 实现正确的 API 文档
-- 使用正确的类型提示
-- 保持文档更新
-- 记录错误场景
-- 使用正确的版本控制
+- 使用 `uvicorn` 作为 ASGI 服务器，生产环境配合 `gunicorn` 使用
+- 使用多阶段 Docker 构建减小镜像体积
+- 通过 `.env` 文件和 `python-dotenv` 管理环境变量
+- 使用结构化日志（`structlog` 或 `loguru`）
+- 配置健康检查端点 `/health` 用于容器编排
