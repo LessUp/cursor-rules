@@ -1,7 +1,6 @@
 ---
-description: 
-globs: "**/*.c,**/*.cpp,**/*.h,**/*.hpp,**/*.cxx,CMakeLists.txt,*.cmake,conanfile.txt,Makefil,**/*.cc"
-alwaysApply: false
+description: 现代 C++ 编程的最佳实践、命名规范和代码模式
+globs: "**/*.c,**/*.cpp,**/*.h,**/*.hpp,**/*.cxx,CMakeLists.txt,*.cmake,conanfile.txt,Makefile,**/*.cc"
 ---
 # C++ 编程指南
 
