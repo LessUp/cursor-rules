@@ -23,26 +23,44 @@
 
 我们目前支持以下语言和框架的规则集：
 
-| 分类 | 技术栈 |
-| :--- | :--- |
-| **编程语言** | `Python`, `Java`, `Go`, `C#`, `Ruby`, `PHP`, `C++`, `TypeScript` |
-| **后端框架** | `Node.js/Express`, `Spring`, `FastAPI`, `.NET`, `Ruby on Rails` |
-| **前端** | `React`, `Vue`, `Svelte`, `Next.js`, `Tailwind CSS`, `Medusa` |
-| **移动端** | `Android`, `iOS`, `WeChat Mini Program`, `NativeScript` |
-| **数据库** | `Database` (通用) |
-| **DevOps** | `Docker` |
-| **通用规范** | `Clean Code`, `Code Quality`, `Git Flow` |
+| 分类 | 技术栈 | 对应文件 |
+| :--- | :--- | :--- |
+| **编程语言** | Python, Java, Go, C#, Ruby, PHP, C++, TypeScript | `python.mdc`, `java.mdc`, `go.mdc`, `csharp-dotnet.mdc`, `ruby.mdc`, `php.mdc`, `cpp.mdc`, `typescript.mdc` |
+| **后端框架** | Node.js/Express, Spring, FastAPI | `node-express.mdc`, `spring.mdc`, `fastapi.mdc` |
+| **前端框架** | React, Vue, Svelte, Next.js, Tailwind CSS, Medusa | `react.mdc`, `vue.mdc`, `svelte.mdc`, `nextjs.mdc`, `tailwind.mdc`, `medusa.mdc` |
+| **移动端** | Android, iOS, 微信小程序, NativeScript | `android.mdc`, `ios.mdc`, `wechat-miniprogram.mdc`, `nativescript.mdc` |
+| **数据库** | Prisma, Supabase, 通用数据库设计 | `database.mdc` |
+| **DevOps** | Docker | `docker.mdc` |
+| **通用规范** | 整洁代码, 代码质量, Git Flow | `clean-code.mdc`, `codequality.mdc`, `gitflow.mdc` |
 
 ## 🚀 使用指南
 
-在 Cursor 编辑器中，您可以轻松地导入和使用这些规则。
+### 方式一：直接复制到项目（推荐）
 
-1.  打开 Cursor 编辑器。
-2.  按下 `Ctrl + K` (Windows/Linux) 或 `Cmd + K` (macOS)，然后输入 `@rules`。
-3.  选择“导入规则”。
-4.  将您需要的 `.mdc` 文件的内容复制并粘贴到输入框中。
+1. 在您的项目根目录下创建 `.cursor/rules/` 目录。
+2. 将您需要的 `.mdc` 文件复制到该目录中。
+3. Cursor 会自动识别并应用这些规则。
 
-例如，要导入 Python 规则，只需将 `python.mdc` 文件的内容粘贴进去即可。
+```bash
+# 示例：将 Python 和 Clean Code 规则复制到项目中
+mkdir -p .cursor/rules
+cp python.mdc clean-code.mdc .cursor/rules/
+```
+
+### 方式二：通过 Cursor 设置导入
+
+1. 打开 Cursor 编辑器。
+2. 进入 `Settings` > `Cursor Settings` > `Rules`。
+3. 点击 `Add Rule`，将 `.mdc` 文件的内容粘贴到规则编辑器中。
+
+### 规则文件说明
+
+每个 `.mdc` 文件包含两部分：
+
+- **Frontmatter**（`---` 之间的内容）：定义规则的描述和适用的文件类型（`globs`）。
+- **规则正文**：具体的编码规范和最佳实践指南。
+
+当 `globs` 不为空时，规则仅在匹配的文件类型上生效；当 `globs` 为空时，规则作为通用规范全局生效。
 
 ## 📜 许可证
 
@@ -59,6 +77,24 @@
   3.  提交您的更改 (`git commit -m 'Add some AmazingFeature'`)。
   4.  推送到分支 (`git push origin feature/AmazingFeature`)。
   5.  打开一个 Pull Request。
+
+### 编写新规则的规范
+
+如果您想贡献新的规则文件，请遵循以下格式：
+
+```markdown
+---
+description: 简短描述该规则集的用途
+globs: **/*.ext, src/**/*.ext
+---
+
+# 技术名称 最佳实践
+
+## 章节标题
+- 具体、可操作的指导（避免空泛的描述）
+- 推荐具体的工具、库和命令
+- 提供代码示例和配置参考
+```
 
 ## ❤️ 致谢
 
