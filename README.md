@@ -7,7 +7,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/LessUp/cursor-rules?style=flat-square&logo=github)](https://github.com/LessUp/cursor-rules/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/LessUp/cursor-rules?style=flat-square&logo=github)](https://github.com/LessUp/cursor-rules/network/members)
 [![License](https://img.shields.io/github/license/LessUp/cursor-rules?style=flat-square)](LICENSE)
-[![Rules](https://img.shields.io/badge/rules-28-blue?style=flat-square)](#-支持的技术栈)
+[![Rules](https://img.shields.io/badge/rules-26-blue?style=flat-square)](#-支持的技术栈)
 
 帮助开发者和团队统一代码风格、提升代码质量，从而更高效地进行协作开发。
 
@@ -23,6 +23,7 @@
 - [支持的技术栈](#-支持的技术栈)
 - [快速开始](#-快速开始)
 - [规则文件说明](#-规则文件说明)
+- [验证规则文件](#-验证规则文件)
 - [贡献指南](#-贡献指南)
 - [许可证](#-许可证)
 - [致谢](#-致谢)
@@ -144,8 +145,41 @@ globs: **/*.py, src/**/*.py          # 适用的文件类型
 
 - **`globs` 不为空** → 规则仅在匹配的文件类型上生效（如 `**/*.py` 只对 Python 文件生效）。
 - **`globs` 为空** → 规则作为通用规范全局生效。
+- 当前 validator 接受两种 `globs` 写法：
+  - 不带整体引号的逗号分隔字符串：`**/*.py, src/**/*.py`
+  - 带整体引号的逗号分隔字符串：`"**/*.c,**/*.cpp,Makefile"`
+
+## ✅ 验证规则文件
+
+仓库内置了一个零依赖的 validator，用于检查根目录下 `.mdc` 规则文件的基本结构是否正确。
+
+```bash
+node scripts/validate-rules.mjs
+```
+
+也可以只校验指定文件：
+
+```bash
+node scripts/validate-rules.mjs python.mdc medusa.mdc
+```
+
+validator 默认会检查：
+- 文件是否以 `---` frontmatter 开始并正确结束
+- 是否包含 `description` 和 `globs`
+- `description` 是否为空
+- 非空 `globs` 是否能解析为有效的逗号分隔条目
+- frontmatter 后是否存在正文
+- 正文中是否至少包含一个 H1 标题
+
+validator 还会给出非阻塞 warning，例如：
+- 首个 H1 之前出现正文内容
+- 同一文件中存在多个 H1
+- 出现未知 frontmatter 字段
 
 ## 🤝 贡献指南
+
+在提交 Pull Request 前，建议先运行一次 validator，确保新增或修改的规则文件符合仓库约定。
+
 
 我们非常欢迎社区的贡献！
 
