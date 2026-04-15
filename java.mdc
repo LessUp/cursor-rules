@@ -1,6 +1,6 @@
 ---
 description: 现代软件开发的 Java 最佳实践和模式
-globs: "**/*.java", "src/**/*.java", "tests/**/*.java"
+globs: **/*.java, src/**/*.java, tests/**/*.java
 ---
 
 # Java 最佳实践

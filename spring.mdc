@@ -1,6 +1,6 @@
 ---
 description: 使用 Spring 和 Spring Boot 的现代软件开发的最佳实践和模式
-globs: "**/*.java", "src/main/java/**/*.java", "src/test/java/**/*.java"
+globs: **/*.java, src/main/java/**/*.java, src/test/java/**/*.java
 ---
 
 # Spring & Spring Boot 最佳实践

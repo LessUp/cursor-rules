@@ -1,6 +1,6 @@
 ---
 description: 使用 Swift 和 SwiftUI 进行现代 iOS 开发的最佳实践和模式
-globs: "**/*.swift"
+globs: **/*.swift
 ---
 
 # iOS (Swift & SwiftUI) 最佳实践

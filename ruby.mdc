@@ -1,6 +1,6 @@
 ---
 description: 使用 Ruby 和 Ruby on Rails 的现代 Web 开发最佳实践
-globs: "**/*.rb", "app/**/*.rb", "config/**/*.rb"
+globs: **/*.rb, app/**/*.rb, config/**/*.rb
 ---
 
 # Ruby & Rails 最佳实践

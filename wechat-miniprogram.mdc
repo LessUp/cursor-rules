@@ -1,6 +1,6 @@
 ---
 description: 微信小程序开发的最佳实践和常见模式
-globs: "**/*.wxml", "**/*.wxss", "**/*.js", "**/*.json"
+globs: **/*.wxml, **/*.wxss, **/*.js, **/*.json
 ---
 
 # 微信小程序最佳实践
@@ -23,7 +23,7 @@ globs: "**/*.wxml", "**/*.wxss", "**/*.js", "**/*.json"
 - 启用并使用组件样式隔离（`styleIsolation`）
 
 ## JavaScript (逻辑层)
-- **`setData` 优化**: 
+- **`setData` 优化**:
   - 避免频繁调用 `setData`，合并多次调用
   - 只传递需要变更的数据，不要传递整个 `data` 对象
   - 避免传递过大的数据

@@ -1,6 +1,6 @@
 ---
 description: 使用 Kotlin 进行现代 Android 开发的最佳实践和模式
-globs: "**/*.kt", "app/src/main/java/**/*.kt"
+globs: **/*.kt, app/src/main/java/**/*.kt
 ---
 
 # Android (Kotlin) 最佳实践

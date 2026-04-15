@@ -1,6 +1,6 @@
 ---
 description: 使用 PHP 和 Laravel 框架的现代 Web 开发最佳实践
-globs: "**/*.php", "app/**/*.php", "routes/**/*.php"
+globs: **/*.php, app/**/*.php, routes/**/*.php
 ---
 
 # PHP & Laravel 最佳实践

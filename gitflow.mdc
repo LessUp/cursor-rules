@@ -1,6 +1,6 @@
 ---
 description: Gitflow 工作流规则。在执行 git 操作时应应用这些规则。
-globs: 
+globs:
 ---
 # Gitflow 工作流规则
 
@@ -32,7 +32,7 @@ globs:
 
 ### release/*
 - 分支来源: develop
-- 合并回: 
+- 合并回:
   - main
   - develop
 - 命名约定: release/vX.Y.Z
@@ -109,4 +109,4 @@ globs:
 5. 合并到 main 后：
    - 标记发布版本
    - 合并回 develop
-   - 删除 hotfix 分支 
+   - 删除 hotfix 分支

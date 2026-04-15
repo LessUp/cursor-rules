@@ -1,6 +1,6 @@
 ---
 description: 现代软件开发的 Go (Golang) 最佳实践和模式
-globs: "**/*.go", "cmd/**/*.go", "pkg/**/*.go"
+globs: **/*.go, cmd/**/*.go, pkg/**/*.go
 ---
 
 # Go (Golang) 最佳实践

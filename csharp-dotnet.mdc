@@ -1,6 +1,6 @@
 ---
 description: 使用 C# 和 .NET 的现代软件开发最佳实践和模式
-globs: "**/*.cs", "src/**/*.cs"
+globs: **/*.cs, src/**/*.cs
 ---
 
 # C# 和 .NET 最佳实践

@@ -1,6 +1,6 @@
 ---
 description: 编写高效、安全的 Dockerfile 的最佳实践
-globs: "**/Dockerfile"
+globs: **/Dockerfile
 ---
 
 # Dockerfile 最佳实践
