@@ -1,5 +1,5 @@
 ---
-description: Medusa 规则和最佳实践。在使用 Medusa 构建应用程序时应遵循这些规则。
+description: Medusa 电子商务框架最佳实践
 globs: **/*.tsx, **/*.ts, src/**/*.ts, src/**/*.tsx, src/**/*.js, src/**/*.jsx
 ---
 

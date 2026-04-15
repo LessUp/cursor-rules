@@ -1,6 +1,6 @@
 ---
 description: NativeScript 移动应用的最佳实践和模式
-globs: **/*.tsx, **/*.ts, **/*.vue, **/*.svelte, src/**/*.ts, app/**/*.ts, src/**/*.tsx, app/**/*.tsx, src/**/*.vue, app/**/*.vue, src/**/*.svelte
+globs: **/*.tsx, **/*.ts, **/*.vue, **/*.svelte
 ---
 
 # NativeScript 最佳实践

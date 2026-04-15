@@ -154,12 +154,20 @@ globs: **/*.py, src/**/*.py          # 适用的文件类型
 仓库内置了一个零依赖的 validator，用于检查根目录下 `.mdc` 规则文件的基本结构是否正确。
 
 ```bash
+# 方式一：使用 npm（推荐）
+npm test
+# 或
+npm run validate
+
+# 方式二：直接使用 Node
 node scripts/validate-rules.mjs
 ```
 
 也可以只校验指定文件：
 
 ```bash
+npm test -- python.mdc medusa.mdc
+# 或
 node scripts/validate-rules.mjs python.mdc medusa.mdc
 ```
 
