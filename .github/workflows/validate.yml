@@ -23,15 +23,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
 
       - name: Validate MDC rule files
         run: node scripts/validate-rules.mjs
-
-      - name: Check file permissions
-        run: |
-          if [ -x scripts/validate-rules.mjs ]; then
-            echo "✅ Script has executable permission"
-          else
-            echo "⚠️ Script missing executable permission"
-          fi

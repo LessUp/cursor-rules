@@ -3,62 +3,360 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cursor Rules - Code Review & Coding Standards</title>
-    <meta name="description" content="A curated collection of code review and coding standard rules for Cursor editor">
+    <title>Cursor Rules - Code Review & Coding Standards Collection</title>
+    <meta name="description" content="A curated collection of 26 code review and coding standard rules for Cursor editor. Unify code style, improve quality, and boost team productivity.">
+    <meta name="keywords" content="cursor, cursor-rules, code review, coding standards, best practices, ai coding">
+    <meta name="author" content="LessUp">
     <link rel="canonical" href="https://github.com/LessUp/cursor-rules">
-    <meta http-equiv="refresh" content="0; url=https://github.com/LessUp/cursor-rules">
+    <meta property="og:title" content="Cursor Rules - Code Review & Coding Standards">
+    <meta property="og:description" content="A curated collection of 26 code review and coding standard rules for Cursor editor.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lessup.github.io/cursor-rules/">
+    <meta property="og:site_name" content="Cursor Rules">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cursor Rules - Code Review & Coding Standards">
+    <meta name="twitter:description" content="A curated collection of 26 code review and coding standard rules for Cursor editor.">
     <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #22d3ee;
+            --success: #10b981;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans SC', Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
         }
-        .container {
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            padding: 4rem 2rem;
             text-align: center;
-            padding: 2rem;
-            max-width: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        .hero-content { position: relative; z-index: 1; }
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
         }
         h1 {
             font-size: 2.5rem;
+            font-weight: 700;
             margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        p {
+        .tagline {
             font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 2rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto 2rem;
         }
         .btn {
-            display: inline-block;
-            background: white;
-            color: #667eea;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--text-primary);
+            color: var(--primary);
             padding: 1rem 2rem;
-            border-radius: 8px;
+            border-radius: 12px;
             text-decoration: none;
             font-weight: 600;
+            font-size: 1.1rem;
             transition: transform 0.2s, box-shadow 0.2s;
+            margin: 0.5rem;
         }
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
-        .redirect-notice {
-            margin-top: 1.5rem;
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--text-primary);
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .stat-label {
             font-size: 0.9rem;
-            opacity: 0.7;
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .feature-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .feature-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .feature-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        .tech-item {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.2s;
+        }
+        .tech-item:hover {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.1);
+        }
+        .tech-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .quickstart {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .quickstart h3 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        pre {
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        code {
+            color: var(--accent);
+        }
+        .comment { color: #6e7681; }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+        }
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .lang-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .hero { padding: 3rem 1.5rem; }
+            .stats { gap: 1rem; }
+            .stat-number { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
+    <section class="hero">
+        <button class="lang-toggle" onclick="toggleLang()">EN / 中</button>
+        <div class="hero-content">
+            <div class="logo">🎯</div>
+            <h1>Cursor Rules</h1>
+            <p class="tagline" data-en="A curated collection of code review and coding standard rules for Cursor editor. Unify code style, improve quality, and boost team productivity." data-zh="专为 Cursor 编辑器打造的代码审查与编码规范规则集。统一代码风格，提升代码质量，加速团队协作。">
+                A curated collection of code review and coding standard rules for Cursor editor. Unify code style, improve quality, and boost team productivity.
+            </p>
+            <div>
+                <a href="https://github.com/LessUp/cursor-rules" class="btn">
+                    <span>📦</span> View on GitHub
+                </a>
+                <a href="https://github.com/LessUp/cursor-rules/stargazers" class="btn btn-secondary">
+                    <span>⭐</span> Star
+                </a>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">26</div>
+                    <div class="stat-label" data-en="Rule Files" data-zh="规则文件">Rule Files</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label" data-en="Technologies" data-zh="技术栈">Technologies</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">MIT</div>
+                    <div class="stat-label" data-en="License" data-zh="许可证">License</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <div class="container">
-        <h1>Cursor Rules</h1>
-        <p>A curated collection of code review and coding standard rules for Cursor editor</p>
-        <a href="https://github.com/LessUp/cursor-rules" class="btn">View on GitHub</a>
-        <p class="redirect-notice">Redirecting to GitHub...</p>
+        <h2 class="section-title" data-en="✨ Key Features" data-zh="✨ 核心特性">✨ Key Features</h2>
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">✍️</div>
+                <h3 class="feature-title" data-en="Unified Standards" data-zh="统一规范">Unified Standards</h3>
+                <p class="feature-desc" data-en="Follow industry-recognized best practices to ensure consistent team code style." data-zh="遵循业界广泛认可的最佳实践，确保团队代码风格一致。">Follow industry-recognized best practices to ensure consistent team code style.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3 class="feature-title" data-en="Ready to Use" data-zh="开箱即用">Ready to Use</h3>
+                <p class="feature-desc" data-en="Simple configuration to enable rules in Cursor editor with automatic recognition." data-zh="只需简单配置，Cursor 编辑器即可自动识别并应用规则。">Simple configuration to enable rules in Cursor editor with automatic recognition.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💡</div>
+                <h3 class="feature-title" data-en="Smart Review" data-zh="智能审查">Smart Review</h3>
+                <p class="feature-desc" data-en="Leverage Cursor's AI capabilities for real-time code improvement suggestions." data-zh="结合 Cursor 的 AI 能力，实时获得代码改进建议。">Leverage Cursor's AI capabilities for real-time code improvement suggestions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧩</div>
+                <h3 class="feature-title" data-en="Highly Extensible" data-zh="高度可扩展">Highly Extensible</h3>
+                <p class="feature-desc" data-en="Easily customize or add new rules to meet team-specific needs." data-zh="轻松定制或添加新规则，满足团队个性化需求。">Easily customize or add new rules to meet team-specific needs.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title" data-en="🛠️ Supported Tech Stack" data-zh="🛠️ 支持的技术栈">🛠️ Supported Tech Stack</h2>
+        <div class="tech-grid">
+            <div class="tech-item"><span class="tech-name">Python</span></div>
+            <div class="tech-item"><span class="tech-name">Java</span></div>
+            <div class="tech-item"><span class="tech-name">Go</span></div>
+            <div class="tech-item"><span class="tech-name">TypeScript</span></div>
+            <div class="tech-item"><span class="tech-name">C#/.NET</span></div>
+            <div class="tech-item"><span class="tech-name">C++</span></div>
+            <div class="tech-item"><span class="tech-name">Ruby</span></div>
+            <div class="tech-item"><span class="tech-name">PHP</span></div>
+            <div class="tech-item"><span class="tech-name">React</span></div>
+            <div class="tech-item"><span class="tech-name">Vue</span></div>
+            <div class="tech-item"><span class="tech-name">Svelte</span></div>
+            <div class="tech-item"><span class="tech-name">Next.js</span></div>
+            <div class="tech-item"><span class="tech-name">Tailwind</span></div>
+            <div class="tech-item"><span class="tech-name">Node.js</span></div>
+            <div class="tech-item"><span class="tech-name">Spring</span></div>
+            <div class="tech-item"><span class="tech-name">FastAPI</span></div>
+            <div class="tech-item"><span class="tech-name">Android</span></div>
+            <div class="tech-item"><span class="tech-name">iOS</span></div>
+            <div class="tech-item"><span class="tech-name">Docker</span></div>
+            <div class="tech-item"><span class="tech-name">Database</span></div>
+        </div>
+
+        <div class="quickstart">
+            <h3 data-en="🚀 Quick Start" data-zh="🚀 快速开始">🚀 Quick Start</h3>
+            <pre><code><span class="comment"># Create rules directory in your project</span>
+<span class="keyword">mkdir</span> -p .cursor/rules
+
+<span class="comment"># Copy the rules you need (e.g., Python + Clean Code)</span>
+<span class="keyword">cp</span> cursor-rules/python.mdc .cursor/rules/
+<span class="keyword">cp</span> cursor-rules/clean-code.mdc .cursor/rules/
+
+<span class="comment"># Cursor will automatically recognize and apply these rules ✅</span></code></pre>
+        </div>
+
+        <h2 class="section-title" data-en="📄 Rule File Format" data-zh="📄 规则文件格式">📄 Rule File Format</h2>
+        <div class="quickstart">
+            <pre><code><span class="comment">---</span>
+<span class="keyword">description:</span> <span class="string">Brief description of the rule set purpose</span>
+<span class="keyword">globs:</span> <span class="string">**/*.py, src/**/*.py</span>  <span class="comment"># Applicable file types</span>
+<span class="comment">---</span>
+
+<span class="keyword"># Technology Name Best Practices</span>
+
+<span class="comment">## Section Title</span>
+<span class="comment">- Specific, actionable guidance</span>
+<span class="comment">- Recommend specific tools, libraries, and commands</span>
+<span class="comment">- Provide code examples and configuration references</span></code></pre>
+        </div>
     </div>
+
+    <footer>
+        <p data-en="Made with ❤️ by" data-zh="由 ❤️ 制作">Made with ❤️ by <a href="https://github.com/LessUp">LessUp</a></p>
+        <p style="margin-top: 0.5rem;">
+            <a href="https://github.com/LessUp/cursor-rules">GitHub</a> ·
+            <a href="https://github.com/LessUp/cursor-rules/blob/master/LICENSE">MIT License</a> ·
+            <a href="https://github.com/LessUp/cursor-rules/stargazers">⭐ Star</a>
+        </p>
+    </footer>
+
+    <script>
+        let currentLang = 'en';
+        function toggleLang() {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            document.querySelectorAll('[data-en][data-zh]').forEach(el => {
+                el.textContent = el.getAttribute(`data-${currentLang}`);
+            });
+        }
+    </script>
 </body>
 </html>
