@@ -2,20 +2,237 @@
 
 # cursor-rules
 
-**为 [Cursor](https://cursor.sh/) 编辑器量身打造的代码审查与编码规范规则集**
+**A curated collection of code review and coding standard rules tailored for [Cursor](https://cursor.sh/) editor**
+
+[English](#english) | [中文](#中文)
 
 [![GitHub stars](https://img.shields.io/github/stars/LessUp/cursor-rules?style=flat-square&logo=github)](https://github.com/LessUp/cursor-rules/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/LessUp/cursor-rules?style=flat-square&logo=github)](https://github.com/LessUp/cursor-rules/network/members)
 [![License](https://img.shields.io/github/license/LessUp/cursor-rules?style=flat-square)](LICENSE)
-[![Rules](https://img.shields.io/badge/rules-26-blue?style=flat-square)](#-支持的技术栈)
+[![Rules](https://img.shields.io/badge/rules-26-blue?style=flat-square)](#-supported-tech-stack)
 
-帮助开发者和团队统一代码风格、提升代码质量，从而更高效地进行协作开发。
+Help developers and teams unify code style and improve code quality for more efficient collaborative development.
 
-如果您觉得这个项目有帮助，请给我们一个 ⭐️ Star，这是我们持续维护的最大动力！
+If you find this project helpful, please give us a ⭐️ Star — it's our biggest motivation to keep maintaining!
 
 </div>
 
 ---
+
+<a name="english"></a>
+
+## 📖 Table of Contents
+
+- [Key Features](#-key-features)
+- [Supported Tech Stack](#-supported-tech-stack)
+- [Quick Start](#-quick-start)
+- [Rule File Format](#-rule-file-format)
+- [Validation](#-validation)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Acknowledgments](#-acknowledgments)
+
+## ✨ Key Features
+
+| | Feature | Description |
+| :---: | :--- | :--- |
+| ✍️ | **Unified Standards** | Follows industry-recognized best practices to ensure consistent team code style |
+| 🚀 | **Ready to Use** | Simple configuration to enable rules in Cursor editor |
+| 💡 | **Smart Review** | Leverages Cursor's AI capabilities for real-time code improvement suggestions |
+| 🧩 | **Highly Extensible** | Easily customize or add new rules to meet team-specific needs |
+
+## 🛠️ Supported Tech Stack
+
+### Programming Languages
+
+| Tech | Rule File |
+| :--- | :--- |
+| Python | [`python.mdc`](python.mdc) |
+| Java | [`java.mdc`](java.mdc) |
+| Go | [`go.mdc`](go.mdc) |
+| C# / .NET | [`csharp-dotnet.mdc`](csharp-dotnet.mdc) |
+| Ruby | [`ruby.mdc`](ruby.mdc) |
+| PHP | [`php.mdc`](php.mdc) |
+| C++ | [`cpp.mdc`](cpp.mdc) |
+| TypeScript | [`typescript.mdc`](typescript.mdc) |
+
+### Backend Frameworks
+
+| Tech | Rule File |
+| :--- | :--- |
+| Node.js / Express | [`node-express.mdc`](node-express.mdc) |
+| Spring | [`spring.mdc`](spring.mdc) |
+| FastAPI | [`fastapi.mdc`](fastapi.mdc) |
+
+### Frontend Frameworks
+
+| Tech | Rule File |
+| :--- | :--- |
+| React | [`react.mdc`](react.mdc) |
+| Vue | [`vue.mdc`](vue.mdc) |
+| Svelte | [`svelte.mdc`](svelte.mdc) |
+| Next.js | [`nextjs.mdc`](nextjs.mdc) |
+| Tailwind CSS | [`tailwind.mdc`](tailwind.mdc) |
+| Medusa | [`medusa.mdc`](medusa.mdc) |
+
+### Mobile Development
+
+| Tech | Rule File |
+| :--- | :--- |
+| Android | [`android.mdc`](android.mdc) |
+| iOS | [`ios.mdc`](ios.mdc) |
+| WeChat Mini Program | [`wechat-miniprogram.mdc`](wechat-miniprogram.mdc) |
+| NativeScript | [`nativescript.mdc`](nativescript.mdc) |
+
+### Infrastructure & Engineering
+
+| Tech | Rule File |
+| :--- | :--- |
+| Database Design | [`database.mdc`](database.mdc) |
+| Docker | [`docker.mdc`](docker.mdc) |
+
+### General Standards
+
+| Tech | Rule File |
+| :--- | :--- |
+| Clean Code | [`clean-code.mdc`](clean-code.mdc) |
+| Code Quality | [`codequality.mdc`](codequality.mdc) |
+| Git Flow | [`gitflow.mdc`](gitflow.mdc) |
+
+## 🚀 Quick Start
+
+### Method 1: Copy Directly to Project (Recommended)
+
+```bash
+# 1. Create rules directory in project root
+mkdir -p .cursor/rules
+
+# 2. Copy required rule files (e.g., Python + Clean Code)
+cp path/to/cursor-rules/python.mdc .cursor/rules/
+cp path/to/cursor-rules/clean-code.mdc .cursor/rules/
+
+# Cursor will automatically recognize and apply these rules ✅
+```
+
+### Method 2: Git Submodule (Easy Updates)
+
+```bash
+# 1. Add this repo as a submodule
+git submodule add https://github.com/LessUp/cursor-rules.git .cursor/cursor-rules
+
+# 2. Symlink required rules to rules directory
+mkdir -p .cursor/rules
+ln -s ../cursor-rules/python.mdc .cursor/rules/python.mdc
+
+# Update later
+git submodule update --remote
+```
+
+### Method 3: Import via Cursor Settings
+
+1. Open Cursor editor.
+2. Go to **Settings** → **Cursor Settings** → **Rules**.
+3. Click **Add Rule** and paste the `.mdc` file content into the rule editor.
+
+## 📄 Rule File Format
+
+Each `.mdc` file consists of two parts:
+
+```markdown
+---
+description: Brief description of the rule set purpose
+globs: **/*.py, src/**/*.py          # Applicable file types
+---
+
+# Rule Body: Specific coding standards and best practices
+```
+
+- **`globs` not empty** → Rule only applies to matching file types (e.g., `**/*.py` only affects Python files).
+- **`globs` empty** → Rule applies globally as a general standard.
+- The validator accepts two `globs` formats:
+  - Unquoted comma-separated string: `**/*.py, src/**/*.py`
+  - Quoted comma-separated string: `"**/*.c,**/*.cpp,Makefile"`
+
+## ✅ Validation
+
+The repo includes a zero-dependency validator to check `.mdc` rule files structure.
+
+```bash
+# Method 1: Using npm (recommended)
+npm test
+# or
+npm run validate
+
+# Method 2: Direct Node execution
+node scripts/validate-rules.mjs
+```
+
+Validate specific files:
+
+```bash
+npm test -- python.mdc medusa.mdc
+# or
+node scripts/validate-rules.mjs python.mdc medusa.mdc
+```
+
+The validator checks:
+- File starts with `---` frontmatter and ends correctly
+- Contains `description` and `globs`
+- `description` is not empty
+- Non-empty `globs` parses as valid comma-separated entries
+- Body exists after frontmatter
+- Body contains at least one H1 heading
+
+The validator also gives non-blocking warnings:
+- Content before first H1
+- Multiple H1 headings in same file
+- Unknown frontmatter fields
+
+## 🤝 Contributing
+
+Before submitting a Pull Request, run the validator to ensure new or modified rule files comply with repo conventions.
+
+We welcome community contributions!
+
+### How to Contribute
+
+- **Submit Issues**: Found a problem or have a new idea? Tell us in [Issues](https://github.com/LessUp/cursor-rules/issues).
+- **Submit Pull Requests**:
+  1. Fork this repository
+  2. Create feature branch: `git checkout -b feature/AmazingFeature`
+  3. Commit changes: `git commit -m 'Add some AmazingFeature'`
+  4. Push branch: `git push origin feature/AmazingFeature`
+  5. Open a Pull Request
+
+### Rule Writing Guidelines
+
+When contributing new rules, follow this template:
+
+```markdown
+---
+description: Brief description of the rule set purpose
+globs: **/*.ext, src/**/*.ext
+---
+
+# Technology Name Best Practices
+
+## Section Title
+- Specific, actionable guidance (avoid vague descriptions)
+- Recommend specific tools, libraries, and commands
+- Provide code examples and configuration references
+```
+
+## 📜 License
+
+This project is licensed under [MIT](LICENSE) — free to use, modify, and distribute.
+
+## ❤️ Acknowledgments
+
+Thanks to all developers who contributed to this project!
+
+---
+
+<a name="中文"></a>
 
 ## 📖 目录
 
@@ -231,6 +448,6 @@ globs: **/*.ext, src/**/*.ext
 
 <div align="center">
 
-**喜欢这个项目吗？请给我们一个 [⭐️ Star](https://github.com/LessUp/cursor-rules/stargazers)！**
+**Like this project? Give us a [⭐️ Star](https://github.com/LessUp/cursor-rules/stargazers)!**
 
 </div>
