@@ -3,76 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Page Not Found | Cursor Rules</title>
+    <title>404 - Page Not Found | Cursor Rules Gallery</title>
     <style>
         :root {
             --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --primary-light: #e0e7ff;
             --secondary: #8b5cf6;
-            --bg-dark: #0f172a;
-            --text-primary: #f8fafc;
+            --bg: #fafafa;
+            --bg-card: #ffffff;
+            --text-main: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --radius-lg: 12px;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-dark);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(180deg, var(--primary-light) 0%, var(--bg) 50%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-primary);
+            color: var(--text-main);
+            line-height: 1.6;
         }
+        
         .container {
             text-align: center;
             padding: 2rem;
+            max-width: 500px;
         }
+        
+        .error-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+        
         .error-code {
-            font-size: 8rem;
-            font-weight: 700;
+            font-size: 6rem;
+            font-weight: 800;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             line-height: 1;
+            margin-bottom: 0.5rem;
         }
-        h2 {
+        
+        h1 {
             font-size: 1.5rem;
-            margin: 1rem 0 2rem;
-            opacity: 0.9;
-        }
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            text-decoration: none;
             font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin: 0.5rem;
+            margin-bottom: 0.5rem;
         }
-        .btn:hover {
+        
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-hover);
             transform: translateY(-2px);
-            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+            box-shadow: var(--shadow-md);
         }
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary);
+        
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border);
         }
-        .message {
-            margin-top: 2rem;
-            opacity: 0.7;
+        
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+        
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @media (max-width: 480px) {
+            .error-code {
+                font-size: 4rem;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <a href="/cursor-rules/" class="logo">
+            <div class="logo-icon">🎯</div>
+            <span class="logo-text">Cursor Rules</span>
+        </a>
+        
+        <div class="error-icon">🔍</div>
         <div class="error-code">404</div>
-        <h2>Page Not Found / 页面未找到</h2>
-        <div>
-            <a href="https://lessup.github.io/cursor-rules/" class="btn">🏠 Home</a>
-            <a href="https://github.com/LessUp/cursor-rules" class="btn btn-outline">📦 GitHub</a>
+        <h1>Page Not Found</h1>
+        <p>The page you're looking for doesn't exist or has been moved.</p>
+        
+        <div class="buttons">
+            <a href="/cursor-rules/" class="btn btn-primary">
+                <span>🏠</span> Back to Home
+            </a>
+            <a href="https://github.com/LessUp/cursor-rules" class="btn btn-secondary" target="_blank" rel="noopener">
+                <span>📦</span> GitHub
+            </a>
         </div>
-        <p class="message">The page you're looking for doesn't exist or has been moved.</p>
     </div>
 </body>
 </html>
