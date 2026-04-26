@@ -1,0 +1,312 @@
+[
+  {
+    "slug": "android",
+    "fileName": "android.mdc",
+    "title": "Android (Kotlin) 最佳实践",
+    "description": "使用 Kotlin 进行现代 Android 开发的最佳实践和模式",
+    "globs": [
+      "**/*.kt",
+      "app/src/main/java/**/*.kt"
+    ],
+    "category": "mobile"
+  },
+  {
+    "slug": "clean-code",
+    "fileName": "clean-code.mdc",
+    "title": "整洁代码指南",
+    "description": "编写干净、可维护且易于人类阅读的代码的指南。在编写或审查代码时应用这些规则，以确保一致性和质量。",
+    "globs": [],
+    "category": "general"
+  },
+  {
+    "slug": "codequality",
+    "fileName": "codequality.mdc",
+    "title": "代码质量指南",
+    "description": "代码质量指南",
+    "globs": [],
+    "category": "general"
+  },
+  {
+    "slug": "cpp",
+    "fileName": "cpp.mdc",
+    "title": "C++ 编程指南",
+    "description": "现代 C++ 编程的最佳实践、命名规范和代码模式",
+    "globs": [
+      "**/*.c",
+      "**/*.cpp",
+      "**/*.h",
+      "**/*.hpp",
+      "**/*.cxx",
+      "CMakeLists.txt",
+      "*.cmake",
+      "conanfile.txt",
+      "Makefile",
+      "**/*.cc"
+    ],
+    "category": "language"
+  },
+  {
+    "slug": "csharp-dotnet",
+    "fileName": "csharp-dotnet.mdc",
+    "title": "C# 和 .NET 最佳实践",
+    "description": "使用 C# 和 .NET 的现代软件开发最佳实践和模式",
+    "globs": [
+      "**/*.cs",
+      "src/**/*.cs"
+    ],
+    "category": "language"
+  },
+  {
+    "slug": "database",
+    "fileName": "database.mdc",
+    "title": "数据库最佳实践",
+    "description": "数据库最佳实践，重点关注 Prisma 和 Supabase 集成",
+    "globs": [
+      "prisma/**/*",
+      "src/db/**/*",
+      "**/*.prisma",
+      "supabase/**/*"
+    ],
+    "category": "engineering"
+  },
+  {
+    "slug": "docker",
+    "fileName": "docker.mdc",
+    "title": "Dockerfile 最佳实践",
+    "description": "编写高效、安全的 Dockerfile 的最佳实践",
+    "globs": [
+      "**/Dockerfile"
+    ],
+    "category": "engineering"
+  },
+  {
+    "slug": "fastapi",
+    "fileName": "fastapi.mdc",
+    "title": "FastAPI 最佳实践",
+    "description": "FastAPI 最佳实践和模式，用于构建现代 Python Web API",
+    "globs": [
+      "**/*.py",
+      "app/**/*.py",
+      "api/**/*.py"
+    ],
+    "category": "backend"
+  },
+  {
+    "slug": "gitflow",
+    "fileName": "gitflow.mdc",
+    "title": "Gitflow 工作流规则",
+    "description": "Gitflow 工作流规则。在执行 git 操作时应应用这些规则。",
+    "globs": [],
+    "category": "general"
+  },
+  {
+    "slug": "go",
+    "fileName": "go.mdc",
+    "title": "Go (Golang) 最佳实践",
+    "description": "现代软件开发的 Go (Golang) 最佳实践和模式",
+    "globs": [
+      "**/*.go",
+      "cmd/**/*.go",
+      "pkg/**/*.go"
+    ],
+    "category": "language"
+  },
+  {
+    "slug": "ios",
+    "fileName": "ios.mdc",
+    "title": "iOS (Swift & SwiftUI) 最佳实践",
+    "description": "使用 Swift 和 SwiftUI 进行现代 iOS 开发的最佳实践和模式",
+    "globs": [
+      "**/*.swift"
+    ],
+    "category": "mobile"
+  },
+  {
+    "slug": "java",
+    "fileName": "java.mdc",
+    "title": "Java 最佳实践",
+    "description": "现代软件开发的 Java 最佳实践和模式",
+    "globs": [
+      "**/*.java",
+      "src/**/*.java",
+      "tests/**/*.java"
+    ],
+    "category": "language"
+  },
+  {
+    "slug": "medusa",
+    "fileName": "medusa.mdc",
+    "title": "Medusa 规则",
+    "description": "Medusa 电子商务框架最佳实践",
+    "globs": [
+      "**/*.tsx",
+      "**/*.ts",
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "src/**/*.js",
+      "src/**/*.jsx"
+    ],
+    "category": "frontend"
+  },
+  {
+    "slug": "nativescript",
+    "fileName": "nativescript.mdc",
+    "title": "NativeScript 最佳实践",
+    "description": "NativeScript 移动应用的最佳实践和模式",
+    "globs": [
+      "**/*.tsx",
+      "**/*.ts",
+      "**/*.vue",
+      "**/*.svelte"
+    ],
+    "category": "mobile"
+  },
+  {
+    "slug": "nextjs",
+    "fileName": "nextjs.mdc",
+    "title": "Next.js 最佳实践",
+    "description": "Next.js 结合 TypeScript 和 Tailwind UI 的最佳实践",
+    "globs": [
+      "**/*.tsx",
+      "**/*.ts",
+      "src/**/*.ts",
+      "src/**/*.tsx"
+    ],
+    "category": "frontend"
+  },
+  {
+    "slug": "node-express",
+    "fileName": "node-express.mdc",
+    "title": "Node.js 和 Express.js 最佳实践",
+    "description": "Node.js 和 Express.js 后端开发最佳实践",
+    "globs": [
+      "**/*.js",
+      "**/*.ts",
+      "src/**/*.ts"
+    ],
+    "category": "backend"
+  },
+  {
+    "slug": "php",
+    "fileName": "php.mdc",
+    "title": "PHP & Laravel 最佳实践",
+    "description": "使用 PHP 和 Laravel 框架的现代 Web 开发最佳实践",
+    "globs": [
+      "**/*.php",
+      "app/**/*.php",
+      "routes/**/*.php"
+    ],
+    "category": "language"
+  },
+  {
+    "slug": "python",
+    "fileName": "python.mdc",
+    "title": "Python 最佳实践",
+    "description": "使用 Flask 和 SQLite 的现代软件开发的 Python 最佳实践和模式",
+    "globs": [
+      "**/*.py",
+      "src/**/*.py",
+      "tests/**/*.py"
+    ],
+    "category": "language"
+  },
+  {
+    "slug": "react",
+    "fileName": "react.mdc",
+    "title": "React 最佳实践",
+    "description": "适用于现代 Web 应用程序的 React 最佳实践和模式",
+    "globs": [
+      "**/*.tsx",
+      "**/*.jsx",
+      "components/**/*"
+    ],
+    "category": "frontend"
+  },
+  {
+    "slug": "ruby",
+    "fileName": "ruby.mdc",
+    "title": "Ruby & Rails 最佳实践",
+    "description": "使用 Ruby 和 Ruby on Rails 的现代 Web 开发最佳实践",
+    "globs": [
+      "**/*.rb",
+      "app/**/*.rb",
+      "config/**/*.rb"
+    ],
+    "category": "language"
+  },
+  {
+    "slug": "spring",
+    "fileName": "spring.mdc",
+    "title": "Spring & Spring Boot 最佳实践",
+    "description": "使用 Spring 和 Spring Boot 的现代软件开发的最佳实践和模式",
+    "globs": [
+      "**/*.java",
+      "src/main/java/**/*.java",
+      "src/test/java/**/*.java"
+    ],
+    "category": "backend"
+  },
+  {
+    "slug": "svelte",
+    "fileName": "svelte.mdc",
+    "title": "Svelte 最佳实践",
+    "description": "Svelte 现代 Web 应用的最佳实践和模式",
+    "globs": [
+      "**/*.svelte",
+      "src/**/*.ts",
+      "src/**/*.js"
+    ],
+    "category": "frontend"
+  },
+  {
+    "slug": "tailwind",
+    "fileName": "tailwind.mdc",
+    "title": "Tailwind CSS 最佳实践",
+    "description": "适用于现代 Web 应用程序的 Tailwind CSS 和 UI 组件最佳实践",
+    "globs": [
+      "**/*.css",
+      "**/*.tsx",
+      "**/*.jsx",
+      "tailwind.config.js",
+      "tailwind.config.ts"
+    ],
+    "category": "frontend"
+  },
+  {
+    "slug": "typescript",
+    "fileName": "typescript.mdc",
+    "title": "TypeScript 最佳实践",
+    "description": "适用于现代 Web 开发的 TypeScript 编码标准和最佳实践",
+    "globs": [
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.d.ts"
+    ],
+    "category": "language"
+  },
+  {
+    "slug": "vue",
+    "fileName": "vue.mdc",
+    "title": "Vue.js 最佳实践",
+    "description": "适用于现代 Web 应用程序的 Vue.js 最佳实践和模式",
+    "globs": [
+      "**/*.vue",
+      "**/*.ts",
+      "components/**/*"
+    ],
+    "category": "frontend"
+  },
+  {
+    "slug": "wechat-miniprogram",
+    "fileName": "wechat-miniprogram.mdc",
+    "title": "微信小程序最佳实践",
+    "description": "微信小程序开发的最佳实践和常见模式",
+    "globs": [
+      "**/*.wxml",
+      "**/*.wxss",
+      "**/*.js",
+      "**/*.json"
+    ],
+    "category": "mobile"
+  }
+]

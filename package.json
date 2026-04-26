@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "为 Cursor 编辑器量身打造的代码审查与编码规范规则集",
   "scripts": {
-    "test": "node scripts/validate-rules.mjs",
-    "validate": "node scripts/validate-rules.mjs"
+    "build:catalog": "node scripts/build-rule-catalog.mjs",
+    "test": "node scripts/validate-rules.mjs && node --test scripts/rule-catalog.test.mjs",
+    "validate": "npm test"
   },
   "keywords": [
     "cursor",
@@ -24,6 +25,6 @@
   },
   "homepage": "https://github.com/LessUp/cursor-rules#readme",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.0.0 <23"
   }
 }
