@@ -30,3 +30,8 @@
 2. 再读 `docs/openspec/architecture.md` 和 `workflow.md`。
 3. 把 `docs/assets/rules.json` 视为生成产物，而不是手写数据源。
 4. 修改 `.mdc`、Pages 或 AI 配置后，重新运行 `npm test` 与 `npm run build:catalog`。
+
+## Preferred skills
+
+- `verify`：在批量改动 `.mdc` 后快速确认结构仍然合法。
+- `rule-curation`：在重写、压缩或新增规则内容前先检查 frontmatter、H1、globs 和信噪比。

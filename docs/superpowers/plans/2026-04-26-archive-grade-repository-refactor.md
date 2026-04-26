@@ -847,3 +847,7 @@ Implementation status: planned for archive-grade refactor execution on top of th
 git add docs/openspec/workflow.md docs/openspec/ai-tooling.md docs/superpowers/specs/2026-04-26-archive-grade-refactor-design.md docs/superpowers/plans/2026-04-26-archive-grade-repository-refactor.md
 git commit -m "docs: finalize archive-grade handoff"
 ```
+
+---
+
+Implementation status: implemented in the `archive-grade-refactor` worktree on top of the generated catalog architecture.

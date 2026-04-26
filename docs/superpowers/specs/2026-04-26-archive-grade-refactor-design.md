@@ -238,3 +238,7 @@ GitHub Pages 不应继续扮演 README 的镜像页，而应成为本仓库的**
 3. 仓库级 AI 协作指令齐全，且没有明显互相冲突。
 4. GitHub 工作流与仓库元信息已收敛到真实需要的最小集合。
 5. 后续 GLM 接手时，不需要重新理解仓库定位即可继续推进。
+
+---
+
+Implementation status: implemented in the `archive-grade-refactor` worktree on top of the generated catalog architecture.

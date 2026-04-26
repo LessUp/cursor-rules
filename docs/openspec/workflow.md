@@ -35,3 +35,12 @@ npm run build:catalog
 1. `.mdc` 校验通过。
 2. 目录生成测试与 Pages shell 测试通过。
 3. `docs/assets/rules.json` 已按当前规则内容重建。
+
+## Review trigger summary
+
+以下情况默认触发 `/review`：
+
+- 修改任意 `.mdc`
+- 修改 GitHub Pages 的信息架构或交互逻辑
+- 修改 `AGENTS.md`、`CLAUDE.md`、Copilot 指令或 Claude Skills
+- 修改 workflow、版本锚定或 GitHub 仓库 metadata
