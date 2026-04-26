@@ -1,181 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Page Not Found | Cursor Rules Gallery</title>
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --primary-light: #e0e7ff;
-            --secondary: #8b5cf6;
-            --bg: #fafafa;
-            --bg-card: #ffffff;
-            --text-main: #1f2937;
-            --text-secondary: #6b7280;
-            --border: #e5e7eb;
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --radius-lg: 12px;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(180deg, var(--primary-light) 0%, var(--bg) 50%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-main);
-            line-height: 1.6;
-        }
-        
-        .container {
-            text-align: center;
-            padding: 2rem;
-            max-width: 500px;
-        }
-        
-        .error-icon {
-            font-size: 5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .error-code {
-            font-size: 6rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1;
-            margin-bottom: 0.5rem;
-        }
-        
-        h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        p {
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-        }
-        
-        .buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.875rem 1.5rem;
-            border-radius: var(--radius-lg);
-            font-size: 1rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.2s;
-            cursor: pointer;
-            border: none;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .btn-secondary {
-            background: var(--bg-card);
-            color: var(--text-main);
-            border: 1px solid var(--border);
-        }
-        
-        .btn-secondary:hover {
-            background: var(--border);
-        }
-        
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 2rem;
-            text-decoration: none;
-            color: inherit;
-        }
-        
-        .logo-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: var(--radius-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-        
-        .logo-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        @media (max-width: 480px) {
-            .error-code {
-                font-size: 4rem;
-            }
-            
-            .buttons {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-    </style>
+    <title>404 | Cursor Rules</title>
+    <meta name="description" content="页面不存在，请返回 Cursor Rules 首页。">
+    <link rel="stylesheet" href="./assets/site.css">
 </head>
-<body>
-    <div class="container">
-        <a href="/cursor-rules/" class="logo">
-            <div class="logo-icon">🎯</div>
-            <span class="logo-text">Cursor Rules</span>
-        </a>
-        
-        <div class="error-icon">🔍</div>
-        <div class="error-code">404</div>
-        <h1>Page Not Found</h1>
-        <p>The page you're looking for doesn't exist or has been moved.</p>
-        
-        <div class="buttons">
-            <a href="/cursor-rules/" class="btn btn-primary">
-                <span>🏠</span> Back to Home
-            </a>
-            <a href="https://github.com/LessUp/cursor-rules" class="btn btn-secondary" target="_blank" rel="noopener">
-                <span>📦</span> GitHub
-            </a>
+<body class="not-found">
+    <main class="not-found-card">
+        <p class="eyebrow">404</p>
+        <h1>页面不存在 / Page not found</h1>
+        <p class="subtitle">你访问的页面不存在，或者已经被移动到新的 GitHub Pages 信息架构中。</p>
+        <div class="hero-actions">
+            <a class="primary-link" href="/cursor-rules/">返回首页 / Back to home</a>
+            <a class="secondary-link" href="https://github.com/LessUp/cursor-rules" target="_blank" rel="noopener">GitHub</a>
         </div>
-    </div>
+    </main>
 </body>
 </html>
