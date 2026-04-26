@@ -2,9 +2,19 @@ name: Validate Rules
 
 on:
   push:
-    branches: [master, main]
+    branches: [master]
+    paths:
+      - "*.mdc"
+      - "scripts/**"
+      - "package.json"
+      - ".github/workflows/validate.yml"
   pull_request:
-    branches: [master, main]
+    branches: [master]
+    paths:
+      - "*.mdc"
+      - "scripts/**"
+      - "package.json"
+      - ".github/workflows/validate.yml"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -22,7 +32,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '22'
 
       - name: Validate MDC rule files
-        run: node scripts/validate-rules.mjs
+        run: npm test

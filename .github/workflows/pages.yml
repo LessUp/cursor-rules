@@ -2,7 +2,13 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [master, main]
+    branches: [master]
+    paths:
+      - "*.mdc"
+      - "docs/**"
+      - "scripts/**"
+      - "package.json"
+      - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 permissions:
@@ -23,6 +29,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate repository
+        run: npm test
+
+      - name: Build catalog
+        run: npm run build:catalog
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

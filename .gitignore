@@ -19,3 +19,6 @@ desktop.ini
 
 # Node (if used for tooling)
 node_modules/
+
+# Local visual brainstorming artifacts
+.superpowers/

@@ -1,7 +1,7 @@
 {
   "name": "cursor-rules",
   "version": "1.0.0",
-  "description": "为 Cursor 编辑器量身打造的代码审查与编码规范规则集",
+  "description": "Archive-grade Cursor .mdc rule library with generated catalog, validation, and GitHub Pages gallery",
   "scripts": {
     "build:catalog": "node scripts/build-rule-catalog.mjs",
     "test": "node scripts/validate-rules.mjs && node --test scripts/rule-catalog.test.mjs scripts/site-shell.test.mjs",
@@ -9,10 +9,11 @@
   },
   "keywords": [
     "cursor",
-    "rules",
-    "coding-standards",
-    "best-practices",
-    "ai-prompts"
+    "cursor-rules",
+    "mdc",
+    "ai-coding",
+    "code-review",
+    "best-practices"
   ],
   "author": "LessUp",
   "license": "MIT",
@@ -23,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/LessUp/cursor-rules/issues"
   },
-  "homepage": "https://github.com/LessUp/cursor-rules#readme",
+  "homepage": "https://lessup.github.io/cursor-rules/",
   "engines": {
     "node": ">=22.0.0 <23"
   }
