@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Skill(update-config)"
+      "Skill(update-config)",
+      "Skill(rule-curation)"
     ]
   },
   "hooks": {
@@ -11,7 +12,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '.tool_input.file_path' | { read -r f; if [[ \"$f\" == *.mdc ]]; then node /home/shane/dev/cursor-rules/scripts/validate-rules.mjs \"$f\"; fi; } 2>/dev/null || true",
+            "command": "ROOT=$(git rev-parse --show-toplevel 2>/dev/null) && jq -r '.tool_input.file_path' | { read -r f; if [[ \"$f\" == *.mdc ]]; then node \"$ROOT/scripts/validate-rules.mjs\" \"$f\"; fi; } 2>/dev/null || true",
             "timeout": 30,
             "statusMessage": "Validating .mdc file..."
           }
