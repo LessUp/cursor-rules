@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(update-config)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | { read -r f; if [[ \"$f\" == *.mdc ]]; then node /home/shane/dev/cursor-rules/scripts/validate-rules.mjs \"$f\"; fi; } 2>/dev/null || true",
+            "timeout": 30,
+            "statusMessage": "Validating .mdc file..."
+          }
+        ]
+      }
+    ]
+  }
+}
