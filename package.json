@@ -1,6 +1,6 @@
 {
   "name": "cursor-rules",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Archive-grade Cursor .mdc rule library with generated catalog, validation, and GitHub Pages gallery",
   "scripts": {
     "build:catalog": "node scripts/build-rule-catalog.mjs",

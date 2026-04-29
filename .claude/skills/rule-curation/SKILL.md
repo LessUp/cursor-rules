@@ -3,6 +3,8 @@ name: rule-curation
 description: Review or edit an MDC rule without drifting from the repository contract
 ---
 
+TRIGGER when: 新增、重写或大幅修改单个 .mdc 规则前。
+
 Use this skill when adding, rewriting, or reviewing any `.mdc` rule in this repository.
 
 ## Checklist
