@@ -1,3 +1,11 @@
+function debounce(fn, delay) {
+  let timeoutId;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(...args), delay);
+  };
+}
+
 const TEXT = {
   zh: {
     badge: 'Archive-grade Cursor .mdc 规则库',
@@ -86,7 +94,30 @@ const state = {
   category: 'all',
   rules: [],
   copyMessage: '',
+  expandedSlug: null,
 };
+
+function syncUrl() {
+  const params = new URLSearchParams();
+
+  if (state.query) params.set('q', state.query);
+  if (state.category !== 'all') params.set('cat', state.category);
+  if (state.language !== 'zh') params.set('lang', state.language);
+
+  const newUrl = params.toString()
+    ? `${window.location.pathname}?${params.toString()}`
+    : window.location.pathname;
+
+  window.history.replaceState({}, '', newUrl);
+}
+
+function restoreFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+
+  state.query = params.get('q') ?? '';
+  state.category = params.get('cat') ?? 'all';
+  state.language = params.get('lang') ?? 'zh';
+}
 
 function t() {
   return TEXT[state.language];
@@ -175,6 +206,11 @@ function renderHero() {
         </div>
       </div>
     </header>
+    <div class="shortcut-hint" id="shortcut-hint">
+      <span class="shortcut-key">/</span> 搜索
+      <span class="shortcut-key">Esc</span> 清空
+      <span class="shortcut-key">1-8</span> 切换分类
+    </div>
   `;
 }
 
@@ -193,14 +229,22 @@ function renderFilters() {
         <div class="status-pill">${escapeHtml(labels.results)}: ${filteredRules().length}</div>
       </div>
       <div class="toolbar">
-        <input
-          id="search-input"
-          class="search-input"
-          type="search"
-          value="${escapeHtml(state.query)}"
-          placeholder="${escapeHtml(labels.searchPlaceholder)}"
-          aria-label="${escapeHtml(labels.searchPlaceholder)}"
-        >
+        <div class="search-wrapper">
+          <input
+            id="search-input"
+            class="search-input"
+            type="search"
+            value="${escapeHtml(state.query)}"
+            placeholder="${escapeHtml(labels.searchPlaceholder)}"
+            aria-label="${escapeHtml(labels.searchPlaceholder)}"
+          >
+          <button
+            id="search-clear"
+            class="search-clear ${state.query ? 'visible' : ''}"
+            type="button"
+            aria-label="Clear search"
+          >×</button>
+        </div>
         <div class="chip-row">
           ${CATEGORY_ORDER.map((category) => `
             <button
@@ -218,14 +262,41 @@ function renderFilters() {
   `;
 }
 
+function renderSkeletons(count = 6) {
+  return Array.from({ length: count }, () => `
+    <article class="skeleton-card">
+      <div class="skeleton-line short"></div>
+      <div class="skeleton-line medium"></div>
+      <div class="skeleton-line long"></div>
+      <div class="skeleton-line long"></div>
+      <div style="display: flex; gap: 8px; margin-top: auto;">
+        <div class="skeleton-line pill"></div>
+        <div class="skeleton-line pill"></div>
+      </div>
+    </article>
+  `).join('');
+}
+
+function renderLoading() {
+  const grid = document.querySelector('#rule-grid');
+  grid.innerHTML = `
+    <section class="grid-shell">
+      <div class="grid">
+        ${renderSkeletons(6)}
+      </div>
+    </section>
+  `;
+}
+
 function renderRule(rule) {
   const labels = t();
+  const isExpanded = state.expandedSlug === rule.slug;
   const globs = rule.globs.length
     ? rule.globs.map((glob) => `<code>${escapeHtml(glob)}</code>`).join('')
     : `<span class="scope-global">${escapeHtml(labels.globalLabel)}</span>`;
 
   return `
-    <article class="rule-card">
+    <article class="rule-card ${isExpanded ? 'expanded' : ''}" data-slug="${escapeHtml(rule.slug)}">
       <div class="rule-card-head">
         <div>
           <p class="eyebrow">${escapeHtml(categoryLabel(rule.category))}</p>
@@ -233,19 +304,23 @@ function renderRule(rule) {
         </div>
         <span class="file-pill">${escapeHtml(rule.fileName)}</span>
       </div>
-      <p class="rule-description">${escapeHtml(rule.description)}</p>
-      <dl class="rule-meta">
-        <div>
-          <dt>${escapeHtml(labels.fileLabel)}</dt>
-          <dd><code>${escapeHtml(rule.fileName)}</code></dd>
-        </div>
-        <div>
-          <dt>${escapeHtml(labels.globLabel)}</dt>
-          <dd class="scope-list">${globs}</dd>
-        </div>
-      </dl>
-      <div class="rule-actions">
+      <p class="rule-description rule-truncated">${escapeHtml(rule.description)}</p>
+      <div class="rule-full-content">
+        <dl class="rule-meta">
+          <div>
+            <dt>${escapeHtml(labels.fileLabel)}</dt>
+            <dd><code>${escapeHtml(rule.fileName)}</code></dd>
+          </div>
+          <div>
+            <dt>${escapeHtml(labels.globLabel)}</dt>
+            <dd class="scope-list">${globs}</dd>
+          </div>
+        </dl>
+      </div>
+      <p class="expand-hint">${isExpanded ? '点击收起' : '点击展开详情'}</p>
+      <div class="rule-actions" onclick="event.stopPropagation()">
         <button class="secondary-link button-reset" type="button" data-copy-file="${escapeHtml(rule.fileName)}">${escapeHtml(labels.installSnippet)}</button>
+        <button class="secondary-link button-reset" type="button" data-copy-content="${escapeHtml(rule.fileName)}">复制规则内容</button>
         <a class="secondary-link" href="https://github.com/LessUp/cursor-rules/blob/master/${encodeURIComponent(rule.fileName)}" target="_blank" rel="noopener">${escapeHtml(labels.openOnGithub)}</a>
       </div>
     </article>
@@ -302,6 +377,23 @@ async function copyText(value) {
   textarea.remove();
 }
 
+const RAW_BASE_URL = 'https://raw.githubusercontent.com/LessUp/cursor-rules/master/';
+
+async function copyRuleContent(fileName) {
+  try {
+    const response = await fetch(RAW_BASE_URL + fileName);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.status}`);
+    }
+    const content = await response.text();
+    await copyText(content);
+    return true;
+  } catch (error) {
+    console.error('Failed to copy rule content:', error);
+    return false;
+  }
+}
+
 async function loadRules() {
   const response = await fetch('./assets/rules.json', { cache: 'no-store' });
   if (!response.ok) {
@@ -316,6 +408,7 @@ document.addEventListener('click', async (event) => {
   if (langButton) {
     state.language = langButton.dataset.lang;
     state.copyMessage = '';
+    syncUrl();
     render();
     return;
   }
@@ -324,6 +417,7 @@ document.addEventListener('click', async (event) => {
   if (categoryButton) {
     state.category = categoryButton.dataset.category;
     state.copyMessage = '';
+    syncUrl();
     render();
     return;
   }
@@ -334,18 +428,57 @@ document.addEventListener('click', async (event) => {
     await copyText(installCommand(fileName));
     state.copyMessage = `${fileName} copied`;
     renderFilters();
+    return;
+  }
+
+  const copyContentButton = event.target.closest('[data-copy-content]');
+  if (copyContentButton) {
+    const fileName = copyContentButton.dataset.copyContent;
+    const success = await copyRuleContent(fileName);
+    if (success) {
+      state.copyMessage = `规则内容已复制: ${fileName}`;
+    } else {
+      state.copyMessage = `复制失败，请稍后重试`;
+    }
+    renderFilters();
+    return;
+  }
+
+  const clearButton = event.target.closest('#search-clear');
+  if (clearButton) {
+    state.query = '';
+    syncUrl();
+    renderFilters();
+    renderGrid();
+    return;
+  }
+
+  // Card expand/collapse
+  const ruleCard = event.target.closest('.rule-card');
+  if (ruleCard && !event.target.closest('.rule-actions')) {
+    const slug = ruleCard.dataset.slug;
+    state.expandedSlug = state.expandedSlug === slug ? null : slug;
+    renderGrid();
+    return;
   }
 });
+
+const debouncedSearch = debounce(() => {
+  syncUrl();
+  renderFilters();
+  renderGrid();
+}, 300);
 
 document.addEventListener('input', (event) => {
   if (event.target.id === 'search-input') {
     state.query = event.target.value;
-    renderFilters();
-    renderGrid();
+    debouncedSearch();
   }
 });
 
 async function init() {
+  restoreFromUrl();
+  renderLoading();
   await loadRules();
   render();
 }
