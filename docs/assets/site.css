@@ -15,6 +15,16 @@
   --radius-md: 14px;
 }
 
+/* Smooth transitions for theme changes */
+body,
+.hero-shell,
+.panel,
+.grid-shell,
+.rule-card,
+.stat-card {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   :root {
@@ -23,7 +33,7 @@
     --surface-muted: #334155;
     --text: #f1f5f9;
     --text-soft: #94a3b8;
-    --border: #334155;
+    --border: #475569;
     --accent: #818cf8;
     --accent-soft: #312e81;
     --accent-strong: #c7d2fe;
