@@ -476,11 +476,64 @@ document.addEventListener('input', (event) => {
   }
 });
 
+function setupKeyboardShortcuts() {
+  document.addEventListener('keydown', (event) => {
+    // Ignore if typing in input
+    if (event.target.tagName === 'INPUT' && event.key !== 'Escape') {
+      return;
+    }
+
+    // / to focus search
+    if (event.key === '/') {
+      event.preventDefault();
+      const input = document.querySelector('#search-input');
+      if (input) input.focus();
+      return;
+    }
+
+    // Escape to clear search
+    if (event.key === 'Escape') {
+      state.query = '';
+      state.expandedSlug = null;
+      const input = document.querySelector('#search-input');
+      if (input) input.value = '';
+      syncUrl();
+      render();
+      return;
+    }
+
+    // 1-8 to switch category
+    const num = parseInt(event.key, 10);
+    if (num >= 1 && num <= 8) {
+      const category = CATEGORY_ORDER[num - 1];
+      if (category) {
+        state.category = category;
+        syncUrl();
+        render();
+      }
+    }
+  });
+
+  // Show shortcut hint on first visit
+  const hasSeenHint = sessionStorage.getItem('seen-shortcut-hint');
+  if (!hasSeenHint) {
+    const hint = document.querySelector('#shortcut-hint');
+    if (hint) {
+      hint.classList.add('visible');
+      setTimeout(() => {
+        hint.classList.remove('visible');
+      }, 5000);
+      sessionStorage.setItem('seen-shortcut-hint', 'true');
+    }
+  }
+}
+
 async function init() {
   restoreFromUrl();
   renderLoading();
   await loadRules();
   render();
+  setupKeyboardShortcuts();
 }
 
 init().catch((error) => {
