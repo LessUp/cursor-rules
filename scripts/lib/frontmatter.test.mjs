@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { parseFrontmatter, unwrapQuotes, parseGlobs, extractH1Title } from './lib/frontmatter.mjs';
+import { parseFrontmatter, unwrapQuotes, parseGlobs, extractH1Title } from './frontmatter.mjs';
 
 // ========== parseFrontmatter 测试 ==========
 

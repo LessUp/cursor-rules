@@ -4,7 +4,7 @@
   "description": "Archive-grade Cursor .mdc rule library with generated catalog, validation, and GitHub Pages gallery",
   "scripts": {
     "build:catalog": "node scripts/build-rule-catalog.mjs",
-    "test": "node scripts/validate-rules.mjs && node --test scripts/frontmatter.test.mjs scripts/rule-catalog.test.mjs scripts/site-shell.test.mjs",
+    "test": "node scripts/validate-rules.mjs && node --test scripts/lib/category-resolver.test.mjs scripts/lib/frontmatter.test.mjs scripts/lib/rule-processor.test.mjs scripts/site-shell.test.mjs",
     "validate": "npm test"
   },
   "keywords": [

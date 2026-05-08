@@ -3,7 +3,6 @@
  *
  * @module rule-processor
  * @description 深接口：一次解析同时产出验证结果和目录条目
- * 消除 validate-rules.mjs 和 build-rule-catalog.mjs 之间的重复解析
  */
 
 import fs from 'node:fs/promises';

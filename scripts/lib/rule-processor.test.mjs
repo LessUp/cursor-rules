@@ -3,13 +3,14 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { buildCatalog, parseRuleFile } from './lib/rule-catalog.mjs';
+import { buildCatalog, processRuleFile, toCatalogEntry } from './rule-processor.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const rootDir = path.resolve(__dirname, '..');
+const rootDir = path.resolve(__dirname, '..', '..');
 
-test('parseRuleFile normalizes a language rule', async () => {
-  const entry = await parseRuleFile(path.join(rootDir, 'python.mdc'));
+test('processRuleFile normalizes a language rule', async () => {
+  const rule = await processRuleFile(path.join(rootDir, 'python.mdc'));
+  const entry = toCatalogEntry(rule);
 
   assert.equal(entry.slug, 'python');
   assert.equal(entry.title, 'Python 最佳实践');
@@ -18,8 +19,9 @@ test('parseRuleFile normalizes a language rule', async () => {
   assert.match(entry.description, /Python/);
 });
 
-test('parseRuleFile keeps empty globs as an empty list', async () => {
-  const entry = await parseRuleFile(path.join(rootDir, 'clean-code.mdc'));
+test('processRuleFile keeps empty globs as an empty list', async () => {
+  const rule = await processRuleFile(path.join(rootDir, 'clean-code.mdc'));
+  const entry = toCatalogEntry(rule);
 
   assert.equal(entry.slug, 'clean-code');
   assert.equal(entry.category, 'general');

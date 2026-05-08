@@ -114,17 +114,5 @@ export function getDefaultResolver() {
  * @returns {string} 分类键
  */
 export function resolveCategory(slug, explicitCategory = null) {
-  // 直接使用静态模式匹配，无需 DEFAULT_CATEGORY_MAP
-  if (explicitCategory && isValidCategory(explicitCategory)) {
-    return explicitCategory;
-  }
-
-  // 从 slug 模式推断
-  for (const { pattern, category } of CATEGORY_PATTERNS) {
-    if (pattern.test(slug)) {
-      return category;
-    }
-  }
-
-  return 'other';
+  return getDefaultResolver().resolve(slug, explicitCategory);
 }

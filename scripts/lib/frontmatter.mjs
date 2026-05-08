@@ -3,7 +3,7 @@
  *
  * @module frontmatter
  * @description 提供深接口：一次调用获取完整解析结果
- * 这个模块是所有 frontmatter 解析逻辑的单一来源，消除 validate-rules.mjs 和 rule-catalog.mjs 之间的重复代码
+ * 这个模块是所有 frontmatter 解析逻辑的单一来源
  */
 
 /**
