@@ -1,109 +1,36 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
+/**
+ * 规则目录构建模块
+ *
+ * @module rule-catalog
+ * @description 向后兼容的导出，实际逻辑在 rule-processor.mjs
+ */
 
-const CATEGORY_MAP = new Map([
-  ['clean-code', 'general'],
-  ['codequality', 'general'],
-  ['gitflow', 'general'],
-  ['database', 'engineering'],
-  ['docker', 'engineering'],
-  ['python', 'language'],
-  ['java', 'language'],
-  ['go', 'language'],
-  ['cpp', 'language'],
-  ['csharp-dotnet', 'language'],
-  ['php', 'language'],
-  ['ruby', 'language'],
-  ['typescript', 'language'],
-  ['node-express', 'backend'],
-  ['spring', 'backend'],
-  ['fastapi', 'backend'],
-  ['react', 'frontend'],
-  ['vue', 'frontend'],
-  ['svelte', 'frontend'],
-  ['nextjs', 'frontend'],
-  ['tailwind', 'frontend'],
-  ['medusa', 'frontend'],
-  ['android', 'mobile'],
-  ['ios', 'mobile'],
-  ['wechat-miniprogram', 'mobile'],
-  ['nativescript', 'mobile'],
-]);
+import { buildCatalog as buildCatalogImpl, processRuleFile as processRuleFileImpl } from './rule-processor.mjs';
 
-function splitFrontmatter(content) {
-  const lines = content.replace(/\r\n/g, '\n').split('\n');
-  const closingIndex = lines.findIndex(
-    (line, index) => index > 0 && line.trim() === '---',
-  );
-
-  return {
-    frontmatterLines: lines.slice(1, closingIndex),
-    bodyLines: lines.slice(closingIndex + 1),
-  };
-}
-
-function parseFrontmatter(lines) {
-  const frontmatter = new Map();
-
-  for (const line of lines) {
-    if (!line.trim()) {
-      continue;
-    }
-
-    const separatorIndex = line.indexOf(':');
-    const key = line.slice(0, separatorIndex).trim();
-    const value = line.slice(separatorIndex + 1).trim();
-    frontmatter.set(key, value);
-  }
-
-  return frontmatter;
-}
-
-function parseGlobs(rawGlobs) {
-  if (!rawGlobs) {
-    return [];
-  }
-
-  const normalized = rawGlobs.replace(/^['"]|['"]$/g, '');
-  if (!normalized.trim()) {
-    return [];
-  }
-
-  return normalized
-    .split(',')
-    .map((entry) => entry.trim())
-    .filter(Boolean);
-}
-
-function firstHeading(lines) {
-  return lines.find((line) => /^#\s+\S/.test(line))?.replace(/^#\s+/, '').trim() ?? '';
-}
-
+/**
+ * 解析单个规则文件
+ *
+ * @param {string} filePath - 规则文件路径
+ * @returns {Promise<Object>} 规则条目对象
+ */
 export async function parseRuleFile(filePath) {
-  const content = await fs.readFile(filePath, 'utf8');
-  const { frontmatterLines, bodyLines } = splitFrontmatter(content);
-  const frontmatter = parseFrontmatter(frontmatterLines);
-  const slug = path.basename(filePath, '.mdc');
-
+  const rule = await processRuleFileImpl(filePath);
   return {
-    slug,
-    fileName: path.basename(filePath),
-    title: firstHeading(bodyLines),
-    description:
-      frontmatter.get('description')?.replace(/^['"]|['"]$/g, '') ?? '',
-    globs: parseGlobs(frontmatter.get('globs') ?? ''),
-    category: CATEGORY_MAP.get(slug) ?? 'other',
+    slug: rule.slug,
+    fileName: rule.fileName,
+    title: rule.title,
+    description: rule.description,
+    globs: rule.globs,
+    category: rule.category,
   };
 }
 
+/**
+ * 构建完整的规则目录
+ *
+ * @param {string} rootDir - 根目录路径
+ * @returns {Promise<Object[]>} 排序后的规则目录数组
+ */
 export async function buildCatalog(rootDir) {
-  const entries = await fs.readdir(rootDir, { withFileTypes: true });
-  const files = entries.filter(
-    (entry) => entry.isFile() && entry.name.endsWith('.mdc'),
-  );
-  const catalog = await Promise.all(
-    files.map((entry) => parseRuleFile(path.join(rootDir, entry.name))),
-  );
-
-  return catalog.sort((left, right) => left.slug.localeCompare(right.slug, 'en'));
+  return buildCatalogImpl(rootDir);
 }
