@@ -411,7 +411,7 @@ const llmsUrl = 'https://lessup.github.io/cursor-rules/llms.txt'
 
 <style scoped>
 .rule-catalog {
-  max-width: 1120px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px 64px;
 }
