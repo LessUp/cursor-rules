@@ -1,0 +1,77 @@
+---
+title: "Svelte 最佳实践"
+description: "Svelte 现代 Web 应用的最佳实践和模式"
+---
+
+
+# Svelte 最佳实践
+
+## 组件结构
+- 保持组件小而专注，每个组件不超过 200 行
+- 在 `<script lang="ts">` 中使用 TypeScript
+- 使用 `export let propName: Type` 定义带类型的 props
+- 使用 `createEventDispatcher<{ eventName: DetailType }>()` 派发类型安全的事件
+- 遵循 `<script>` → `<markup>` → `<style>` 的代码块顺序
+- 使用具名插槽 `<slot name="header" />` 实现灵活的组件组合
+
+## 响应性 (Reactivity)
+- 使用 `$:` 声明响应式变量和语句
+- 使用 `$: derivedValue = sourceA + sourceB` 创建派生值
+- 避免在 `$:` 语句中产生副作用，副作用应放在 `$: { ... }` 块中
+- 使用 `onMount` 进行 DOM 初始化，`onDestroy` 清理定时器和订阅
+- 使用 `bind:value` 实现双向绑定，`bind:this` 获取 DOM 引用
+- 理解 Svelte 响应性仅追踪赋值（`=`），对数组使用 `arr = [...arr, item]`
+
+## 状态管理
+- 使用 `writable()` 创建可读写的存储
+- 使用 `readable()` 创建只读存储（如计时器、地理位置）
+- 使用 `derived()` 从其他存储派生计算值
+- 将每个存储放在独立文件中（如 `stores/userStore.ts`）
+- 使用 `$storeName` 语法自动订阅和取消订阅
+- 对异步状态使用自定义存储封装加载/错误/数据状态
+
+## 性能
+- 使用 SvelteKit 的动态导入 `import()` 实现组件懒加载
+- 使用 `transition:fade`, `in:fly`, `out:slide` 等内置过渡效果
+- 对列表项使用 `{#each items as item (item.id)}` 中的 key 提高 diff 性能
+- 避免在模板中进行复杂计算，将其移至 `$:` 响应式声明
+- 使用 `on:event|preventDefault|stopPropagation` 事件修饰符
+- 大列表使用虚拟滚动库（如 `svelte-virtual-list`）
+
+## SvelteKit 路由
+- 使用基于文件系统的路由：`src/routes/[slug]/+page.svelte`
+- 使用 `+layout.svelte` 定义共享布局，支持嵌套布局
+- 使用 `[param]` 定义动态路由参数，`[[optional]]` 定义可选参数
+- 在 `+page.ts` 中使用 `load` 函数获取数据
+- 使用 `+error.svelte` 自定义错误页面
+- 使用 `goto()`, `invalidate()`, `invalidateAll()` 进行编程式导航和数据刷新
+
+## 表单
+- 使用 SvelteKit 的 `<form method="POST">` + `+page.server.ts` 中的 `actions`
+- 使用 `use:enhance` 实现渐进增强的表单提交
+- 使用 Zod 或 Superforms 进行表单验证
+- 在 `action` 返回 `fail(400, { errors })` 处理验证失败
+- 使用 `$page.form` 访问表单操作的返回数据
+- 提交时禁用按钮并显示加载指示器
+
+## TypeScript 集成
+- 使用 `ComponentProps<Component>` 获取组件的 props 类型
+- 使用 `ComponentEvents<Component>` 获取组件的事件类型
+- 使用 `Writable<T>`, `Readable<T>` 为存储添加类型
+- 在 `app.d.ts` 中扩展 `App.Locals`, `App.PageData` 等全局类型
+- 对 `load` 函数使用自动推断的类型（`PageLoad`, `LayoutLoad`）
+
+## 测试
+- 使用 Vitest 作为单元测试框架
+- 使用 `@testing-library/svelte` 进行组件测试
+- 使用 Playwright 进行端到端测试
+- 测试存储的订阅和更新行为
+- 使用 `vi.mock()` 模拟模块和 API 调用
+- 测试 `load` 函数的数据获取逻辑
+
+## 构建和工具
+- 使用 SvelteKit + Vite 作为开发和构建工具链
+- 使用 `$env/static/private` 和 `$env/static/public` 访问环境变量
+- 使用 `@sveltejs/adapter-auto` 或特定适配器（node, vercel, static）部署
+- 利用 Vite 的自动代码分割，按路由拆分 bundle
+- 使用 `$lib/` 别名引用 `src/lib/` 下的模块

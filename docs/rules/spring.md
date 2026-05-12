@@ -1,0 +1,71 @@
+---
+title: "Spring & Spring Boot 最佳实践"
+description: "使用 Spring 和 Spring Boot 的现代软件开发的最佳实践和模式"
+---
+
+
+# Spring & Spring Boot 最佳实践
+
+## Spring Boot 基础
+- 优先使用 Spring Boot Starters 来管理依赖
+- 使用 `application.properties` 或 `application.yml` 进行外部化配置
+- 利用 Spring Boot 的自动配置，仅在必要时进行覆盖
+- 使用 `@SpringBootApplication` 作为主配置类
+- 将应用打包为可执行的 JAR 文件
+
+## 依赖注入 (DI)
+- 优先使用构造函数注入（Constructor Injection）来声明依赖，以保证不变性
+- 使用 `@Autowired` 时，保持其在字段注入上的最小范围
+- 遵循单一职责原则，保持 Bean 的职责清晰
+- 使用 `@Component`, `@Service`, `@Repository`, `@Controller` 等构造型注解来定义 Bean
+
+## Spring MVC / WebFlux
+- 使用 `@RestController` 构建 RESTful API
+- 使用 DTO (Data Transfer Objects) 来封装 API 的输入和输出
+- 使用 `@RequestMapping` 及其快捷方式（`@GetMapping`, `@PostMapping` 等）来映射请求
+- 使用 `@Validated` 和 Bean Validation (JSR 380) 来验证请求数据
+- 实现全局异常处理器（`@ControllerAdvice` 和 `@ExceptionHandler`）
+
+## Spring Data JPA
+- 将 Repository 定义为接口并继承 `JpaRepository` 或 `CrudRepository`
+- 使用方法名约定来自动生成查询
+- 对复杂的查询使用 `@Query` 注解或 Specification/Criteria API
+- 在 Service 层管理事务（使用 `@Transactional`）
+- 警惕 N+1 查询问题，使用 `JOIN FETCH` 或 `@EntityGraph` 进行优化
+
+## 配置与 Profile
+- 使用 Profile（`@Profile`）来区分不同环境（开发、测试、生产）的配置
+- 使用 `@ConfigurationProperties` 将配置绑定到类型安全的 Bean
+- 避免在代码中硬编码配置值
+- 使用 Spring Cloud Config 或其他配置中心进行集中化配置管理
+
+## 安全 (Spring Security)
+- 启用并配置 Spring Security
+- 使用 `WebSecurityConfigurerAdapter` (旧版) 或 `SecurityFilterChain` Bean (新版) 自定义安全策略
+- 使用 BCryptPasswordEncoder 对密码进行编码
+- 配置 HTTPS
+- 使用 JWT 或 OAuth2 进行无状态认证
+- 实现方法级别的安全控制（`@PreAuthorize`, `@PostAuthorize`）
+
+## 测试
+- 使用 `@SpringBootTest` 进行集成测试
+- 使用 `@MockBean` 或 `@SpyBean` 来模拟依赖
+- 使用 `@WebMvcTest` 或 `@WebFluxTest` 专门测试 Web 层
+- 使用 `@DataJpaTest` 专门测试数据持久化层
+- 使用 Testcontainers 进行依赖服务的集成测试（如数据库、消息队列）
+
+## AOP (面向切面编程)
+- 使用 AOP 处理横切关注点，如日志、监控、事务管理
+- 创建自定义注解来触发切面逻辑
+- 保持切面逻辑的简洁和高效
+
+## 监控与健康检查
+- 使用 Spring Boot Actuator 暴露应用信息、指标和健康状况
+- 配置健康检查指示器（Health Indicators）
+- 集成 Micrometer 和 Prometheus/Grafana 进行度量监控
+
+## 最佳实践
+- 保持 Spring Boot 版本为最新，以获得性能改进和安全修复
+- 遵循“约定优于配置”的原则
+- 将业务逻辑放在 Service 层，保持 Controller 的轻量
+- 正确处理应用的启动和关闭事件

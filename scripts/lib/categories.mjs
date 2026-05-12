@@ -9,9 +9,7 @@
  * 分类定义
  *
  * @typedef {Object} CategoryDefinition
- * @property {Object} label - 多语言标签
- * @property {string} label.zh - 中文标签
- * @property {string} label.en - 英文标签
+ * @property {string} label - 中文标签
  * @property {number} order - 排序权重
  */
 
@@ -21,13 +19,13 @@
  * @type {Record<string, CategoryDefinition>}
  */
 export const CATEGORIES = Object.freeze({
-  general: { label: { zh: '通用', en: 'General' }, order: 1 },
-  language: { label: { zh: '语言', en: 'Language' }, order: 2 },
-  backend: { label: { zh: '后端', en: 'Backend' }, order: 3 },
-  frontend: { label: { zh: '前端', en: 'Frontend' }, order: 4 },
-  mobile: { label: { zh: '移动端', en: 'Mobile' }, order: 5 },
-  engineering: { label: { zh: '工程', en: 'Engineering' }, order: 6 },
-  other: { label: { zh: '其他', en: 'Other' }, order: 99 },
+  general: { label: '通用', order: 1 },
+  language: { label: '语言', order: 2 },
+  backend: { label: '后端', order: 3 },
+  frontend: { label: '前端', order: 4 },
+  mobile: { label: '移动端', order: 5 },
+  engineering: { label: '工程', order: 6 },
+  other: { label: '其他', order: 99 },
 });
 
 /**
@@ -79,7 +77,7 @@ export const DEFAULT_CATEGORY_MAP = new Map([
 /**
  * 获取排序后的分类列表
  *
- * @returns {Array<{key: string, label: Object, order: number}>} 排序后的分类数组
+ * @returns {Array<{key: string, label: string, order: number}>} 排序后的分类数组
  */
 export function getSortedCategories() {
   return Object.entries(CATEGORIES)

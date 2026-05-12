@@ -1,0 +1,49 @@
+---
+title: "Android (Kotlin) 最佳实践"
+description: "使用 Kotlin 进行现代 Android 开发的最佳实践和模式"
+---
+
+
+# Android (Kotlin) 最佳实践
+
+## 项目结构
+- 遵循 Google 推荐的应用架构指南
+- 按功能（feature）组织包，而不是按层（layer）
+- 使用 Gradle 版本目录（Version Catalogs）来管理依赖
+- 将 UI 相关的代码（Activity, Fragment, Composable）与业务逻辑分离
+
+## 架构
+- 采用 MVVM (Model-View-ViewModel) 或 MVI (Model-View-Intent) 架构模式
+- 使用 Repository 模式来处理数据操作，作为数据源的统一入口
+- 使用依赖注入（Hilt 或 Koin）来管理组件依赖关系
+
+## Kotlin 语言
+- 广泛使用 Kotlin Coroutines 处理异步任务
+- 使用 Flow 进行响应式编程，替代 LiveData
+- 优先使用 `val` 而不是 `var`，拥抱不可变性
+- 使用数据类（`data class`）来持有状态
+- 善用作用域函数（`let`, `run`, `with`, `apply`, `also`）
+
+## Jetpack Compose
+- 使用 Compose 构建声明式 UI
+- 遵循单向数据流（Unidirectional Data Flow）原则
+- 将复杂的可组合函数（Composable）拆分为更小的、可重用的函数
+- 正确管理状态（State Hoisting）
+- 使用 `remember` 来记住状态，`derivedStateOf` 来派生状态
+
+## Android Jetpack
+- **ViewModel**: 存储和管理 UI 相关的数据，使其在配置变更后得以存留
+- **Room**: 用于本地数据库存储，提供编译时 SQL 校验
+- **Navigation**: 用于处理应用内的导航
+- **Lifecycle**: 创建生命周期感知的组件
+
+## 资源管理
+- 将字符串、尺寸、颜色和样式提取到 XML 资源文件中
+- 为不同的屏幕尺寸和密度提供备用资源
+- 使用主题（Themes）和样式（Styles）来确保 UI 一致性
+
+## 测试
+- 使用 JUnit 4/5 进行单元测试
+- 使用 Mockito 或 MockK 来模拟依赖
+- 使用 Espresso 或 Compose Test 进行 UI 测试
+- 使用 Turbine 来测试 Flow

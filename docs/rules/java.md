@@ -1,0 +1,80 @@
+---
+title: "Java 最佳实践"
+description: "现代软件开发的 Java 最佳实践和模式"
+---
+
+
+# Java 最佳实践
+
+## 项目结构
+- 使用标准的 Maven 或 Gradle 目录布局 (`src/main/java`, `src/test/java`)
+- 将资源文件放在 `src/main/resources`
+- 将配置文件（如 `application.properties`）放在资源目录中
+- 使用包（packages）来组织类，遵循反向域名表示法（例如 `com.yourcompany.project`）
+- 将测试代码放在 `src/test/java` 中，并保持与主代码相同的包结构
+
+## 代码风格
+- 遵循 Google Java Style Guide 或 Oracle Code Conventions
+- 使用 4 个空格进行缩进
+- 保持行长不超过 100-120 个字符
+- 在代码块（`if`, `for`, `while`, `try`）周围始终使用花括号 `{}`
+- 使用有意义的变量和方法名
+- 避免使用魔法数字（magic numbers），使用命名常量代替
+
+## 面向对象设计 (OOD)
+- 遵循 SOLID 原则
+- 优先使用组合而非继承
+- 最小化类和成员的可访问性（使用 `private` 除非必要）
+- 接口应定义行为，而不是状态
+- 使用不可变对象（Immutable Objects）以提高线程安全性
+- 正确使用抽象类和接口
+
+## 异常处理
+- 优先使用非受检异常（Unchecked Exceptions）
+- 不要捕获顶级的 `Exception` 或 `Throwable`
+- 在 `finally` 块中或使用 `try-with-resources` 来释放资源
+- 为自定义异常创建特定的异常类
+- 在文档中清晰地说明方法可能抛出的异常
+
+## 集合（Collections）
+- 优先使用接口类型（如 `List`, `Map`, `Set`）声明变量
+- 为集合指定初始容量以提高性能
+- 使用 `Collections.emptyList()` 等方法代替返回 `null`
+- 了解并正确使用不同集合实现的性能特点
+
+## Java 8+ 特性
+- 广泛使用 Stream API 进行集合处理
+- 使用 `Optional` 来避免 `NullPointerException`
+- 使用 Lambda 表达式和方法引用来简化代码
+- 使用 `java.time` 包处理日期和时间
+
+## 并发（Concurrency）
+- 优先使用 `java.util.concurrent` 包中的高级并发工具，而不是手动的 `wait()` 和 `notify()`
+- 了解并正确使用 `ExecutorService` 和 `Future`
+- 使用线程安全的集合，如 `ConcurrentHashMap`
+- 谨慎使用同步（`synchronized`），避免死锁
+
+## 测试
+- 使用 JUnit 5 或 TestNG 作为测试框架
+- 使用 Mockito 或 EasyMock 进行模拟（mocking）
+- 遵循 Arrange-Act-Assert (AAA) 模式编写测试
+- 确保高测试覆盖率，特别是对核心业务逻辑
+- 编写单元测试、集成测试和端到端测试
+
+## 安全
+- 使用 `PreparedStatement` 防止 SQL 注入
+- 验证和清理所有用户输入
+- 避免在日志中记录敏感信息
+- 使用安全的库来处理密码（例如 bcrypt）
+- 及时更新依赖项以修复已知的安全漏洞
+
+## 性能
+- 了解并分析代码的性能瓶颈
+- 谨慎进行字符串拼接，优先使用 `StringBuilder`
+- 避免在循环中创建昂贵的对象
+- 正确使用缓存策略
+
+## 文档
+- 为所有公共 API 编写 Javadoc
+- 保持 `README.md` 文件的更新
+- 在复杂的代码段中添加必要的内联注释

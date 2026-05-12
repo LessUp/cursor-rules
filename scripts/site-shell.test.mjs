@@ -12,21 +12,17 @@ const ruleCatalog = fs.readFileSync(
   'utf8',
 );
 
-const zhIndex = fs.readFileSync(
-  new URL('../docs/zh/index.md', import.meta.url),
+const indexMd = fs.readFileSync(
+  new URL('../docs/index.md', import.meta.url),
   'utf8',
 );
 
-const enIndex = fs.readFileSync(
-  new URL('../docs/en/index.md', import.meta.url),
-  'utf8',
-);
-
-test('VitePress config defines zh/en locales and rule navigation', () => {
-  assert.match(configTs, /label:\s*'简体中文'/);
-  assert.match(configTs, /label:\s*'English'/);
-  assert.match(configTs, /\/zh\/rules\//);
-  assert.match(configTs, /\/en\/rules\//);
+test('VitePress config is Chinese-only without locales', () => {
+  assert.match(configTs, /lang:\s*'zh-CN'/);
+  assert.match(configTs, /\/rules\//);
+  assert.doesNotMatch(configTs, /locales:/);
+  assert.doesNotMatch(configTs, /\/zh\//);
+  assert.doesNotMatch(configTs, /\/en\//);
 });
 
 test('RuleCatalog component implements search, filter, and copy actions', () => {
@@ -36,10 +32,6 @@ test('RuleCatalog component implements search, filter, and copy actions', () => 
   assert.match(ruleCatalog, /copyContent/);
 });
 
-test('zh/index.md embeds RuleCatalog component', () => {
-  assert.match(zhIndex, /<RuleCatalog\s+lang="zh"\s*\/>/);
-});
-
-test('en/index.md embeds RuleCatalog component', () => {
-  assert.match(enIndex, /<RuleCatalog\s+lang="en"\s*\/>/);
+test('index.md embeds RuleCatalog component without lang prop', () => {
+  assert.match(indexMd, /<RuleCatalog\s*\/>/);
 });

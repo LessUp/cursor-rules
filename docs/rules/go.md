@@ -1,0 +1,56 @@
+---
+title: "Go (Golang) 最佳实践"
+description: "现代软件开发的 Go (Golang) 最佳实践和模式"
+---
+
+
+# Go (Golang) 最佳实践
+
+## 项目结构
+- 遵循标准的 Go 项目布局 (e.g., `/cmd`, `/pkg`, `/internal`)
+- 将可执行程序的 main 包放在 `/cmd` 目录下
+- 将库代码（可被外部项目导入）放在 `/pkg` 目录下
+- 将项目私有的库代码放在 `/internal` 目录下
+- 使用 Go Modules (`go.mod`, `go.sum`) 管理依赖
+
+## 代码风格
+- 使用 `gofmt` 或 `goimports` 自动格式化代码
+- 遵循 Effective Go 指南
+- 命名要简洁且有意义，利用 Go 的类型系统而不是冗长的名字
+- 包名应为小写的单个词
+- 接口名通常以 `-er` 结尾 (e.g., `Reader`, `Writer`)
+
+## 错误处理
+- 错误是值。函数应返回一个 `error` 作为其最后一个返回值
+- 不要使用 `panic` 进行常规的错误处理，它应该用于真正异常的情况
+- 使用 `errors.Is()` 和 `errors.As()` (Go 1.13+) 来检查和包装错误
+- 在错误信息中提供上下文（e.g., `fmt.Errorf("parsing user %d: %w", userID, err)`)
+
+## 并发
+- "Do not communicate by sharing memory; instead, share memory by communicating."
+- 使用 Goroutines 和 Channels 进行并发编程
+- 使用 `sync` 包 (`Mutex`, `WaitGroup`) 进行更底层的同步控制
+- 避免在不知道何时会关闭的情况下从 channel 接收数据，使用 `for range` 或 "comma ok" idiom
+- 使用 `context` 包来处理超时、取消和传递请求范围的值
+
+## 测试
+- 使用内置的 `testing` 包
+- 测试文件命名为 `_test.go`
+- 测试函数以 `Test` 开头 (e.g., `func TestMyFunction(t *testing.T)`)
+- 使用表格驱动测试（Table-Driven Tests）来覆盖多个 case
+- 使用 `go test -cover` 来检查测试覆盖率
+
+## API 设计
+- 保持接口小而专注（接口隔离原则）
+- 返回具体类型，接收接口类型
+- 设计的 API 要难以被误用
+
+## 安全
+- 清理所有外部输入（HTTP 请求、文件等）
+- 使用标准库的 `html/template` 来防止 XSS 攻击
+- 使用 `database/sql` 的参数化查询来防止 SQL 注入
+
+## 性能
+- 编写简单、清晰的代码。不要过早优化
+- 使用 Go 的性能分析工具 (`pprof`) 来识别瓶颈
+- 了解指针的使用，避免不必要的内存分配

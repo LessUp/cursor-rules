@@ -35,10 +35,8 @@ await fs.writeFile(categoriesOutputPath, `${JSON.stringify(CATEGORIES, null, 2)}
 console.log(`Wrote ${path.relative(rootDir, categoriesOutputPath)}`);
 
 // 生成规则 Markdown 页面供 VitePress 索引
-const zhRulesDir = path.join(rootDir, 'docs/zh/rules');
-const enRulesDir = path.join(rootDir, 'docs/en/rules');
-await fs.mkdir(zhRulesDir, { recursive: true });
-await fs.mkdir(enRulesDir, { recursive: true });
+const rulesDir = path.join(rootDir, 'docs/rules');
+await fs.mkdir(rulesDir, { recursive: true });
 
 for (const rule of catalog) {
   const filePath = path.join(rootDir, rule.fileName);
@@ -56,14 +54,11 @@ description: "${safeDesc}"
 
 `;
 
-  const zhPagePath = path.join(zhRulesDir, `${rule.slug}.md`);
-  const enPagePath = path.join(enRulesDir, `${rule.slug}.md`);
-
-  await fs.writeFile(zhPagePath, pageFrontmatter + body);
-  await fs.writeFile(enPagePath, pageFrontmatter + body);
+  const pagePath = path.join(rulesDir, `${rule.slug}.md`);
+  await fs.writeFile(pagePath, pageFrontmatter + body);
 }
 
-console.log(`Wrote ${catalog.length} rule pages to docs/zh/rules/ and docs/en/rules/`);
+console.log(`Wrote ${catalog.length} rule pages to docs/rules/`);
 
 // Generate sitemap
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -73,23 +68,8 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-  <url>
-    <loc>${baseUrl}zh/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}en/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
 ${catalog.map(rule => `  <url>
-    <loc>${baseUrl}zh/rules/${rule.slug}</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}en/rules/${rule.slug}</loc>
+    <loc>${baseUrl}rules/${rule.slug}</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>`).join('\n')}

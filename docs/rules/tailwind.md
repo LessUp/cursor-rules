@@ -1,0 +1,76 @@
+---
+title: "Tailwind CSS 最佳实践"
+description: "适用于现代 Web 应用程序的 Tailwind CSS 和 UI 组件最佳实践"
+---
+
+
+# Tailwind CSS 最佳实践
+
+## 项目设置
+- 在 `tailwind.config.ts` 中配置 `content` 数组，确保扫描所有模板文件
+- 在 `theme.extend` 中扩展设计系统，而非直接覆盖默认主题
+- 使用 `@tailwindcss/typography`, `@tailwindcss/forms`, `@tailwindcss/aspect-ratio` 等官方插件
+- 在 `theme.extend.spacing` 中定义自定义间距值保持一致性
+- 在 `theme.extend.screens` 中添加自定义断点（如 `xs: '475px'`）
+- 使用 CSS 变量定义品牌颜色：`--color-primary: 220 90% 56%`，配合 `hsl(var(--color-primary))` 使用
+
+## 组件样式
+- 优先使用功能类（utility-first），避免编写自定义 CSS
+- 仅在重复组合频繁出现时使用 `@apply`（如 `.btn-primary { @apply px-4 py-2 bg-blue-600 ... }`）
+- 使用响应式前缀：`sm:`, `md:`, `lg:`, `xl:`, `2xl:`
+- 使用 `dark:` 变体实现深色模式（`dark:bg-gray-900 dark:text-white`）
+- 使用状态变体：`hover:`, `focus:`, `active:`, `disabled:`, `group-hover:`
+- 按类别组织功能类顺序：布局 → 尺寸 → 间距 → 排版 → 颜色 → 效果
+
+## 布局
+- 使用 `flex`, `items-center`, `justify-between` 构建弹性布局
+- 使用 `grid`, `grid-cols-3`, `gap-4` 构建网格布局
+- 使用 `space-x-4`, `space-y-2` 设置子元素间距
+- 使用 `container mx-auto px-4` 创建居中容器
+- 使用 `p-4`, `px-6`, `mt-8`, `mb-4` 设置内外边距
+- 使用 `items-center`, `justify-center`, `self-start` 控制对齐
+
+## 排版
+- 使用 `text-sm`, `text-base`, `text-lg`, `text-xl` 等预定义字号
+- 使用 `leading-tight`, `leading-normal`, `leading-relaxed` 控制行高
+- 使用 `font-medium`, `font-semibold`, `font-bold` 设置字重
+- 在 `tailwind.config.ts` 的 `fontFamily` 中配置自定义字体
+- 使用 `@tailwindcss/typography` 的 `prose` 类美化富文本内容
+- 使用 `truncate` 或 `line-clamp-3` 处理文本溢出
+
+## 颜色
+- 使用语义化颜色名：`bg-primary`, `text-destructive`，通过 CSS 变量映射
+- 确保文本与背景的对比度符合 WCAG AA 标准（至少 4.5:1）
+- 使用 `bg-black/50` 语法设置不透明度（替代旧的 `bg-opacity-50`）
+- 使用 `bg-gradient-to-r from-blue-500 to-purple-600` 创建渐变
+- 使用 `hover:bg-blue-700`, `focus:ring-2 focus:ring-blue-500` 设置交互状态
+- 在 `theme.extend.colors` 中定义项目调色板，保持全局一致
+
+## 组件库集成
+- 优先使用 shadcn/ui 组件，基于 Radix UI 提供无障碍性支持
+- 使用 CVA（Class Variance Authority）管理组件变体
+- 使用 `cn()` 工具函数（`clsx` + `tailwind-merge`）合并和去重类名
+- 使用 `animate-spin`, `animate-pulse`, `animate-bounce` 等内置动画
+- 使用 `transition-all duration-200 ease-in-out` 添加平滑过渡效果
+
+## 响应式设计
+- 采用移动优先策略：先编写基础样式，再用 `md:`, `lg:` 添加大屏样式
+- 默认断点：`sm:640px`, `md:768px`, `lg:1024px`, `xl:1280px`, `2xl:1536px`
+- 使用 `@container` 和 `@lg:` 等容器查询实现组件级响应式
+- 使用 `hidden md:block` 和 `md:hidden` 控制不同屏幕的显示/隐藏
+- 使用 `text-sm md:text-base lg:text-lg` 实现响应式字号
+- 使用 `p-4 md:p-6 lg:p-8` 实现响应式间距
+
+## 性能
+- Tailwind v3+ 使用 JIT 引擎自动按需生成样式，无需手动配置 purge
+- 避免使用 `@apply` 创建过多抽象层，这会增加 CSS 体积
+- 使用 `tailwind-merge` 避免类名冲突导致的样式冗余
+- 避免动态拼接类名（如 `` `text-${color}-500` ``），使用完整的类名字符串
+- 生产构建时 Tailwind 自动进行 tree-shaking 和 minification
+
+## 无障碍性
+- 使用 `sr-only` 为屏幕阅读器提供隐藏的辅助文本
+- 使用 `focus:ring-2 focus:ring-offset-2` 提供清晰的焦点指示器
+- 确保可交互元素有 `focus-visible:` 样式
+- 使用 `not-sr-only` 在需要时恢复可视元素
+- 使用语义化 HTML 元素配合 Tailwind 样式，而非仅用 `div` 和 `span`

@@ -1,0 +1,84 @@
+---
+title: "Node.js 和 Express.js 最佳实践"
+description: "Node.js 和 Express.js 后端开发最佳实践"
+---
+
+
+# Node.js 和 Express.js 最佳实践
+
+## 项目结构
+- 按领域组织代码：`src/users/`, `src/orders/`, `src/auth/`
+- 每个领域包含 `controller.ts`, `service.ts`, `routes.ts`, `model.ts`
+- 将中间件集中在 `src/middleware/` 目录
+- 将配置放在 `src/config/` 中，使用 `dotenv` 加载环境变量
+- 将共享工具函数放在 `src/utils/` 中
+- 使用 `src/types/` 存放 TypeScript 类型定义
+
+## Express 设置
+- 使用 `express.json()` 和 `express.urlencoded()` 解析请求体
+- 使用 `helmet` 设置安全相关的 HTTP 头
+- 使用 `cors` 中间件配置跨域策略
+- 使用 `morgan` 或 `pino-http` 记录 HTTP 请求日志
+- 使用 `compression` 中间件启用 Gzip 压缩
+- 将路由挂载到版本化的前缀下（如 `/api/v1`）
+
+## API 设计
+- 使用名词复数命名资源端点（`/api/v1/users`, `/api/v1/orders`）
+- 使用 URL 路径前缀 `/api/v1/` 实现 API 版本控制
+- 使用 `express-validator` 或 `joi` / `zod` 验证请求参数
+- 统一错误响应格式：`{ error: { code, message, details } }`
+- 返回语义化 HTTP 状态码（201 创建、204 无内容、400 错误请求、404 未找到）
+- 使用 `swagger-jsdoc` + `swagger-ui-express` 自动生成 API 文档
+
+## 数据库集成
+- 关系型数据库使用 Prisma、TypeORM 或 Knex.js
+- MongoDB 使用 Mongoose 作为 ODM
+- 使用数据库迁移工具管理模式变更（Prisma Migrate、Knex migrations）
+- 关系型数据库配置连接池（`pool: { min: 2, max: 10 }`）
+- 将数据库操作封装在 Service 层，Controller 不直接操作数据库
+- 在 Service 层使用事务确保数据一致性
+
+## 认证
+- 使用 `jsonwebtoken` 签发和验证 JWT，设置合理的过期时间
+- 使用 `bcrypt` 或 `argon2` 对密码进行哈希存储
+- 实现 Access Token + Refresh Token 双令牌机制
+- 使用 `passport.js` 集成 Google、GitHub 等 OAuth 登录
+- 使用中间件实现基于角色的访问控制（RBAC）
+- 将 JWT Secret 存入环境变量，切勿硬编码
+
+## 安全
+- 使用 `cors({ origin: ['https://yourdomain.com'] })` 限制允许的源
+- 使用 `express-rate-limit` 限制请求频率以防止暴力攻击
+- 使用 `helmet` 自动设置 X-Content-Type-Options、X-Frame-Options 等安全头
+- 对所有用户输入进行转义和验证，防止注入攻击
+- 使用 HTTPS，在生产环境中强制重定向 HTTP 到 HTTPS
+- 定期使用 `npm audit` 检查依赖项的已知漏洞
+
+## 错误处理
+- 创建自定义错误类继承 `Error`（如 `NotFoundError`, `ValidationError`）
+- 实现全局错误处理中间件（四参数签名 `(err, req, res, next)`）
+- 使用 `express-async-errors` 或手动 try-catch 捕获异步路由错误
+- 在生产环境中不向客户端暴露堆栈信息
+- 使用 `process.on('unhandledRejection')` 捕获未处理的 Promise 拒绝
+
+## 性能
+- 使用 Redis 缓存频繁查询的数据和会话信息
+- 始终使用 `async/await` 处理异步操作，避免回调地狱
+- 使用 `cluster` 模块或 PM2 利用多核 CPU
+- 使用 `pino` 替代 `console.log`，其性能比 Winston 高数倍
+- 对大数据集实现基于游标的分页而非 OFFSET
+
+## 测试
+- 使用 Jest 或 Vitest 作为测试框架
+- 使用 `supertest` 对 Express 路由进行集成测试
+- 在 `beforeEach` 中重置数据库状态以保证测试隔离
+- 使用 Jest 的 `jest.mock()` 模拟外部服务调用
+- 为每个端点编写成功和失败场景的测试用例
+- 使用 `--coverage` 标志生成测试覆盖率报告
+
+## 部署
+- 使用多阶段 Docker 构建，最终镜像基于 `node:lts-alpine`
+- 使用 PM2 作为进程管理器，启用集群模式和自动重启
+- 通过 `.env` 文件管理环境变量，使用 `dotenv` 加载
+- 监听 `SIGTERM` 和 `SIGINT` 信号，实现优雅关闭（graceful shutdown）
+- 配置健康检查端点 `/health` 返回应用状态

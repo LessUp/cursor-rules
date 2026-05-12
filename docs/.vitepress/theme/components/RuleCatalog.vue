@@ -12,7 +12,6 @@
         <a :href="siteLink('/')">{{ texts.navCatalog }}</a>
         <a :href="siteLink('/openspec/architecture')">{{ texts.navDocs }}</a>
         <a :href="repoUrl" target="_blank" rel="noopener">GitHub</a>
-        <a :href="switchLocaleLink">{{ texts.switchLocale }}</a>
       </div>
     </div>
 
@@ -140,10 +139,10 @@
               </div>
             </dl>
           </div>
-          <p class="expand-hint">{{ expandedSlug === rule.slug ? (lang === 'zh' ? '点击收起' : 'Collapse') : (lang === 'zh' ? '点击展开详情' : 'Expand details') }}</p>
+          <p class="expand-hint">{{ expandedSlug === rule.slug ? '点击收起' : '点击展开详情' }}</p>
           <div class="rule-actions" @click.stop>
             <button class="secondary-link button-reset" @click="copyInstall(rule.fileName)">{{ texts.installSnippet }}</button>
-            <button class="secondary-link button-reset" @click="copyContent(rule.fileName)">{{ lang === 'zh' ? '复制规则内容' : 'Copy rule content' }}</button>
+            <button class="secondary-link button-reset" @click="copyContent(rule.fileName)">复制规则内容</button>
             <a class="secondary-link" :href="githubUrl(rule.fileName)" target="_blank" rel="noopener">{{ texts.openOnGithub }}</a>
           </div>
         </article>
@@ -154,9 +153,9 @@
     </div>
 
     <div class="shortcut-hint">
-      <span class="shortcut-key">/</span> {{ lang === 'zh' ? '搜索' : 'Search' }}
-      <span class="shortcut-key">Esc</span> {{ lang === 'zh' ? '清空' : 'Clear' }}
-      <span class="shortcut-key">1-8</span> {{ lang === 'zh' ? '切换分类' : 'Switch category' }}
+      <span class="shortcut-key">/</span> 搜索
+      <span class="shortcut-key">Esc</span> 清空
+      <span class="shortcut-key">1-8</span> 切换分类
     </div>
   </div>
 </template>
@@ -164,10 +163,6 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useData, withBase } from 'vitepress'
-
-const props = defineProps({
-  lang: { type: String, default: 'zh' }
-})
 
 const { site } = useData()
 const base = computed(() => site.value.base)
@@ -181,143 +176,72 @@ const copyMessage = ref('')
 const expandedSlug = ref(null)
 const searchInput = ref(null)
 
-const TEXT_BASE = {
-  zh: {
-    badge: 'Archive-grade Cursor .mdc 规则库',
-    title: '用生成式目录浏览、筛选并采用 Cursor Rules',
-    description: '根目录 .mdc 是产品本体，GitHub Pages 提供发现、筛选、理解与复制采用的体验。',
-    navCatalog: '规则目录',
-    navDocs: '项目文档',
-    switchLocale: 'English',
-    browseRepo: '查看 GitHub 仓库',
-    readme: '阅读 README',
-    totalRules: '规则',
-    categories: '分类',
-    globalRules: '全局',
-    featureMapTitle: '核心能力',
-    quickStartTitle: '快速接入',
-    quickStartHint: '将需要的 .mdc 文件复制到项目 .cursor/rules/ 后即可生效。',
-    filtersTitle: '按主题筛选',
-    filtersDescription: '搜索规则标题、描述或文件名，并通过分类按钮快速缩小范围。',
-    searchPlaceholder: '搜索规则、描述或文件名',
-    results: '结果',
-    emptyTitle: '没有匹配的规则',
-    emptyDescription: '试试清空关键词，或者切换到其他分类。',
-    installSnippet: '复制接入命令',
-    openOnGithub: '在 GitHub 中打开',
-    fileLabel: '文件',
-    globLabel: '适用范围',
-    globalLabel: '全局规则',
-    footer: 'README 负责快速开始，GitHub Pages 负责规则目录，OpenSpec 负责项目控制文档。',
-    copiedInstall: '已复制接入命令',
-    copiedRule: '规则内容已复制',
-    copyFailed: '复制失败，请稍后重试',
-  },
-  en: {
-    badge: 'Archive-grade Cursor .mdc library',
-    title: 'Browse, filter, and adopt Cursor Rules from a generated catalog',
-    description: 'Root-level .mdc files are the product; GitHub Pages focuses on discovery, filtering, understanding, and adoption.',
-    navCatalog: 'Rules',
-    navDocs: 'Project docs',
-    switchLocale: '简体中文',
-    browseRepo: 'Open GitHub repo',
-    readme: 'Read README',
-    totalRules: 'Rules',
-    categories: 'Categories',
-    globalRules: 'Global',
-    featureMapTitle: 'Core capabilities',
-    quickStartTitle: 'Quick start',
-    quickStartHint: 'Copy required .mdc files into .cursor/rules/ to activate them in your project.',
-    filtersTitle: 'Filter by topic',
-    filtersDescription: 'Search rule titles, descriptions, or filenames and narrow the scope by category.',
-    searchPlaceholder: 'Search rules, descriptions, or filenames',
-    results: 'Results',
-    emptyTitle: 'No matching rules',
-    emptyDescription: 'Clear the search query or switch to another category.',
-    installSnippet: 'Copy install command',
-    openOnGithub: 'Open on GitHub',
-    fileLabel: 'File',
-    globLabel: 'Scope',
-    globalLabel: 'Global rule',
-    footer: 'README is the quick-start entry, GitHub Pages is the rule catalog, and OpenSpec docs hold project control guidance.',
-    copiedInstall: 'Install command copied',
-    copiedRule: 'Rule content copied',
-    copyFailed: 'Copy failed, please try again',
-  },
+const texts = {
+  badge: 'Archive-grade Cursor .mdc 规则库',
+  title: '用生成式目录浏览、筛选并采用 Cursor Rules',
+  description: '根目录 .mdc 是产品本体，GitHub Pages 提供发现、筛选、理解与复制采用的体验。',
+  navCatalog: '规则目录',
+  navDocs: '项目文档',
+  browseRepo: '查看 GitHub 仓库',
+  readme: '阅读 README',
+  totalRules: '规则',
+  categories: '分类',
+  globalRules: '全局',
+  featureMapTitle: '核心能力',
+  quickStartTitle: '快速接入',
+  quickStartHint: '将需要的 .mdc 文件复制到项目 .cursor/rules/ 后即可生效。',
+  filtersTitle: '按主题筛选',
+  filtersDescription: '搜索规则标题、描述或文件名，并通过分类按钮快速缩小范围。',
+  searchPlaceholder: '搜索规则、描述或文件名',
+  results: '结果',
+  emptyTitle: '没有匹配的规则',
+  emptyDescription: '试试清空关键词，或者切换到其他分类。',
+  installSnippet: '复制接入命令',
+  openOnGithub: '在 GitHub 中打开',
+  fileLabel: '文件',
+  globLabel: '适用范围',
+  globalLabel: '全局规则',
+  footer: 'README 负责快速开始，GitHub Pages 负责规则目录，OpenSpec 负责项目控制文档。',
+  copiedInstall: '已复制接入命令',
+  copiedRule: '规则内容已复制',
+  copyFailed: '复制失败，请稍后重试',
 }
 
-const texts = computed(() => TEXT_BASE[props.lang] || TEXT_BASE.zh)
-const localePrefix = computed(() => (props.lang === 'zh' ? '/zh' : '/en'))
-const switchLocaleLink = computed(() => withBase(props.lang === 'zh' ? '/en/' : '/zh/'))
 const installCommand = 'mkdir -p .cursor/rules && cp path/to/cursor-rules/*.mdc .cursor/rules/'
 
 function siteLink(pathname) {
-  return withBase(`${localePrefix.value}${pathname}`)
+  return withBase(pathname)
 }
 
-const featureCards = computed(() => {
-  if (props.lang === 'zh') {
-    return [
-      {
-        title: '按技术栈筛选',
-        description: '按语言、前端、后端、移动端或工程主题快速定位规则。',
-        tags: [
-          { text: '语言', href: siteLink('/?cat=language') },
-          { text: '前端', href: siteLink('/?cat=frontend') },
-          { text: '后端', href: siteLink('/?cat=backend') },
-        ],
-      },
-      {
-        title: '快速采用规则',
-        description: '支持复制接入命令与规则全文，减少手工复制粘贴成本。',
-        tags: [
-          { text: '规则目录', href: '#catalog' },
-          { text: 'README', href: readmeUrl },
-          { text: 'GitHub', href: repoUrl },
-        ],
-      },
-      {
-        title: '项目控制文档',
-        description: '将架构、工作流与 AI tooling 约束集中在 OpenSpec 里维护。',
-        tags: [
-          { text: '架构', href: siteLink('/openspec/architecture') },
-          { text: 'AI 工具', href: siteLink('/openspec/ai-tooling') },
-          { text: '工作流', href: siteLink('/openspec/workflow') },
-        ],
-      },
-    ]
-  }
-
-  return [
-    {
-      title: 'Filter by stack',
-      description: 'Locate rules quickly by language, frontend, backend, mobile, or engineering topics.',
-      tags: [
-        { text: 'Language', href: siteLink('/?cat=language') },
-        { text: 'Frontend', href: siteLink('/?cat=frontend') },
-        { text: 'Backend', href: siteLink('/?cat=backend') },
-      ],
-    },
-    {
-      title: 'Adopt quickly',
-      description: 'Copy install commands and raw rule content directly from the catalog UI.',
-      tags: [
-        { text: 'Catalog', href: '#catalog' },
-        { text: 'README', href: readmeUrl },
-        { text: 'GitHub', href: repoUrl },
-      ],
-    },
-    {
-      title: 'Project control docs',
-      description: 'Keep architecture, workflow, and AI tooling contracts centralized in OpenSpec docs.',
-      tags: [
-        { text: 'Architecture', href: siteLink('/openspec/architecture') },
-        { text: 'AI tooling', href: siteLink('/openspec/ai-tooling') },
-        { text: 'Workflow', href: siteLink('/openspec/workflow') },
-      ],
-    },
-  ]
-})
+const featureCards = [
+  {
+    title: '按技术栈筛选',
+    description: '按语言、前端、后端、移动端或工程主题快速定位规则。',
+    tags: [
+      { text: '语言', href: siteLink('/?cat=language') },
+      { text: '前端', href: siteLink('/?cat=frontend') },
+      { text: '后端', href: siteLink('/?cat=backend') },
+    ],
+  },
+  {
+    title: '快速采用规则',
+    description: '支持复制接入命令与规则全文，减少手工复制粘贴成本。',
+    tags: [
+      { text: '规则目录', href: '#catalog' },
+      { text: 'README', href: readmeUrl },
+      { text: 'GitHub', href: repoUrl },
+    ],
+  },
+  {
+    title: '项目控制文档',
+    description: '将架构、工作流与 AI tooling 约束集中在 OpenSpec 里维护。',
+    tags: [
+      { text: '架构', href: siteLink('/openspec/architecture') },
+      { text: 'AI 工具', href: siteLink('/openspec/ai-tooling') },
+      { text: '工作流', href: siteLink('/openspec/workflow') },
+    ],
+  },
+]
 
 async function loadData() {
   try {
@@ -357,9 +281,9 @@ const categoryCounts = computed(() => {
 const globalRuleCount = computed(() => rules.value.filter(r => r.globs.length === 0).length)
 
 const stats = computed(() => [
-  { label: texts.value.totalRules, value: rules.value.length },
-  { label: texts.value.categories, value: categoryOrder.value.length - 1 },
-  { label: texts.value.globalRules, value: globalRuleCount.value },
+  { label: texts.totalRules, value: rules.value.length },
+  { label: texts.categories, value: categoryOrder.value.length - 1 },
+  { label: texts.globalRules, value: globalRuleCount.value },
 ])
 
 const filteredRules = computed(() => {
@@ -373,8 +297,8 @@ const filteredRules = computed(() => {
 })
 
 function categoryLabel(cat) {
-  if (cat === 'all') return props.lang === 'zh' ? '全部' : 'All'
-  return categories.value[cat]?.label?.[props.lang] ?? cat
+  if (cat === 'all') return '全部'
+  return categories.value[cat]?.label ?? cat
 }
 
 function setCategory(cat) {
@@ -415,9 +339,9 @@ async function copyInstall(fileName) {
   try {
     const cmd = `mkdir -p .cursor/rules\ncp path/to/cursor-rules/${fileName} .cursor/rules/`
     await copyText(cmd)
-    copyMessage.value = `${texts.value.copiedInstall}: ${fileName}`
+    copyMessage.value = `${texts.copiedInstall}: ${fileName}`
   } catch (e) {
-    copyMessage.value = texts.value.copyFailed
+    copyMessage.value = texts.copyFailed
   }
   setTimeout(() => { copyMessage.value = '' }, 2000)
 }
@@ -428,9 +352,9 @@ async function copyContent(fileName) {
     if (!res.ok) throw new Error(res.status)
     const content = await res.text()
     await copyText(content)
-    copyMessage.value = `${texts.value.copiedRule}: ${fileName}`
+    copyMessage.value = `${texts.copiedRule}: ${fileName}`
   } catch (e) {
-    copyMessage.value = texts.value.copyFailed
+    copyMessage.value = texts.copyFailed
   }
   setTimeout(() => { copyMessage.value = '' }, 2000)
 }

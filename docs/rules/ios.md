@@ -1,0 +1,47 @@
+---
+title: "iOS (Swift & SwiftUI) 最佳实践"
+description: "使用 Swift 和 SwiftUI 进行现代 iOS 开发的最佳实践和模式"
+---
+
+
+# iOS (Swift & SwiftUI) 最佳实践
+
+## 项目结构
+- 按功能（Feature）组织文件和文件夹，而不是按类型（e.g., Views, ViewModels）
+- 使用 Swift Package Manager (SPM) 管理第三方依赖
+- 将网络层、数据持久化层等分离为独立的模块/包
+
+## Swift 语言
+- 遵循 Swift API 设计指南
+- 拥抱值类型（Structs, Enums），在需要引用语义时才使用类（Classes）
+- 使用 `guard` 语句处理前置条件，减少嵌套
+- 优先使用 `Result` 类型处理可能失败的操作
+- 采用协议导向编程（Protocol-Oriented Programming）
+
+## 架构
+- 采用 MVVM (Model-View-ViewModel) 作为 SwiftUI 的首选架构
+- 考虑使用 TCA (The Composable Architecture) 或其他 Redux-like 架构处理复杂状态管理
+- 保持 View 的轻量，将业务逻辑移至 ViewModel 或其他服务层
+
+## SwiftUI
+- 遵循声明式 UI 的思想，UI 是状态的函数
+- 正确使用属性包装器（`@State`, `@Binding`, `@StateObject`, `@ObservedObject`）来管理数据流
+- 将复杂的视图拆分为更小的、可重用的子视图
+- 使用 `.environmentObject()` 在视图层级中共享数据
+- 使用 `LazyVStack` 和 `LazyHStack` 处理大量数据
+
+## 并发
+- 使用 Swift 5.5+ 的 `async/await` 来编写清晰的异步代码
+- 使用 `Task` 来创建和管理并发任务
+- 使用 Actors 来保护可变状态，确保线程安全
+- 避免在主线程上执行耗时操作
+
+## 数据持久化
+- 使用 Core Data 或 SwiftData (iOS 17+) 进行本地数据存储
+- 使用 `Codable` 协议来序列化和反序列化数据
+- 将数据访问逻辑封装在 Repository 中
+
+## 测试
+- 使用 XCTest 框架进行单元测试和 UI 测试
+- 遵循 Arrange-Act-Assert (AAA) 或 Given-When-Then 模式
+- 编写可测试的代码，将依赖项作为协议传入以便模拟

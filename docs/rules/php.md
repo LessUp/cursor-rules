@@ -1,0 +1,50 @@
+---
+title: "PHP & Laravel 最佳实践"
+description: "使用 PHP 和 Laravel 框架的现代 Web 开发最佳实践"
+---
+
+
+# PHP & Laravel 最佳实践
+
+## PHP 基础
+- 遵循 PSR-12 (Extended Coding Style)
+- 使用 Composer 管理依赖
+- 使用强类型（PHP 7+）
+- 使用 `strict_types=1`
+- 了解并使用 SPL (Standard PHP Library)
+
+## Laravel 项目结构
+- 遵循 "Fat Models, Skinny Controllers" 原则
+- 使用 Service Classes 或 Action Classes 来封装业务逻辑
+- 使用 Form Requests 来处理验证逻辑
+- 使用 Eloquent API Resources 来转换模型和集合为 JSON
+
+## Eloquent ORM
+- 警惕 N+1 问题，使用 Eager Loading (`with()`)
+- 使用 Accessors & Mutators 来格式化属性
+- 使用 Scopes 来创建可重用的查询
+- 使用数据库迁移（Migrations）和 Seeding
+
+## 路由 (Routing)
+- 将路由定义在 `routes/web.php` 和 `routes/api.php`
+- 使用路由命名（`->name('profile')`）
+- 使用路由模型绑定（Route Model Binding）来自动注入模型实例
+
+## Blade 模板
+- 避免在 Blade 模板中执行数据库查询
+- 使用 `@include` 和 `@extends` 组织视图
+- 使用 Blade Components 和 Slots
+- 使用 `@csrf` 指令保护表单
+
+## 安全
+- 使用 Laravel 内置的认证和授权系统
+- 使用 Hashed Passwords
+- 防止 SQL 注入（Eloquent 默认处理）
+- 防止 XSS（Blade 默认处理）
+- 防止 CSRF（Laravel 默认处理）
+
+## 测试
+- 使用 PHPUnit 和 Laravel Dusk
+- 使用 Pest 作为 PHPUnit 的替代
+- 使用 HTTP Tests 来测试 API 端点
+- 使用数据库迁移和工厂（Factories）来准备测试数据
