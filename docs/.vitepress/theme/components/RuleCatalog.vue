@@ -11,6 +11,7 @@
       <div class="home-nav">
         <a :href="siteLink('/')">{{ texts.navCatalog }}</a>
         <a :href="siteLink('/openspec/architecture')">{{ texts.navDocs }}</a>
+        <a :href="llmsUrl" target="_blank" rel="noopener">LLM 文档</a>
         <a :href="repoUrl" target="_blank" rel="noopener">GitHub</a>
       </div>
     </div>
@@ -405,6 +406,7 @@ onMounted(() => {
 
 const repoUrl = 'https://github.com/LessUp/cursor-rules'
 const readmeUrl = 'https://github.com/LessUp/cursor-rules#readme'
+const llmsUrl = 'https://lessup.github.io/cursor-rules/llms.txt'
 </script>
 
 <style scoped>

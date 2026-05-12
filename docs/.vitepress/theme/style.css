@@ -233,3 +233,16 @@
     font-size: 23px;
   }
 }
+
+/* Mermaid 图表样式 */
+.mermaid {
+  background: var(--vp-c-bg-soft);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px 0;
+  text-align: center;
+}
+
+.dark .mermaid {
+  background: var(--vp-c-bg-alt);
+}

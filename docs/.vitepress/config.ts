@@ -1,4 +1,6 @@
 import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
+import llmstxt from 'vitepress-plugin-llms'
 
 const rawBase = process.env.VITEPRESS_BASE
 const base = rawBase
@@ -7,13 +9,17 @@ const base = rawBase
     : `/${rawBase}/`
   : '/'
 
-export default defineConfig({
+export default withMermaid(defineConfig({
   base,
   title: 'Cursor Rules',
   description: 'Archive-grade Cursor .mdc 规则库',
   lang: 'zh-CN',
 
   srcExclude: ['superpowers/**'],
+
+  vite: {
+    plugins: [llmstxt()]
+  },
 
   themeConfig: {
     nav: [
@@ -48,4 +54,4 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/LessUp/cursor-rules' },
     ],
   },
-})
+}))
