@@ -33,8 +33,8 @@ npm run build:catalog
 并确认：
 
 1. `.mdc` 校验通过。
-2. 目录生成测试与 Pages shell 测试通过。
-3. `docs/assets/rules.json` 已按当前规则内容重建。
+2. 目录生成测试通过。
+3. `docs/.vitepress/public/assets/rules.json` 和规则 Markdown 页面已按当前规则内容重建。
 
 ## Review trigger summary
 

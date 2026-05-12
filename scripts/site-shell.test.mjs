@@ -2,18 +2,44 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
-const indexHtml = fs.readFileSync(
-  new URL('../docs/index.html', import.meta.url),
+const configTs = fs.readFileSync(
+  new URL('../docs/.vitepress/config.ts', import.meta.url),
   'utf8',
 );
 
-test('index shell references generated assets and empty render targets', () => {
-  assert.match(indexHtml, /<main id="app">/);
-  assert.match(indexHtml, /<section id="hero">/);
-  assert.match(indexHtml, /<section id="filters">/);
-  assert.match(indexHtml, /<section id="rule-grid"><\/section>/);
-  assert.match(
-    indexHtml,
-    /<script type="module" src="\.\/assets\/site\.js"><\/script>/,
-  );
+const ruleCatalog = fs.readFileSync(
+  new URL('../docs/.vitepress/theme/components/RuleCatalog.vue', import.meta.url),
+  'utf8',
+);
+
+const zhIndex = fs.readFileSync(
+  new URL('../docs/zh/index.md', import.meta.url),
+  'utf8',
+);
+
+const enIndex = fs.readFileSync(
+  new URL('../docs/en/index.md', import.meta.url),
+  'utf8',
+);
+
+test('VitePress config defines zh/en locales and rule navigation', () => {
+  assert.match(configTs, /label:\s*'简体中文'/);
+  assert.match(configTs, /label:\s*'English'/);
+  assert.match(configTs, /\/zh\/rules\//);
+  assert.match(configTs, /\/en\/rules\//);
+});
+
+test('RuleCatalog component implements search, filter, and copy actions', () => {
+  assert.match(ruleCatalog, /search-input/);
+  assert.match(ruleCatalog, /chip-button/);
+  assert.match(ruleCatalog, /copyInstall/);
+  assert.match(ruleCatalog, /copyContent/);
+});
+
+test('zh/index.md embeds RuleCatalog component', () => {
+  assert.match(zhIndex, /<RuleCatalog\s+lang="zh"\s*\/>/);
+});
+
+test('en/index.md embeds RuleCatalog component', () => {
+  assert.match(enIndex, /<RuleCatalog\s+lang="en"\s*\/>/);
 });

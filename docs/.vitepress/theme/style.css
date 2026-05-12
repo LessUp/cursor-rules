@@ -1,0 +1,235 @@
+:root {
+  --vp-c-brand-1: #3476f6;
+  --vp-c-brand-2: #488aff;
+  --vp-c-brand-3: #5c9eff;
+  --vp-c-brand-soft: rgba(52, 118, 246, 0.14);
+
+  --vp-c-bg: #ffffff;
+  --vp-c-bg-alt: #f6f8fa;
+  --vp-c-bg-soft: #f6f8fa;
+
+  --vp-c-text-1: #24292f;
+  --vp-c-text-2: #57606a;
+  --vp-c-text-3: #8b949e;
+
+  --vp-c-border: #d0d7de;
+  --vp-c-divider: #d0d7de;
+
+  --vp-home-hero-name-color: #3476f6;
+  --vp-home-hero-name-background: transparent;
+  --vp-home-hero-image-background-image: none;
+  --vp-home-hero-image-filter: none;
+}
+
+.dark {
+  --vp-c-brand-1: #488aff;
+  --vp-c-brand-2: #3476f6;
+  --vp-c-brand-3: #5c9eff;
+  --vp-c-brand-soft: rgba(52, 118, 246, 0.16);
+
+  --vp-c-bg: #0d1117;
+  --vp-c-bg-alt: #161b22;
+  --vp-c-bg-soft: #21262d;
+
+  --vp-c-text-1: #c9d1d9;
+  --vp-c-text-2: #8b949e;
+  --vp-c-text-3: #6e7681;
+
+  --vp-c-border: #30363d;
+  --vp-c-divider: #30363d;
+}
+
+.VPNav {
+  background: var(--vp-c-bg);
+  border-bottom: 1px solid var(--vp-c-border);
+}
+
+.VPNavBarMenuLink,
+.VPNavBarMenuGroup .button {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.VPNavBarMenuLink.active,
+.VPNavBarMenuGroup.open .button {
+  color: var(--vp-c-brand-1);
+}
+
+.VPSidebar {
+  padding: 20px 14px 96px;
+}
+
+.VPSidebarGroup {
+  margin-bottom: 12px;
+}
+
+.VPSidebarGroup .title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--vp-c-text-3);
+  padding: 10px 14px;
+}
+
+.VPSidebarItem .text {
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: all 0.15s;
+}
+
+.VPSidebarItem .text:hover {
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-brand-1);
+}
+
+.VPSidebarItem.is-active .text {
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  font-weight: 500;
+}
+
+.VPDoc {
+  padding: 32px 24px 96px;
+}
+
+.VPDoc .content {
+  max-width: 760px;
+}
+
+.VPDoc h1 {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.7px;
+  margin-bottom: 16px;
+}
+
+.VPDoc h2 {
+  font-size: 26px;
+  font-weight: 600;
+  margin-top: 42px;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.VPDoc h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 28px;
+  margin-bottom: 12px;
+}
+
+.VPDoc p {
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 14px;
+}
+
+.VPDoc a {
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+
+.VPDoc a:hover {
+  border-bottom-color: var(--vp-c-brand-1);
+}
+
+.VPDoc code {
+  font-size: 14px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--vp-c-bg-soft);
+}
+
+.VPDoc pre code {
+  padding: 0;
+  background: transparent;
+}
+
+.VPDoc .custom-block {
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin: 20px 0;
+}
+
+.VPDoc .custom-block.info {
+  background: var(--vp-c-bg-soft);
+  border-left: 4px solid var(--vp-c-brand-1);
+}
+
+.VPDoc .custom-block.tip {
+  background: color-mix(in srgb, var(--vp-c-brand-soft), #fff 60%);
+  border-left: 4px solid var(--vp-c-brand-1);
+}
+
+.VPDoc .custom-block.warning {
+  background: rgba(255, 197, 23, 0.14);
+  border-left: 4px solid #ffc517;
+}
+
+.VPDoc .custom-block.danger {
+  background: rgba(255, 84, 84, 0.14);
+  border-left: 4px solid #ff5454;
+}
+
+.VPDoc table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 20px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--vp-c-border);
+}
+
+.VPDoc th {
+  background: var(--vp-c-bg-soft);
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--vp-c-border);
+}
+
+.VPDoc td {
+  padding: 10px 16px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--vp-c-border);
+}
+
+.VPDoc tr:last-child td {
+  border-bottom: none;
+}
+
+.VPDoc tr:hover td {
+  background: var(--vp-c-bg-soft);
+}
+
+.VPLocalSearchBox .shell {
+  border-radius: 16px;
+}
+
+.VPFooter {
+  padding: 32px 24px;
+  background: var(--vp-c-bg-alt);
+}
+
+.VPFooter .message,
+.VPFooter .copyright {
+  font-size: 13px;
+  color: var(--vp-c-text-3);
+}
+
+@media (max-width: 960px) {
+  .VPDoc h1 {
+    font-size: 30px;
+  }
+
+  .VPDoc h2 {
+    font-size: 23px;
+  }
+}

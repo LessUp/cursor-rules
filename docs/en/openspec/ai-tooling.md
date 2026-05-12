@@ -28,7 +28,7 @@
 
 1. 先读 `AGENTS.md`。
 2. 再读 `docs/openspec/architecture.md` 和 `workflow.md`。
-3. 把 `docs/assets/rules.json` 视为生成产物，而不是手写数据源。
+3. 把 `docs/.vitepress/public/assets/rules.json` 视为生成产物，而不是手写数据源。
 4. 修改 `.mdc`、Pages 或 AI 配置后，重新运行 `npm test` 与 `npm run build:catalog`。
 
 ## Preferred skills

@@ -25,3 +25,13 @@ node_modules/
 
 # oh-my-claudecode runtime
 .omc/
+
+# VitePress build output
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+
+# Auto-generated rule pages and assets
+docs/zh/rules/
+docs/en/rules/
+docs/public/assets/
+docs/public/sitemap.xml

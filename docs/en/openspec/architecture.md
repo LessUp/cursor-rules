@@ -10,13 +10,12 @@
 
 - `scripts/validate-rules.mjs` 校验 `.mdc` 结构。
 - `scripts/lib/rule-catalog.mjs` 把规则元信息规范化为统一目录项。
-- `scripts/build-rule-catalog.mjs` 生成 `docs/assets/rules.json`。
+- `scripts/build-rule-catalog.mjs` 生成 `docs/.vitepress/public/assets/rules.json` 和规则 Markdown 页面。
 
 ### 3. Static Pages surface
 
-- `docs/index.html` 提供空壳信息架构。
-- `docs/assets/site.js` 负责加载和渲染规则目录。
-- `docs/assets/site.css` 负责统一视觉样式。
+- `docs/.vitepress/` 提供 VitePress 文档站点配置和主题。
+- `docs/.vitepress/theme/components/RuleCatalog.vue` 负责规则目录的展示和交互。
 
 ## Data flow
 
@@ -29,9 +28,11 @@
             │
             └── build-rule-catalog.mjs
                     │
-                    └── docs/assets/rules.json
+                    ├── docs/.vitepress/public/assets/rules.json
+                    │
+                    └── docs/zh/rules/*.md + docs/en/rules/*.md
                                 │
-                                └── docs/index.html + site.js
+                                └── VitePress 构建生成静态站点
 ```
 
 ## Design constraints
