@@ -57,9 +57,9 @@ layout: home
     <div class="feature-card-title">📊 按技术栈筛选</div>
     <div class="feature-card-desc">按语言、前端、后端、移动端或工程主题快速定位规则。</div>
     <div class="feature-tags">
-      <a href="/?cat=language" class="feature-tag">语言</a>
-      <a href="/?cat=frontend" class="feature-tag">前端</a>
-      <a href="/?cat=backend" class="feature-tag">后端</a>
+      <a href="?cat=language" class="feature-tag">语言</a>
+      <a href="?cat=frontend" class="feature-tag">前端</a>
+      <a href="?cat=backend" class="feature-tag">后端</a>
     </div>
   </div>
 

@@ -47,6 +47,13 @@ test('index.md has catalog container elements', () => {
   assert.match(indexMd, /id="search-input"/);
 });
 
+test('homepage category shortcuts stay repo-subpath safe', () => {
+  assert.doesNotMatch(indexMd, /href="\/\?cat=/);
+  assert.match(indexMd, /href="\?cat=language"/);
+  assert.match(indexMd, /href="\?cat=frontend"/);
+  assert.match(indexMd, /href="\?cat=backend"/);
+});
+
 test('public portal contract exposes pathways and resources surfaces', () => {
   assert.match(configTs, /text:\s*'采用路径'/);
   assert.match(configTs, /text:\s*'资源'/);
@@ -119,7 +126,9 @@ test('site content scaffold exports stay stable', () => {
     ['规则', '路径', '资源分组'],
   );
   assert.equal(siteContent.philosophyCards.length, 1);
-  assert.equal(siteContent.philosophyCards[0].icon, '/icons/philosophy.svg');
+  assert.equal(typeof siteContent.philosophyCards[0].icon, 'string');
+  assert.ok(siteContent.philosophyCards[0].icon.length > 0);
+  assert.doesNotMatch(siteContent.philosophyCards[0].icon, /^\//);
   assert.equal(siteContent.philosophyCards[0].title, '不是 prompts 杂货铺');
   assert.ok(Array.isArray(siteContent.pathways));
   assert.ok(Array.isArray(siteContent.resourceGroups));

@@ -6,7 +6,7 @@ export const heroStats = [
 
 export const philosophyCards = [
   {
-    icon: '/icons/philosophy.svg',
+    icon: '🧭',
     title: '不是 prompts 杂货铺',
     body: '规则库强调长期可维护、可复制和可审视的工程约束。',
   },
