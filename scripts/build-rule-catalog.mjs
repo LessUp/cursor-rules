@@ -13,6 +13,11 @@ const rulesOutputPath = path.join(publicAssetsDir, 'rules.json');
 const categoriesOutputPath = path.join(publicAssetsDir, 'categories.json');
 const sitemapPath = path.join(rootDir, 'docs/public/sitemap.xml');
 const baseUrl = 'https://lessup.github.io/cursor-rules/';
+const staticPages = [
+  { path: '', changefreq: 'weekly', priority: '1.0' },
+  { path: 'pathways/', changefreq: 'monthly', priority: '0.7' },
+  { path: 'resources/', changefreq: 'monthly', priority: '0.7' },
+];
 
 const catalog = await buildCatalog(rootDir);
 
@@ -63,11 +68,11 @@ console.log(`Wrote ${catalog.length} rule pages to docs/rules/`);
 // Generate sitemap
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${baseUrl}</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
+${staticPages.map(page => `  <url>
+    <loc>${baseUrl}${page.path}</loc>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`).join('\n')}
 ${catalog.map(rule => `  <url>
     <loc>${baseUrl}rules/${rule.slug}</loc>
     <changefreq>monthly</changefreq>

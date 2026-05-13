@@ -27,7 +27,9 @@ export default withMermaid(defineConfig({
 
   themeConfig: {
     nav: [
-      { text: '规则库', link: '/' },
+      { text: '首页', link: '/' },
+      { text: '采用路径', link: '/pathways/' },
+      { text: '资源', link: '/resources/' },
       { text: '项目文档', link: '/openspec/architecture', activeMatch: '/openspec/' },
       { text: 'GitHub', link: 'https://github.com/LessUp/cursor-rules' },
     ],

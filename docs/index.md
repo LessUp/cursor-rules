@@ -35,6 +35,21 @@ layout: home
   </div>
 </div>
 
+<div id="home-philosophy" class="panel">
+  <h2>站点理念</h2>
+  <p>这里先锁定公共站点的理念区块，后续再补充完整内容。</p>
+</div>
+
+<div id="home-path-map" class="panel">
+  <h2>采用路径图</h2>
+  <p>采用路径页将按顺序引导团队理解规则、选择规则并完成接入。</p>
+</div>
+
+<div id="home-resource-atlas" class="panel">
+  <h2>资源总览</h2>
+  <p>资源页将整理仓库文档、外部参考和维护入口。</p>
+</div>
+
 ## 核心能力
 
 <div class="feature-map">

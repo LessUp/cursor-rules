@@ -7,8 +7,8 @@ const configTs = fs.readFileSync(
   'utf8',
 );
 
-const catalogJs = fs.readFileSync(
-  new URL('../docs/public/assets/catalog.js', import.meta.url),
+const buildScript = fs.readFileSync(
+  new URL('../scripts/build-rule-catalog.mjs', import.meta.url),
   'utf8',
 );
 
@@ -25,15 +25,27 @@ test('VitePress config is Chinese-only without locales', () => {
   assert.doesNotMatch(configTs, /\/en\//);
 });
 
-test('catalog.js implements search, filter, and copy actions', () => {
-  assert.match(catalogJs, /search-input/);
-  assert.match(catalogJs, /chip-button/);
-  assert.match(catalogJs, /copyInstall/);
-  assert.match(catalogJs, /copyContent/);
+test('build script generates site catalog artifacts and rule pages', () => {
+  assert.match(buildScript, /rules\.json/);
+  assert.match(buildScript, /categories\.json/);
+  assert.match(buildScript, /sitemap\.xml/);
+  assert.match(buildScript, /docs\/rules/);
 });
 
 test('index.md has catalog container elements', () => {
   assert.match(indexMd, /id="catalog"/);
   assert.match(indexMd, /id="rule-cards"/);
   assert.match(indexMd, /id="search-input"/);
+});
+
+test('public portal contract exposes pathways and resources surfaces', () => {
+  assert.match(configTs, /text:\s*'采用路径'/);
+  assert.match(configTs, /text:\s*'资源'/);
+  assert.match(indexMd, /id="home-philosophy"/);
+  assert.match(indexMd, /id="home-path-map"/);
+  assert.match(indexMd, /id="home-resource-atlas"/);
+  assert.equal(fs.existsSync(new URL('../docs/pathways/index.md', import.meta.url)), true);
+  assert.equal(fs.existsSync(new URL('../docs/resources/index.md', import.meta.url)), true);
+  assert.match(buildScript, /pathways/);
+  assert.match(buildScript, /resources/);
 });
