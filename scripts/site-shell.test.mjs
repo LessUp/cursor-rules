@@ -52,16 +52,28 @@ test('homepage promotes philosophy, pathway map, and resource atlas before catal
   assert.match(indexMd, /id="home-philosophy"/);
   assert.match(indexMd, /id="home-path-map"/);
   assert.match(indexMd, /id="home-resource-atlas"/);
-  assert.match(indexMd, /href="\/pathways\/"/);
-  assert.match(indexMd, /href="\/resources\/"/);
+  assert.match(indexMd, /toPortalHref\(pathwaysSection\.linkHref\)/);
+  assert.match(indexMd, /toPortalHref\(resourcesSection\.linkHref\)/);
   assert.match(indexMd, /id="catalog"/);
+});
+
+test('homepage keeps hero metrics separate from catalog runtime stats', () => {
+  assert.doesNotMatch(indexMd, /stat\.label === '规则' \? 'stat-rules'/);
+  assert.match(indexMd, /id="catalog-stats"/);
+  assert.match(indexMd, /:id="stat\.id"/);
+  assert.deepEqual(
+    siteContent.catalogSection.stats.map(({ id }) => id),
+    ['stat-rules', 'stat-categories', 'stat-global'],
+  );
 });
 
 test('homepage category shortcuts stay repo-subpath safe', () => {
   assert.doesNotMatch(indexMd, /href="\/\?cat=/);
-  assert.match(indexMd, /href="\?cat=language"/);
-  assert.match(indexMd, /href="\?cat=frontend"/);
-  assert.match(indexMd, /href="\?cat=backend"/);
+  assert.match(indexMd, /:href="filter\.href"/);
+  assert.deepEqual(
+    siteContent.catalogSection.quickFilters.map(({ href }) => href),
+    ['?cat=language', '?cat=frontend', '?cat=backend'],
+  );
 });
 
 test('homepage portal links preserve repo-subpath safety', () => {
@@ -87,12 +99,16 @@ test('public portal contract exposes pathways and resources surfaces', () => {
 });
 
 test('homepage raw HTML OpenSpec links stay static-export safe', () => {
-  assert.match(indexMd, /href="\.\/openspec\/architecture\.html"/);
-  assert.match(indexMd, /href="\.\/openspec\/ai-tooling\.html"/);
-  assert.match(indexMd, /href="\.\/openspec\/workflow\.html"/);
-  assert.doesNotMatch(indexMd, /href="\.\/openspec\/architecture(?=")/);
-  assert.doesNotMatch(indexMd, /href="\.\/openspec\/ai-tooling(?=")/);
-  assert.doesNotMatch(indexMd, /href="\.\/openspec\/workflow(?=")/);
+  assert.match(indexMd, /toPortalHref\(link\.href\)/);
+  assert.deepEqual(
+    siteContent.resourcesSection.links.map(({ href }) => href),
+    [
+      './openspec/architecture.html',
+      './openspec/ai-tooling.html',
+      './openspec/workflow.html',
+    ],
+  );
+  assert.ok(siteContent.resourcesSection.links.every(({ href }) => href.endsWith('.html')));
 });
 
 test('catalog runtime asset contract stays in sync with homepage shell', () => {
@@ -233,6 +249,10 @@ test('site content exports populated portal content collections', () => {
     siteContent.heroStats.map(({ label }) => label),
     ['规则', '路径', '资源分组'],
   );
+  assert.equal(typeof siteContent.homeHero.eyebrow, 'string');
+  assert.equal(siteContent.homeHero.actions.length, 3);
+  assert.equal(siteContent.homeHero.actions[0].href, '/pathways/');
+  assert.equal(typeof siteContent.philosophySection.title, 'string');
   assert.ok(siteContent.philosophyCards.length >= 1);
   assert.equal(typeof siteContent.philosophyCards[0].icon, 'string');
   assert.ok(siteContent.philosophyCards[0].icon.length > 0);
@@ -242,8 +262,30 @@ test('site content exports populated portal content collections', () => {
   assert.equal(siteContent.pathways.length, 3);
   assert.equal(siteContent.pathways[0].href, '/pathways/');
   assert.equal(typeof siteContent.pathways[0].summary, 'string');
+  assert.equal(typeof siteContent.pathwaysSection.linkLabel, 'string');
   assert.ok(Array.isArray(siteContent.resourceGroups));
   assert.equal(siteContent.resourceGroups.length, 4);
   assert.equal(siteContent.resourceGroups[0].href, '/resources/');
   assert.equal(typeof siteContent.resourceGroups[0].items[0], 'string');
+  assert.equal(siteContent.resourcesSection.links.length, 3);
+  assert.equal(siteContent.catalogSection.quickFilters[0].href, '?cat=language');
+  assert.equal(siteContent.catalogSection.shortcuts.length, 3);
+  assert.equal(siteContent.catalogSection.emptyState.title, '没有匹配的规则');
+});
+
+test('homepage template renders homepage copy from site content exports', () => {
+  assert.match(indexMd, /homeHero,/);
+  assert.match(indexMd, /philosophySection,/);
+  assert.match(indexMd, /pathwaysSection,/);
+  assert.match(indexMd, /resourcesSection,/);
+  assert.match(indexMd, /catalogSection,/);
+  assert.match(indexMd, /v-for="action in homeHero\.actions"/);
+  assert.match(indexMd, /{{ homeHero\.eyebrow }}/);
+  assert.match(indexMd, /{{ philosophySection\.title }}/);
+  assert.match(indexMd, /{{ pathwaysSection\.linkLabel }}/);
+  assert.match(indexMd, /{{ resourcesSection\.linksLabel }}/);
+  assert.match(indexMd, /{{ catalogSection\.footer }}/);
+  assert.doesNotMatch(indexMd, /先讲理念、再给路径、再配资源，最后才进入规则目录。/);
+  assert.doesNotMatch(indexMd, /为什么是门户而不是清单/);
+  assert.doesNotMatch(indexMd, /已经理解理念、选好路径、拿到资源后，再按主题筛选规则。/);
 });
