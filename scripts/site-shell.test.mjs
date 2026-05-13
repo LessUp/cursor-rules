@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import vm from 'node:vm';
 
 const configTs = fs.readFileSync(
   new URL('../docs/.vitepress/config.ts', import.meta.url),
@@ -18,6 +19,7 @@ const indexMd = fs.readFileSync(
 );
 
 const catalogJsUrl = new URL('../docs/public/assets/catalog.js', import.meta.url);
+const catalogJs = fs.readFileSync(catalogJsUrl, 'utf8');
 const siteContentUrl = new URL('../docs/.vitepress/theme/content/site-content.ts', import.meta.url);
 const siteContentTs = fs.readFileSync(siteContentUrl, 'utf8');
 const siteContent = await import(
@@ -48,7 +50,8 @@ test('index.md has catalog container elements', () => {
 test('public portal contract exposes pathways and resources surfaces', () => {
   assert.match(configTs, /text:\s*'采用路径'/);
   assert.match(configTs, /text:\s*'资源'/);
-  assert.match(configTs, /src:\s*'\/assets\/catalog\.js'/);
+  assert.match(configTs, /src:\s*`\$\{base\}assets\/catalog\.js`/);
+  assert.doesNotMatch(configTs, /src:\s*'\/assets\/catalog\.js'/);
   assert.match(indexMd, /id="home-philosophy"/);
   assert.match(indexMd, /id="home-path-map"/);
   assert.match(indexMd, /id="home-resource-atlas"/);
@@ -60,11 +63,53 @@ test('public portal contract exposes pathways and resources surfaces', () => {
 });
 
 test('catalog runtime asset contract stays in sync with homepage shell', () => {
-  const catalogJs = fs.readFileSync(catalogJsUrl, 'utf8');
   assert.match(catalogJs, /document\.getElementById\('search-input'\)/);
   assert.match(catalogJs, /document\.getElementById\('rule-cards'\)/);
   assert.match(catalogJs, /fetch\(`\$\{base\}assets\/rules\.json`/);
   assert.match(catalogJs, /fetch\(`\$\{base\}assets\/categories\.json`/);
+});
+
+test('catalog runtime resolves repo subpath assets without relying on a base tag', async () => {
+  const fetchCalls = [];
+  const context = {
+    window: {
+      location: { search: '', pathname: '/cursor-rules/' },
+      history: { replaceState() {} },
+    },
+    document: {
+      readyState: 'complete',
+      currentScript: { src: 'https://lessup.github.io/cursor-rules/assets/catalog.js' },
+      getElementById() { return null; },
+      addEventListener() {},
+      querySelector() { return null; },
+    },
+    navigator: {},
+    fetch: async (url) => {
+      fetchCalls.push(String(url));
+      return {
+        ok: true,
+        json: async () => [],
+        text: async () => '',
+      };
+    },
+    URL,
+    URLSearchParams,
+    console,
+    setTimeout,
+    clearTimeout,
+  };
+
+  context.window.document = context.document;
+  context.window.navigator = context.navigator;
+
+  vm.runInNewContext(catalogJs, context);
+  await Promise.resolve();
+
+  assert.doesNotMatch(catalogJs, /querySelector\('base'\)/);
+  assert.deepEqual(
+    fetchCalls.map((url) => new URL(url, 'https://lessup.github.io').pathname),
+    ['/cursor-rules/assets/rules.json', '/cursor-rules/assets/categories.json'],
+  );
 });
 
 test('site content scaffold exports stay stable', () => {

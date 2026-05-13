@@ -16,7 +16,7 @@ export default withMermaid(defineConfig({
   lang: 'zh-CN',
 
   head: [
-    ['script', { src: '/assets/catalog.js', defer: '' }],
+    ['script', { src: `${base}assets/catalog.js`, defer: '' }],
   ],
 
   srcExclude: ['superpowers/**'],

@@ -9,6 +9,7 @@
   // === 配置 ===
   const REPO_URL = 'https://github.com/LessUp/cursor-rules';
   const RAW_URL = 'https://raw.githubusercontent.com/LessUp/cursor-rules/master';
+  const SITE_BASE = resolveBase();
 
   // === 文本 ===
   const TEXTS = {
@@ -100,10 +101,21 @@
     }
   }
 
+  function normalizeBase(base) {
+    if (!base || base === '/') return '/';
+    return base.endsWith('/') ? base : `${base}/`;
+  }
+
+  function resolveBase() {
+    const scriptSrc = document.currentScript?.src;
+    if (scriptSrc) {
+      return normalizeBase(new URL('../', new URL(scriptSrc, window.location.href)).pathname);
+    }
+    return '/';
+  }
+
   function getBase() {
-    // 获取 VitePress base 路径
-    const baseEl = document.querySelector('base');
-    return baseEl ? baseEl.getAttribute('href') : '/';
+    return SITE_BASE;
   }
 
   // === 分类顺序 ===
