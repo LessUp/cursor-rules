@@ -47,11 +47,28 @@ test('index.md has catalog container elements', () => {
   assert.match(indexMd, /id="search-input"/);
 });
 
+test('homepage promotes philosophy, pathway map, and resource atlas before catalog', () => {
+  assert.match(indexMd, /id="home-hero"/);
+  assert.match(indexMd, /id="home-philosophy"/);
+  assert.match(indexMd, /id="home-path-map"/);
+  assert.match(indexMd, /id="home-resource-atlas"/);
+  assert.match(indexMd, /href="\/pathways\/"/);
+  assert.match(indexMd, /href="\/resources\/"/);
+  assert.match(indexMd, /id="catalog"/);
+});
+
 test('homepage category shortcuts stay repo-subpath safe', () => {
   assert.doesNotMatch(indexMd, /href="\/\?cat=/);
   assert.match(indexMd, /href="\?cat=language"/);
   assert.match(indexMd, /href="\?cat=frontend"/);
   assert.match(indexMd, /href="\?cat=backend"/);
+});
+
+test('homepage portal links preserve repo-subpath safety', () => {
+  assert.match(indexMd, /import\s*\{[^}]*withBase[^}]*\}\s*from 'vitepress'/);
+  assert.match(indexMd, /const toPortalHref = \(href\) => href\.startsWith\('\/'\) \? withBase\(href\) : href/);
+  assert.match(indexMd, /:href="toPortalHref\(pathway\.href\)"/);
+  assert.match(indexMd, /:href="toPortalHref\(group\.href\)"/);
 });
 
 test('public portal contract exposes pathways and resources surfaces', () => {
@@ -210,17 +227,23 @@ test('catalog runtime resolves repo subpath assets without relying on a base tag
   );
 });
 
-test('site content scaffold exports stay stable', () => {
+test('site content exports populated portal content collections', () => {
   assert.ok(Array.isArray(siteContent.heroStats));
   assert.deepEqual(
     siteContent.heroStats.map(({ label }) => label),
     ['规则', '路径', '资源分组'],
   );
-  assert.equal(siteContent.philosophyCards.length, 1);
+  assert.ok(siteContent.philosophyCards.length >= 1);
   assert.equal(typeof siteContent.philosophyCards[0].icon, 'string');
   assert.ok(siteContent.philosophyCards[0].icon.length > 0);
   assert.doesNotMatch(siteContent.philosophyCards[0].icon, /^\//);
   assert.equal(siteContent.philosophyCards[0].title, '不是 prompts 杂货铺');
   assert.ok(Array.isArray(siteContent.pathways));
+  assert.equal(siteContent.pathways.length, 3);
+  assert.equal(siteContent.pathways[0].href, '/pathways/');
+  assert.equal(typeof siteContent.pathways[0].summary, 'string');
   assert.ok(Array.isArray(siteContent.resourceGroups));
+  assert.equal(siteContent.resourceGroups.length, 4);
+  assert.equal(siteContent.resourceGroups[0].href, '/resources/');
+  assert.equal(typeof siteContent.resourceGroups[0].items[0], 'string');
 });
