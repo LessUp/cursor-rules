@@ -15,6 +15,10 @@ export default withMermaid(defineConfig({
   description: 'Archive-grade Cursor .mdc 规则库',
   lang: 'zh-CN',
 
+  head: [
+    ['script', { src: '/assets/catalog.js', defer: '' }],
+  ],
+
   srcExclude: ['superpowers/**'],
 
   vite: {

@@ -7,8 +7,8 @@ const configTs = fs.readFileSync(
   'utf8',
 );
 
-const ruleCatalog = fs.readFileSync(
-  new URL('../docs/.vitepress/theme/components/RuleCatalog.vue', import.meta.url),
+const catalogJs = fs.readFileSync(
+  new URL('../docs/public/assets/catalog.js', import.meta.url),
   'utf8',
 );
 
@@ -25,13 +25,15 @@ test('VitePress config is Chinese-only without locales', () => {
   assert.doesNotMatch(configTs, /\/en\//);
 });
 
-test('RuleCatalog component implements search, filter, and copy actions', () => {
-  assert.match(ruleCatalog, /search-input/);
-  assert.match(ruleCatalog, /chip-button/);
-  assert.match(ruleCatalog, /copyInstall/);
-  assert.match(ruleCatalog, /copyContent/);
+test('catalog.js implements search, filter, and copy actions', () => {
+  assert.match(catalogJs, /search-input/);
+  assert.match(catalogJs, /chip-button/);
+  assert.match(catalogJs, /copyInstall/);
+  assert.match(catalogJs, /copyContent/);
 });
 
-test('index.md embeds RuleCatalog component without lang prop', () => {
-  assert.match(indexMd, /<RuleCatalog\s*\/>/);
+test('index.md has catalog container elements', () => {
+  assert.match(indexMd, /id="catalog"/);
+  assert.match(indexMd, /id="rule-cards"/);
+  assert.match(indexMd, /id="search-input"/);
 });
