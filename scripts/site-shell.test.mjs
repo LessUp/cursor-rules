@@ -69,6 +69,15 @@ test('public portal contract exposes pathways and resources surfaces', () => {
   assert.match(buildScript, /resources/);
 });
 
+test('homepage raw HTML OpenSpec links stay static-export safe', () => {
+  assert.match(indexMd, /href="\.\/openspec\/architecture\.html"/);
+  assert.match(indexMd, /href="\.\/openspec\/ai-tooling\.html"/);
+  assert.match(indexMd, /href="\.\/openspec\/workflow\.html"/);
+  assert.doesNotMatch(indexMd, /href="\.\/openspec\/architecture(?=")/);
+  assert.doesNotMatch(indexMd, /href="\.\/openspec\/ai-tooling(?=")/);
+  assert.doesNotMatch(indexMd, /href="\.\/openspec\/workflow(?=")/);
+});
+
 test('catalog runtime asset contract stays in sync with homepage shell', () => {
   assert.match(catalogJs, /document\.getElementById\('search-input'\)/);
   assert.match(catalogJs, /document\.getElementById\('rule-cards'\)/);

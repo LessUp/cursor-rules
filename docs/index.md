@@ -13,7 +13,7 @@ layout: home
     </div>
   </div>
   <div class="home-nav">
-    <a href="./openspec/architecture">项目文档</a>
+    <a href="./openspec/architecture.html">项目文档</a>
     <a href="https://lessup.github.io/cursor-rules/llms.txt">LLM 文档</a>
     <a href="https://github.com/LessUp/cursor-rules">GitHub</a>
   </div>
@@ -77,9 +77,9 @@ layout: home
     <div class="feature-card-title">📖 项目控制文档</div>
     <div class="feature-card-desc">将架构、工作流与 AI tooling 约束集中在 OpenSpec 里维护。</div>
     <div class="feature-tags">
-      <a href="./openspec/architecture" class="feature-tag">架构</a>
-      <a href="./openspec/ai-tooling" class="feature-tag">AI 工具</a>
-      <a href="./openspec/workflow" class="feature-tag">工作流</a>
+      <a href="./openspec/architecture.html" class="feature-tag">架构</a>
+      <a href="./openspec/ai-tooling.html" class="feature-tag">AI 工具</a>
+      <a href="./openspec/workflow.html" class="feature-tag">工作流</a>
     </div>
   </div>
 </div>
