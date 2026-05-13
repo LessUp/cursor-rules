@@ -17,6 +17,10 @@ const staticPages = [
   { path: '', changefreq: 'weekly', priority: '1.0' },
   { path: 'pathways/', changefreq: 'monthly', priority: '0.7' },
   { path: 'resources/', changefreq: 'monthly', priority: '0.7' },
+  { path: 'openspec/architecture.html', changefreq: 'monthly', priority: '0.6' },
+  { path: 'openspec/ai-tooling.html', changefreq: 'monthly', priority: '0.6' },
+  { path: 'openspec/workflow.html', changefreq: 'monthly', priority: '0.6' },
+  { path: 'openspec/project-positioning.html', changefreq: 'monthly', priority: '0.5' },
 ];
 
 const catalog = await buildCatalog(rootDir);

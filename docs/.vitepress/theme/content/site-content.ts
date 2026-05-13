@@ -53,7 +53,10 @@ export const pathways = [
     summary: '适合第一次引入 Cursor Rules 的团队：先读理念，再看路径页，最后从目录里选最小可用集合。',
     href: '/pathways/',
     cta: '查看起步路径',
+    catalogHref: '/?cat=general',
+    catalogLabel: '查看通用规则',
     outcomes: ['理解规则定位', '挑选首批规则'],
+    steps: ['先读首页理念区块', '确认第一批规则范围', '再进入目录复制接入'],
   },
   {
     kicker: '路径二 · 迁移现有约束',
@@ -61,7 +64,10 @@ export const pathways = [
     summary: '适合已经有 prompts、checklists 或团队口头约定的团队，把分散经验迁移成可维护的规则资产。',
     href: '/pathways/',
     cta: '查看迁移路径',
+    catalogHref: '/?cat=engineering',
+    catalogLabel: '查看工程类规则',
     outcomes: ['梳理现有约束', '沉淀仓库契约'],
+    steps: ['盘点现有 prompts 与 checklists', '映射到目录分类', '把公共约束沉淀回规则库'],
   },
   {
     kicker: '路径三 · 维护与扩展',
@@ -69,9 +75,21 @@ export const pathways = [
     summary: '适合已经采用规则的维护者，围绕 Pages、OpenSpec 与生成脚本建立持续更新流程。',
     href: '/pathways/',
     cta: '查看维护路径',
+    catalogHref: '/?cat=engineering',
+    catalogLabel: '查看维护相关规则',
     outcomes: ['同步站点内容', '控制规则漂移'],
+    steps: ['用 OpenSpec 记录边界', '用脚本重建目录与 sitemap', '定期复核首页与规则一致性'],
   },
 ];
+
+export const pathwaysPage = {
+  eyebrow: '采用路径总览',
+  title: '把“为什么使用规则”翻译成可执行的采用顺序。',
+  intro:
+    '这页承接首页的路径图，把不同团队阶段需要先看什么、再做什么、最后回到目录选哪些规则串成公开路径。',
+  catalogLabel: '直接返回规则目录',
+  catalogHref: '/?cat=general',
+};
 
 export const resourcesSection = {
   eyebrow: '资源地图',
@@ -116,6 +134,15 @@ export const resourceGroups = [
     items: ['build:catalog', 'rules.json 生成物', '仓库契约'],
   },
 ];
+
+export const resourcesPage = {
+  eyebrow: '资源总览',
+  title: '把公开入口、OpenSpec 文档和维护触点放在同一张资源地图上。',
+  intro:
+    '资源页不重复 README，而是把采用过程中真正要跳转的入口组织起来，让访客知道哪里是公开导览，哪里是项目控制文档。',
+  catalogLabel: '返回规则目录',
+  catalogHref: '/?cat=engineering',
+};
 
 export const catalogSection = {
   eyebrow: '规则目录',

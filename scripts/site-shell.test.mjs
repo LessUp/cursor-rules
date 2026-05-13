@@ -18,6 +18,16 @@ const indexMd = fs.readFileSync(
   'utf8',
 );
 
+const pathwaysMd = fs.readFileSync(
+  new URL('../docs/pathways/index.md', import.meta.url),
+  'utf8',
+);
+
+const resourcesMd = fs.readFileSync(
+  new URL('../docs/resources/index.md', import.meta.url),
+  'utf8',
+);
+
 const catalogJsUrl = new URL('../docs/public/assets/catalog.js', import.meta.url);
 const catalogJs = fs.readFileSync(catalogJsUrl, 'utf8');
 const siteContentUrl = new URL('../docs/.vitepress/theme/content/site-content.ts', import.meta.url);
@@ -96,6 +106,26 @@ test('public portal contract exposes pathways and resources surfaces', () => {
   assert.equal(fs.existsSync(catalogJsUrl), true);
   assert.match(buildScript, /pathways/);
   assert.match(buildScript, /resources/);
+});
+
+test('pathways page links visitors back into catalog filters', () => {
+  assert.match(pathwaysMd, /site-content/);
+  assert.match(pathwaysMd, /v-for="pathway in pathways"/);
+  assert.match(pathwaysMd, /\?cat=/);
+});
+
+test('resources page renders resource groups and highlights OpenSpec', () => {
+  assert.match(resourcesMd, /site-content/);
+  assert.match(resourcesMd, /v-for="group in resourceGroups"/);
+  assert.match(resourcesMd, /OpenSpec/);
+});
+
+test('build script sitemap includes portal surfaces and key OpenSpec docs', () => {
+  assert.match(buildScript, /path:\s*'pathways\/'/);
+  assert.match(buildScript, /path:\s*'resources\/'/);
+  assert.match(buildScript, /path:\s*'openspec\/architecture\.html'/);
+  assert.match(buildScript, /path:\s*'openspec\/ai-tooling\.html'/);
+  assert.match(buildScript, /path:\s*'openspec\/workflow\.html'/);
 });
 
 test('homepage raw HTML OpenSpec links stay static-export safe', () => {
