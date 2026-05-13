@@ -55,6 +55,8 @@
     statCategories = document.getElementById('stat-categories');
     statGlobal = document.getElementById('stat-global');
 
+    if (!hasCatalogShell()) return;
+
     // 从 URL 恢复状态
     const params = new URLSearchParams(window.location.search);
     query = params.get('q') || '';
@@ -68,6 +70,10 @@
 
     // 加载数据
     loadData();
+  }
+
+  function hasCatalogShell() {
+    return Boolean(searchInput && ruleCards);
   }
 
   // === 数据加载 ===

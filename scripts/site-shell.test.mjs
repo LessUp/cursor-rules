@@ -85,18 +85,25 @@ test('catalog runtime asset contract stays in sync with homepage shell', () => {
   assert.match(catalogJs, /fetch\(`\$\{base\}assets\/categories\.json`/);
 });
 
-test('catalog runtime resolves repo subpath assets without relying on a base tag', async () => {
+test('catalog runtime stays inert when the catalog shell is absent', async () => {
   const fetchCalls = [];
+  const documentEvents = [];
   const context = {
     window: {
-      location: { search: '', pathname: '/cursor-rules/' },
-      history: { replaceState() {} },
+      location: { search: '?cat=language', pathname: '/cursor-rules/pathways/' },
+      history: {
+        replaceState() {
+          throw new Error('history should stay untouched without catalog shell');
+        },
+      },
     },
     document: {
       readyState: 'complete',
       currentScript: { src: 'https://lessup.github.io/cursor-rules/assets/catalog.js' },
       getElementById() { return null; },
-      addEventListener() {},
+      addEventListener(type) {
+        documentEvents.push(type);
+      },
       querySelector() { return null; },
     },
     navigator: {},
@@ -121,7 +128,82 @@ test('catalog runtime resolves repo subpath assets without relying on a base tag
   vm.runInNewContext(catalogJs, context);
   await Promise.resolve();
 
+  assert.deepEqual(fetchCalls, []);
+  assert.deepEqual(documentEvents, []);
+});
+
+test('catalog runtime resolves repo subpath assets without relying on a base tag', async () => {
+  const fetchCalls = [];
+  const docListeners = [];
+  const createElement = () => ({
+    style: {},
+    value: '',
+    textContent: '',
+    innerHTML: '',
+    dataset: {},
+    children: [],
+    addEventListener() {},
+    appendChild(child) {
+      this.children.push(child);
+    },
+    querySelector() { return null; },
+    querySelectorAll() { return []; },
+    focus() {},
+    setAttribute() {},
+  });
+  const elements = {
+    'search-input': createElement(),
+    'search-clear': createElement(),
+    'chip-row': createElement(),
+    'result-count': createElement(),
+    'copy-status': createElement(),
+    'skeleton-grid': createElement(),
+    'rule-grid': createElement(),
+    'rule-cards': createElement(),
+    'empty-state': createElement(),
+    'stat-rules': createElement(),
+    'stat-categories': createElement(),
+    'stat-global': createElement(),
+  };
+  const context = {
+    window: {
+      location: { search: '', pathname: '/cursor-rules/' },
+      history: { replaceState() {} },
+    },
+    document: {
+      readyState: 'complete',
+      currentScript: { src: 'https://lessup.github.io/cursor-rules/assets/catalog.js' },
+      getElementById(id) { return elements[id] ?? null; },
+      addEventListener(type, handler) {
+        docListeners.push({ type, handler });
+      },
+      querySelector() { return null; },
+      createElement,
+    },
+    navigator: {},
+    fetch: async (url) => {
+      fetchCalls.push(String(url));
+      return {
+        ok: true,
+        json: async () => [],
+        text: async () => '',
+      };
+    },
+    URL,
+    URLSearchParams,
+    console,
+    setTimeout,
+    clearTimeout,
+  };
+
+  context.window.document = context.document;
+  context.window.navigator = context.navigator;
+
+  vm.runInNewContext(catalogJs, context);
+  await Promise.resolve();
+
   assert.doesNotMatch(catalogJs, /querySelector\('base'\)/);
+  assert.deepEqual(docListeners.map(({ type }) => type), ['keydown']);
   assert.deepEqual(
     fetchCalls.map((url) => new URL(url, 'https://lessup.github.io').pathname),
     ['/cursor-rules/assets/rules.json', '/cursor-rules/assets/categories.json'],
