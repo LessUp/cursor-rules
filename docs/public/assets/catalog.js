@@ -125,6 +125,7 @@
         hasLoadedData = true;
         renderLoadedShell();
       } catch (e) {
+        loadPromise = null;
         console.error('Failed to load data:', e);
       } finally {
         if (skeletonGrid) skeletonGrid.style.display = 'none';

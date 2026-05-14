@@ -414,6 +414,190 @@ test('catalog runtime initializes once the homepage shell appears after SPA navi
   );
 });
 
+test('catalog runtime retries data load after a transient failure on a later shell mount', async () => {
+  const fetchCalls = [];
+  const observers = [];
+  const consoleErrors = [];
+
+  const createElement = (overrides = {}) => {
+    const listeners = new Map();
+    return {
+      style: {},
+      value: '',
+      textContent: '',
+      innerHTML: '',
+      dataset: {},
+      children: [],
+      tagName: 'DIV',
+      addEventListener(type, handler) {
+        const handlers = listeners.get(type) ?? [];
+        handlers.push(handler);
+        listeners.set(type, handlers);
+      },
+      appendChild(child) {
+        this.children.push(child);
+      },
+      querySelector() { return null; },
+      querySelectorAll() { return []; },
+      focus() {},
+      scrollIntoView() {},
+      setAttribute(name, value) {
+        this[name] = value;
+      },
+      getAttribute(name) {
+        return this[name] ?? null;
+      },
+      listeners,
+      ...overrides,
+    };
+  };
+
+  let elements = {
+    'catalog': createElement(),
+    'search-input': createElement({ tagName: 'INPUT' }),
+    'search-clear': createElement(),
+    'chip-row': createElement(),
+    'result-count': createElement(),
+    'copy-status': createElement(),
+    'skeleton-grid': createElement(),
+    'rule-grid': createElement(),
+    'rule-cards': createElement(),
+    'empty-state': createElement(),
+    'stat-rules': createElement(),
+    'stat-categories': createElement(),
+    'stat-global': createElement(),
+  };
+
+  class MutationObserver {
+    constructor(callback) {
+      this.callback = callback;
+      observers.push(this);
+    }
+
+    observe() {}
+    disconnect() {}
+  }
+
+  let rulesAttempts = 0;
+  const context = {
+    window: {
+      location: {
+        href: 'https://lessup.github.io/cursor-rules/',
+        search: '',
+        pathname: '/cursor-rules/',
+        hash: '',
+      },
+      history: { replaceState() {} },
+    },
+    document: {
+      readyState: 'complete',
+      currentScript: { src: 'https://lessup.github.io/cursor-rules/assets/catalog.js' },
+      body: createElement(),
+      documentElement: createElement(),
+      getElementById(id) { return elements[id] ?? null; },
+      addEventListener() {},
+      querySelector() { return null; },
+      querySelectorAll() { return []; },
+      createElement,
+    },
+    MutationObserver,
+    navigator: {},
+    fetch: async (url) => {
+      fetchCalls.push(String(url));
+      if (String(url).endsWith('/assets/rules.json')) {
+        rulesAttempts += 1;
+        if (rulesAttempts === 1) {
+          throw new Error('transient rules fetch failure');
+        }
+        return {
+          ok: true,
+          json: async () => [
+            {
+              slug: 'alpha-backend',
+              title: 'Alpha Backend',
+              description: 'Alpha rule',
+              fileName: 'alpha-backend.mdc',
+              category: 'backend',
+              globs: [],
+            },
+          ],
+        };
+      }
+      return {
+        ok: true,
+        json: async () => ({
+          backend: { label: '后端', order: 1 },
+        }),
+      };
+    },
+    URL,
+    URLSearchParams,
+    console: {
+      ...console,
+      error(...args) {
+        consoleErrors.push(args);
+      },
+    },
+    setTimeout,
+    clearTimeout,
+  };
+
+  context.window.document = context.document;
+  context.window.navigator = context.navigator;
+
+  vm.runInNewContext(catalogJs, context);
+  await Promise.resolve();
+  await Promise.resolve();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
+  assert.equal(consoleErrors.length, 1);
+  assert.equal(elements['result-count'].textContent, '');
+  assert.deepEqual(
+    fetchCalls.map((url) => new URL(url, 'https://lessup.github.io').pathname),
+    ['/cursor-rules/assets/rules.json', '/cursor-rules/assets/categories.json'],
+  );
+
+  elements = {};
+  for (const observer of observers) {
+    observer.callback([{ type: 'childList' }]);
+  }
+  await Promise.resolve();
+
+  elements = {
+    'catalog': createElement(),
+    'search-input': createElement({ tagName: 'INPUT' }),
+    'search-clear': createElement(),
+    'chip-row': createElement(),
+    'result-count': createElement(),
+    'copy-status': createElement(),
+    'skeleton-grid': createElement(),
+    'rule-grid': createElement(),
+    'rule-cards': createElement(),
+    'empty-state': createElement(),
+    'stat-rules': createElement(),
+    'stat-categories': createElement(),
+    'stat-global': createElement(),
+  };
+
+  for (const observer of observers) {
+    observer.callback([{ type: 'childList' }]);
+  }
+  await Promise.resolve();
+  await Promise.resolve();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
+  assert.equal(elements['result-count'].textContent, 1);
+  assert.deepEqual(
+    fetchCalls.map((url) => new URL(url, 'https://lessup.github.io').pathname),
+    [
+      '/cursor-rules/assets/rules.json',
+      '/cursor-rules/assets/categories.json',
+      '/cursor-rules/assets/rules.json',
+      '/cursor-rules/assets/categories.json',
+    ],
+  );
+});
+
 test('catalog runtime resolves repo subpath assets without relying on a base tag', async () => {
   const fetchCalls = [];
   const docListeners = [];
