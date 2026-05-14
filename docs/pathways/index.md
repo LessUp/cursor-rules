@@ -22,7 +22,7 @@ const toPortalHref = (href) => {
         <h1>{{ pathwaysPage.title }}</h1>
         <p class="subtitle">{{ pathwaysPage.intro }}</p>
       </div>
-      <a class="feature-tag" :href="toPortalHref('/?cat=general')">{{ pathwaysPage.catalogLabel }}</a>
+      <a class="feature-tag" :href="toPortalHref(pathwaysPage.catalogHref)">{{ pathwaysPage.catalogLabel }}</a>
     </div>
     <div class="feature-tags">
       <span class="feature-tag">建议顺序</span>

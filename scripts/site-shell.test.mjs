@@ -111,13 +111,22 @@ test('public portal contract exposes pathways and resources surfaces', () => {
 test('pathways page links visitors back into catalog filters', () => {
   assert.match(pathwaysMd, /site-content/);
   assert.match(pathwaysMd, /v-for="pathway in pathways"/);
-  assert.match(pathwaysMd, /\?cat=/);
+  assert.match(pathwaysMd, /toPortalHref\(pathwaysPage\.catalogHref\)/);
+  assert.doesNotMatch(pathwaysMd, /toPortalHref\('\/\?cat=general'\)/);
+  assert.match(siteContent.pathwaysPage.catalogHref, /\?cat=/);
 });
 
 test('resources page renders resource groups and highlights OpenSpec', () => {
   assert.match(resourcesMd, /site-content/);
   assert.match(resourcesMd, /v-for="group in resourceGroups"/);
   assert.match(resourcesMd, /OpenSpec/);
+});
+
+test('resource group CTAs do not self-link back to the resources index', () => {
+  assert.ok(
+    siteContent.resourceGroups.every(({ href }) => href !== '/resources/'),
+    'resource group CTA href should point to a real destination',
+  );
 });
 
 test('build script sitemap includes portal surfaces and key OpenSpec docs', () => {
@@ -295,7 +304,7 @@ test('site content exports populated portal content collections', () => {
   assert.equal(typeof siteContent.pathwaysSection.linkLabel, 'string');
   assert.ok(Array.isArray(siteContent.resourceGroups));
   assert.equal(siteContent.resourceGroups.length, 4);
-  assert.equal(siteContent.resourceGroups[0].href, '/resources/');
+  assert.equal(siteContent.resourceGroups[0].href, 'https://github.com/LessUp/cursor-rules#readme');
   assert.equal(typeof siteContent.resourceGroups[0].items[0], 'string');
   assert.equal(siteContent.resourcesSection.links.length, 3);
   assert.equal(siteContent.catalogSection.quickFilters[0].href, '?cat=language');

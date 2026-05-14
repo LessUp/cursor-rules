@@ -108,7 +108,7 @@ export const resourceGroups = [
   {
     title: '仓库入口',
     summary: '给第一次来到站点的访客一个最短路径：仓库、README 与规则目录各做什么。',
-    href: '/resources/',
+    href: 'https://github.com/LessUp/cursor-rules#readme',
     cta: '查看入口资源',
     items: ['GitHub 仓库', 'README', '规则目录'],
   },
@@ -122,14 +122,14 @@ export const resourceGroups = [
   {
     title: '采用辅助材料',
     summary: '把路径页、分类筛选和复制入口组织成一组资源，方便团队按阶段推进采用。',
-    href: '/resources/',
+    href: '/pathways/',
     cta: '查看采用材料',
     items: ['采用路径', '分类筛选', '复制接入'],
   },
   {
     title: '维护者触点',
     summary: '为贡献者保留脚本、生成物与策展边界，确保站点内容和根目录规则同步。',
-    href: '/resources/',
+    href: './openspec/workflow.html',
     cta: '查看维护资源',
     items: ['build:catalog', 'rules.json 生成物', '仓库契约'],
   },
