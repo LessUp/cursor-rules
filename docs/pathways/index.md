@@ -12,15 +12,30 @@ const toPortalHref = (href) => {
   if (href.startsWith('./')) return withBase(`/${href.slice(2)}`)
   return href
 }
+
+const pathwayIcons = {
+  overview: withBase('/icons/pathways.svg'),
+  language: withBase('/icons/languages.svg'),
+  engineering: withBase('/icons/engineering.svg'),
+}
+
+const getPathwayIcon = (title) => {
+  if (title.includes('共识')) return pathwayIcons.language
+  if (title.includes('迁')) return pathwayIcons.engineering
+  return pathwayIcons.overview
+}
 </script>
 
 <div class="home-container">
-  <section class="panel">
+  <section class="panel portal-hero">
     <div class="section-heading">
-      <div>
+      <div class="portal-section-title">
+        <img class="portal-icon" :src="pathwayIcons.overview" alt="" />
+        <div>
         <p class="eyebrow">{{ pathwaysPage.eyebrow }}</p>
         <h1>{{ pathwaysPage.title }}</h1>
         <p class="subtitle">{{ pathwaysPage.intro }}</p>
+        </div>
       </div>
       <a class="feature-tag" :href="toPortalHref(pathwaysPage.catalogHref)">{{ pathwaysPage.catalogLabel }}</a>
     </div>
@@ -39,12 +54,15 @@ const toPortalHref = (href) => {
         <h2>每条路径都在最后回到规则目录，而不是停留在说明页。</h2>
       </div>
     </div>
-    <div class="feature-map">
+    <div class="feature-map pathway-grid">
       <article v-for="pathway in pathways" :key="pathway.title" class="feature-card">
-        <div class="feature-tags">
-          <span class="feature-tag">{{ pathway.kicker }}</span>
+        <div class="portal-card-heading">
+          <img class="portal-icon" :src="getPathwayIcon(pathway.title)" alt="" />
+          <div>
+            <div class="feature-card-title">{{ pathway.title }}</div>
+            <div class="portal-card-subtitle">{{ pathway.kicker }}</div>
+          </div>
         </div>
-        <div class="feature-card-title">{{ pathway.title }}</div>
         <p class="feature-card-desc">{{ pathway.summary }}</p>
         <div class="feature-tags">
           <a :href="toPortalHref(pathway.catalogHref)" class="feature-tag">{{ pathway.catalogLabel }}</a>

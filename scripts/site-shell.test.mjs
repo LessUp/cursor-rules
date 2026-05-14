@@ -28,6 +28,11 @@ const resourcesMd = fs.readFileSync(
   'utf8',
 );
 
+const styleCss = fs.readFileSync(
+  new URL('../docs/.vitepress/theme/style.css', import.meta.url),
+  'utf8',
+);
+
 const catalogJsUrl = new URL('../docs/public/assets/catalog.js', import.meta.url);
 const catalogJs = fs.readFileSync(catalogJsUrl, 'utf8');
 const siteContentUrl = new URL('../docs/.vitepress/theme/content/site-content.ts', import.meta.url);
@@ -120,6 +125,31 @@ test('resources page renders resource groups and highlights OpenSpec', () => {
   assert.match(resourcesMd, /site-content/);
   assert.match(resourcesMd, /v-for="group in resourceGroups"/);
   assert.match(resourcesMd, /OpenSpec/);
+});
+
+test('portal design system contract exposes shared layouts and icon assets', () => {
+  assert.match(styleCss, /\.portal-hero\s*\{/);
+  assert.match(styleCss, /\.pathway-grid\s*\{/);
+  assert.match(styleCss, /\.resource-group\s*\{/);
+  assert.match(styleCss, /\.portal-icon\s*\{/);
+
+  assert.match(indexMd, /class="panel portal-hero"/);
+  assert.match(indexMd, /class="feature-map pathway-grid"/);
+  assert.match(indexMd, /class="feature-card resource-group"/);
+  assert.match(indexMd, /class="portal-icon"/);
+  assert.match(pathwaysMd, /class="feature-map pathway-grid"/);
+  assert.match(resourcesMd, /class="feature-card resource-group"/);
+  assert.match(resourcesMd, /class="portal-icon"/);
+
+  for (const iconPath of [
+    '../docs/public/icons/philosophy.svg',
+    '../docs/public/icons/pathways.svg',
+    '../docs/public/icons/languages.svg',
+    '../docs/public/icons/engineering.svg',
+    '../docs/public/icons/resources.svg',
+  ]) {
+    assert.equal(fs.existsSync(new URL(iconPath, import.meta.url)), true, `${iconPath} should exist`);
+  }
 });
 
 test('resource group CTAs do not self-link back to the resources index', () => {

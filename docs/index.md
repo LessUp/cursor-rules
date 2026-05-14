@@ -17,10 +17,29 @@ import {
 } from './.vitepress/theme/content/site-content'
 
 const toPortalHref = (href) => href.startsWith('/') ? withBase(href) : href
+const portalIcons = {
+  philosophy: withBase('/icons/philosophy.svg'),
+  pathways: withBase('/icons/pathways.svg'),
+  languages: withBase('/icons/languages.svg'),
+  engineering: withBase('/icons/engineering.svg'),
+  resources: withBase('/icons/resources.svg'),
+}
+
+const getPathwayIcon = (title) => {
+  if (title.includes('共识')) return portalIcons.languages
+  if (title.includes('迁')) return portalIcons.engineering
+  return portalIcons.pathways
+}
+
+const getResourceIcon = (title) => {
+  if (title.includes('项目控制') || title.includes('维护者')) return portalIcons.engineering
+  if (title.includes('采用')) return portalIcons.pathways
+  return portalIcons.resources
+}
 </script>
 
 <div class="home-container">
-  <section id="home-hero" class="panel">
+  <section id="home-hero" class="panel portal-hero">
     <div class="section-heading">
       <div>
         <p class="eyebrow">{{ homeHero.eyebrow }}</p>
@@ -56,7 +75,10 @@ const toPortalHref = (href) => href.startsWith('/') ? withBase(href) : href
     </div>
     <div class="feature-map">
       <article v-for="card in philosophyCards" :key="card.title" class="feature-card">
-        <div class="feature-card-title">{{ card.icon }} {{ card.title }}</div>
+        <div class="portal-card-heading">
+          <img class="portal-icon" :src="portalIcons.philosophy" alt="" />
+          <div class="feature-card-title">{{ card.title }}</div>
+        </div>
         <div class="feature-card-desc">{{ card.body }}</div>
       </article>
     </div>
@@ -64,15 +86,24 @@ const toPortalHref = (href) => href.startsWith('/') ? withBase(href) : href
 
   <section id="home-path-map" class="panel">
     <div class="section-heading">
-      <div>
+      <div class="portal-section-title">
+        <img class="portal-icon" :src="portalIcons.pathways" alt="" />
+        <div>
         <p class="eyebrow">{{ pathwaysSection.eyebrow }}</p>
         <h2>{{ pathwaysSection.title }}</h2>
+        </div>
       </div>
       <a class="feature-tag" :href="toPortalHref(pathwaysSection.linkHref)">{{ pathwaysSection.linkLabel }}</a>
     </div>
-    <div class="feature-map">
+    <div class="feature-map pathway-grid">
       <article v-for="pathway in pathways" :key="pathway.title" class="feature-card">
-        <div class="feature-card-title">{{ pathway.kicker }}</div>
+        <div class="portal-card-heading">
+          <img class="portal-icon" :src="getPathwayIcon(pathway.title)" alt="" />
+          <div>
+            <div class="feature-card-title">{{ pathway.kicker }}</div>
+            <div class="portal-card-subtitle">{{ pathway.title }}</div>
+          </div>
+        </div>
         <div class="feature-card-desc">{{ pathway.summary }}</div>
         <div class="feature-tags">
           <a :href="toPortalHref(pathway.href)" class="feature-tag">{{ pathway.cta }}</a>
@@ -84,15 +115,21 @@ const toPortalHref = (href) => href.startsWith('/') ? withBase(href) : href
 
   <section id="home-resource-atlas" class="panel">
     <div class="section-heading">
-      <div>
+      <div class="portal-section-title">
+        <img class="portal-icon" :src="portalIcons.resources" alt="" />
+        <div>
         <p class="eyebrow">{{ resourcesSection.eyebrow }}</p>
         <h2>{{ resourcesSection.title }}</h2>
+        </div>
       </div>
       <a class="feature-tag" :href="toPortalHref(resourcesSection.linkHref)">{{ resourcesSection.linkLabel }}</a>
     </div>
     <div class="feature-map">
-      <article v-for="group in resourceGroups" :key="group.title" class="feature-card">
-        <div class="feature-card-title">{{ group.title }}</div>
+      <article v-for="group in resourceGroups" :key="group.title" class="feature-card resource-group">
+        <div class="portal-card-heading">
+          <img class="portal-icon" :src="getResourceIcon(group.title)" alt="" />
+          <div class="feature-card-title">{{ group.title }}</div>
+        </div>
         <div class="feature-card-desc">{{ group.summary }}</div>
         <div class="feature-tags">
           <a :href="toPortalHref(group.href)" class="feature-tag">{{ group.cta }}</a>

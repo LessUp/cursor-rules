@@ -16,15 +16,30 @@ const toPortalHref = (href) => {
   if (href.startsWith('./')) return withBase(`/${href.slice(2)}`)
   return href
 }
+
+const resourceIcons = {
+  resources: withBase('/icons/resources.svg'),
+  pathways: withBase('/icons/pathways.svg'),
+  engineering: withBase('/icons/engineering.svg'),
+}
+
+const getResourceIcon = (title) => {
+  if (title.includes('项目控制') || title.includes('维护者')) return resourceIcons.engineering
+  if (title.includes('采用')) return resourceIcons.pathways
+  return resourceIcons.resources
+}
 </script>
 
 <div class="home-container">
-  <section class="panel">
+  <section class="panel portal-hero">
     <div class="section-heading">
-      <div>
+      <div class="portal-section-title">
+        <img class="portal-icon" :src="resourceIcons.resources" alt="" />
+        <div>
         <p class="eyebrow">{{ resourcesPage.eyebrow }}</p>
         <h1>{{ resourcesPage.title }}</h1>
         <p class="subtitle">{{ resourcesPage.intro }}</p>
+        </div>
       </div>
       <a class="feature-tag" :href="toPortalHref(resourcesPage.catalogHref)">{{ resourcesPage.catalogLabel }}</a>
     </div>
@@ -44,8 +59,11 @@ const toPortalHref = (href) => {
       </div>
     </div>
     <div class="feature-map">
-      <article v-for="group in resourceGroups" :key="group.title" class="feature-card">
-        <div class="feature-card-title">{{ group.title }}</div>
+      <article v-for="group in resourceGroups" :key="group.title" class="feature-card resource-group">
+        <div class="portal-card-heading">
+          <img class="portal-icon" :src="getResourceIcon(group.title)" alt="" />
+          <div class="feature-card-title">{{ group.title }}</div>
+        </div>
         <p class="feature-card-desc">{{ group.summary }}</p>
         <div class="feature-tags">
           <a :href="toPortalHref(group.href)" class="feature-tag">{{ group.cta }}</a>
