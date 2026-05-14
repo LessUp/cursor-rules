@@ -119,9 +119,16 @@
           fetch(`${base}assets/categories.json`, { cache: 'no-store' }),
         ]);
 
-        if (rulesRes.ok) rules = await rulesRes.json();
-        if (catsRes.ok) categories = await catsRes.json();
+        if (!rulesRes.ok) throw new Error(`Failed to load rules.json: ${rulesRes.status}`);
+        if (!catsRes.ok) throw new Error(`Failed to load categories.json: ${catsRes.status}`);
 
+        const [nextRules, nextCategories] = await Promise.all([
+          rulesRes.json(),
+          catsRes.json(),
+        ]);
+
+        rules = nextRules;
+        categories = nextCategories;
         hasLoadedData = true;
         renderLoadedShell();
       } catch (e) {
