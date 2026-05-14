@@ -39,10 +39,21 @@
   let skeletonGrid, ruleGrid, ruleCards, emptyState;
   let statRules, statCategories, statGlobal;
   let catalogSection;
+  let loadPromise = null;
+  let hasLoadedData = false;
+  let activeShell = null;
+  let globalEventsBound = false;
+  let shellObserverStarted = false;
+  const boundNodes = new WeakSet();
 
   // === 初始化 ===
   function init() {
-    // 获取 DOM 元素
+    refreshDomRefs();
+    ensureCatalogRuntime();
+    startShellObserver();
+  }
+
+  function refreshDomRefs() {
     searchInput = document.getElementById('search-input');
     searchClear = document.getElementById('search-clear');
     chipRow = document.getElementById('chip-row');
@@ -56,21 +67,30 @@
     statCategories = document.getElementById('stat-categories');
     statGlobal = document.getElementById('stat-global');
     catalogSection = document.getElementById('catalog');
+  }
 
-    if (!hasCatalogShell()) return;
+  function ensureCatalogRuntime() {
+    refreshDomRefs();
 
-    // 从 URL 恢复状态
-    const params = new URLSearchParams(window.location.search);
-    query = params.get('q') || '';
-    activeCategory = params.get('cat') || 'all';
+    if (!hasCatalogShell()) {
+      activeShell = null;
+      return;
+    }
 
-    // 设置搜索框初始值
-    if (searchInput) searchInput.value = query;
+    bindCatalogTriggers();
 
-    // 绑定事件
+    const nextShell = catalogSection || ruleCards;
+    if (activeShell === nextShell) return;
+
+    activeShell = nextShell;
+    restoreStateFromUrl();
     bindEvents();
 
-    // 加载数据
+    if (hasLoadedData) {
+      renderLoadedShell();
+      return;
+    }
+
     loadData();
   }
 
@@ -78,35 +98,50 @@
     return Boolean(searchInput && ruleCards);
   }
 
+  function restoreStateFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    query = params.get('q') || '';
+    activeCategory = params.get('cat') || 'all';
+
+    if (searchInput) searchInput.value = query;
+    if (searchClear) searchClear.style.display = query ? 'flex' : 'none';
+  }
+
   // === 数据加载 ===
   async function loadData() {
-    try {
-      const base = getBase();
-      const [rulesRes, catsRes] = await Promise.all([
-        fetch(`${base}assets/rules.json`, { cache: 'no-store' }),
-        fetch(`${base}assets/categories.json`, { cache: 'no-store' }),
-      ]);
+    if (loadPromise) return loadPromise;
 
-      if (rulesRes.ok) rules = await rulesRes.json();
-      if (catsRes.ok) categories = await catsRes.json();
+    loadPromise = (async () => {
+      try {
+        const base = getBase();
+        const [rulesRes, catsRes] = await Promise.all([
+          fetch(`${base}assets/rules.json`, { cache: 'no-store' }),
+          fetch(`${base}assets/categories.json`, { cache: 'no-store' }),
+        ]);
 
-      // 计算分类顺序
-      computeCategoryOrder();
+        if (rulesRes.ok) rules = await rulesRes.json();
+        if (catsRes.ok) categories = await catsRes.json();
 
-      // 更新统计
-      updateStats();
+        hasLoadedData = true;
+        renderLoadedShell();
+      } catch (e) {
+        console.error('Failed to load data:', e);
+      } finally {
+        if (skeletonGrid) skeletonGrid.style.display = 'none';
+      }
+    })();
 
-      // 渲染分类按钮
-      renderChips();
+    return loadPromise;
+  }
 
-      // 渲染规则
-      render();
-    } catch (e) {
-      console.error('Failed to load data:', e);
-    } finally {
-      // 隐藏骨架屏
-      if (skeletonGrid) skeletonGrid.style.display = 'none';
-    }
+  function renderLoadedShell() {
+    if (!hasCatalogShell()) return;
+
+    computeCategoryOrder();
+    updateStats();
+    renderChips();
+    render();
+    if (skeletonGrid) skeletonGrid.style.display = 'none';
   }
 
   function normalizeBase(base) {
@@ -371,29 +406,32 @@
 
   // === 事件绑定 ===
   function bindEvents() {
-    // 搜索输入
-    if (searchInput) {
+    if (searchInput && !boundNodes.has(searchInput)) {
       searchInput.addEventListener('input', (e) => {
         setSearch(e.target.value);
       });
+      boundNodes.add(searchInput);
     }
 
-    // 清除按钮
-    if (searchClear) {
+    if (searchClear && !boundNodes.has(searchClear)) {
       searchClear.addEventListener('click', clearSearch);
+      boundNodes.add(searchClear);
     }
 
-    // 键盘快捷键
-    document.addEventListener('keydown', onKeydown);
+    if (!globalEventsBound) {
+      document.addEventListener('keydown', onKeydown);
+      globalEventsBound = true;
+    }
 
-    // 门户入口
     bindCatalogTriggers();
   }
 
   function bindCatalogTriggers() {
     const triggers = document.querySelectorAll?.('[data-catalog-trigger]') ?? [];
     triggers.forEach((trigger) => {
+      if (boundNodes.has(trigger)) return;
       trigger.addEventListener('click', onCatalogTriggerClick);
+      boundNodes.add(trigger);
     });
   }
 
@@ -443,6 +481,8 @@
   }
 
   function onKeydown(e) {
+    if (!hasCatalogShell()) return;
+
     // 如果在输入框内，只响应 Escape
     if (e.target.tagName === 'INPUT' && e.key !== 'Escape') return;
 
@@ -467,6 +507,19 @@
       const cat = categoryOrder[num - 1];
       if (cat) setCategory(cat);
     }
+  }
+
+  function startShellObserver() {
+    if (shellObserverStarted || typeof MutationObserver !== 'function') return;
+
+    const observerTarget = document.body || document.documentElement;
+    if (!observerTarget) return;
+
+    shellObserverStarted = true;
+    const observer = new MutationObserver(() => {
+      ensureCatalogRuntime();
+    });
+    observer.observe(observerTarget, { childList: true, subtree: true });
   }
 
   // === 启动 ===

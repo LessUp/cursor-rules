@@ -113,12 +113,15 @@ test('public portal contract exposes pathways and resources surfaces', () => {
   assert.match(buildScript, /resources/);
 });
 
-test('pathways page links visitors back into catalog filters', () => {
+test('pathways and resources page links send visitors to filtered homepage catalog anchors', () => {
   assert.match(pathwaysMd, /site-content/);
   assert.match(pathwaysMd, /v-for="pathway in pathways"/);
   assert.match(pathwaysMd, /toPortalHref\(pathwaysPage\.catalogHref\)/);
+  assert.match(resourcesMd, /toPortalHref\(resourcesPage\.catalogHref\)/);
   assert.doesNotMatch(pathwaysMd, /toPortalHref\('\/\?cat=general'\)/);
-  assert.match(siteContent.pathwaysPage.catalogHref, /\?cat=/);
+  assert.match(siteContent.pathwaysPage.catalogHref, /\?cat=.*#catalog$/);
+  assert.match(siteContent.resourcesPage.catalogHref, /\?cat=.*#catalog$/);
+  assert.ok(siteContent.pathways.every(({ catalogHref }) => /\?cat=.*#catalog$/.test(catalogHref)));
 });
 
 test('resources page renders resource groups and highlights OpenSpec', () => {
@@ -232,6 +235,183 @@ test('catalog runtime stays inert when the catalog shell is absent', async () =>
 
   assert.deepEqual(fetchCalls, []);
   assert.deepEqual(documentEvents, []);
+});
+
+test('catalog runtime initializes once the homepage shell appears after SPA navigation', async () => {
+  const fetchCalls = [];
+  const documentEvents = [];
+  const observers = [];
+
+  const createElement = (overrides = {}) => {
+    const listeners = new Map();
+    return {
+      style: {},
+      value: '',
+      textContent: '',
+      innerHTML: '',
+      dataset: {},
+      children: [],
+      tagName: 'DIV',
+      addEventListener(type, handler) {
+        const handlers = listeners.get(type) ?? [];
+        handlers.push(handler);
+        listeners.set(type, handlers);
+      },
+      appendChild(child) {
+        this.children.push(child);
+      },
+      querySelector() { return null; },
+      querySelectorAll() { return []; },
+      focus() {},
+      scrollIntoView() {},
+      setAttribute(name, value) {
+        this[name] = value;
+      },
+      getAttribute(name) {
+        return this[name] ?? null;
+      },
+      listeners,
+      ...overrides,
+    };
+  };
+
+  let elements = {};
+  let triggers = [];
+
+  class MutationObserver {
+    constructor(callback) {
+      this.callback = callback;
+      observers.push(this);
+    }
+
+    observe() {}
+    disconnect() {}
+  }
+
+  const context = {
+    window: {
+      location: {
+        href: 'https://lessup.github.io/cursor-rules/pathways/',
+        search: '',
+        pathname: '/cursor-rules/pathways/',
+        hash: '',
+      },
+      history: { replaceState() {} },
+    },
+    document: {
+      readyState: 'complete',
+      currentScript: { src: 'https://lessup.github.io/cursor-rules/assets/catalog.js' },
+      body: createElement(),
+      documentElement: createElement(),
+      getElementById(id) { return elements[id] ?? null; },
+      addEventListener(type) {
+        documentEvents.push(type);
+      },
+      querySelector() { return null; },
+      querySelectorAll(selector) {
+        if (selector === '[data-catalog-trigger]') return triggers;
+        return [];
+      },
+      createElement,
+    },
+    MutationObserver,
+    navigator: {},
+    fetch: async (url) => {
+      fetchCalls.push(String(url));
+      if (String(url).endsWith('/assets/rules.json')) {
+        return {
+          ok: true,
+          json: async () => [
+            {
+              slug: 'alpha-backend',
+              title: 'Alpha Backend',
+              description: 'Alpha rule',
+              fileName: 'alpha-backend.mdc',
+              category: 'backend',
+              globs: [],
+            },
+          ],
+        };
+      }
+      return {
+        ok: true,
+        json: async () => ({
+          backend: { label: '后端', order: 1 },
+        }),
+      };
+    },
+    URL,
+    URLSearchParams,
+    console,
+    setTimeout,
+    clearTimeout,
+  };
+
+  context.window.document = context.document;
+  context.window.navigator = context.navigator;
+
+  vm.runInNewContext(catalogJs, context);
+  await Promise.resolve();
+
+  assert.deepEqual(fetchCalls, []);
+
+  elements = {
+    'catalog': createElement(),
+    'search-input': createElement({ tagName: 'INPUT' }),
+    'search-clear': createElement(),
+    'chip-row': createElement(),
+    'result-count': createElement(),
+    'copy-status': createElement(),
+    'skeleton-grid': createElement(),
+    'rule-grid': createElement(),
+    'rule-cards': createElement(),
+    'empty-state': createElement(),
+    'stat-rules': createElement(),
+    'stat-categories': createElement(),
+    'stat-global': createElement(),
+  };
+  triggers = [
+    createElement({
+      tagName: 'A',
+      href: '/?cat=backend#catalog',
+      dataset: { catalogTrigger: 'backend' },
+    }),
+  ];
+  context.window.location = {
+    href: 'https://lessup.github.io/cursor-rules/?cat=backend#catalog',
+    search: '?cat=backend',
+    pathname: '/cursor-rules/',
+    hash: '#catalog',
+  };
+
+  for (const observer of observers) {
+    observer.callback([{ type: 'childList' }]);
+  }
+  await Promise.resolve();
+  await Promise.resolve();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
+  assert.equal(elements['result-count'].textContent, 1);
+  assert.equal(elements['search-input'].value, '');
+  assert.deepEqual(
+    fetchCalls.map((url) => new URL(url, 'https://lessup.github.io').pathname),
+    ['/cursor-rules/assets/rules.json', '/cursor-rules/assets/categories.json'],
+  );
+  assert.equal(documentEvents.filter((type) => type === 'keydown').length, 1);
+  assert.equal(triggers[0].listeners.get('click')?.length, 1);
+
+  for (const observer of observers) {
+    observer.callback([{ type: 'childList' }]);
+  }
+  await Promise.resolve();
+  await Promise.resolve();
+
+  assert.equal(documentEvents.filter((type) => type === 'keydown').length, 1);
+  assert.equal(triggers[0].listeners.get('click')?.length, 1);
+  assert.deepEqual(
+    fetchCalls.map((url) => new URL(url, 'https://lessup.github.io').pathname),
+    ['/cursor-rules/assets/rules.json', '/cursor-rules/assets/categories.json'],
+  );
 });
 
 test('catalog runtime resolves repo subpath assets without relying on a base tag', async () => {
