@@ -54,7 +54,12 @@ const getResourceIcon = (title) => {
             :href="toPortalHref(action.href)"
             :theme="action.theme"
           />
-          <a v-else class="vp-button alt" :href="toPortalHref(action.href)">{{ action.label }}</a>
+          <a
+            v-else
+            class="vp-button alt"
+            :href="toPortalHref(action.href)"
+            :data-catalog-trigger="action.href === '#catalog' ? '' : null"
+          >{{ action.label }}</a>
         </template>
       </div>
     </div>
@@ -163,13 +168,15 @@ const getResourceIcon = (title) => {
       </span>
     </div>
     <div class="feature-tags">
-      <a
-        v-for="filter in catalogSection.quickFilters"
-        :key="filter.href"
-        :href="filter.href"
-        class="feature-tag"
-      >{{ filter.label }}</a>
-    </div>
+        <a
+          v-for="filter in catalogSection.quickFilters"
+          :key="filter.href"
+          :href="filter.href"
+          data-catalog-trigger
+          :data-catalog-category="filter.href.replace('?cat=', '')"
+          class="feature-tag"
+        >{{ filter.label }}</a>
+      </div>
     <div class="toolbar">
       <div class="search-wrapper">
         <input

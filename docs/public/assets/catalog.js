@@ -38,6 +38,7 @@
   let searchInput, searchClear, chipRow, resultCount, copyStatus;
   let skeletonGrid, ruleGrid, ruleCards, emptyState;
   let statRules, statCategories, statGlobal;
+  let catalogSection;
 
   // === 初始化 ===
   function init() {
@@ -54,6 +55,7 @@
     statRules = document.getElementById('stat-rules');
     statCategories = document.getElementById('stat-categories');
     statGlobal = document.getElementById('stat-global');
+    catalogSection = document.getElementById('catalog');
 
     if (!hasCatalogShell()) return;
 
@@ -383,6 +385,61 @@
 
     // 键盘快捷键
     document.addEventListener('keydown', onKeydown);
+
+    // 门户入口
+    bindCatalogTriggers();
+  }
+
+  function bindCatalogTriggers() {
+    const triggers = document.querySelectorAll?.('[data-catalog-trigger]') ?? [];
+    triggers.forEach((trigger) => {
+      trigger.addEventListener('click', onCatalogTriggerClick);
+    });
+  }
+
+  function onCatalogTriggerClick(e) {
+    const href = e.currentTarget?.getAttribute('href');
+    if (!href) return;
+
+    const targetUrl = new URL(href, window.location.href);
+    const currentUrl = new URL(window.location.href);
+    const isSamePage = targetUrl.pathname === currentUrl.pathname;
+    const targetsCatalog = targetUrl.hash === '#catalog'
+      || targetUrl.searchParams.has('cat')
+      || targetUrl.searchParams.has('q');
+
+    if (!isSamePage || !targetsCatalog) return;
+
+    e.preventDefault();
+    applyCatalogTrigger(targetUrl, e.currentTarget);
+  }
+
+  function applyCatalogTrigger(targetUrl, trigger) {
+    if (targetUrl.searchParams.has('q')) {
+      query = targetUrl.searchParams.get('q') || '';
+      if (searchInput) searchInput.value = query;
+      if (searchClear) searchClear.style.display = query ? 'flex' : 'none';
+    }
+
+    const nextCategory = targetUrl.searchParams.get('cat') || trigger?.dataset?.catalogCategory;
+    if (nextCategory) activeCategory = nextCategory;
+
+    expandedSlug = null;
+    renderChips();
+    render();
+    syncUrl();
+    hideCopyStatus();
+    focusCatalog();
+  }
+
+  function focusCatalog() {
+    catalogSection?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
+    if (!searchInput?.focus) return;
+    try {
+      searchInput.focus({ preventScroll: true });
+    } catch {
+      searchInput.focus();
+    }
   }
 
   function onKeydown(e) {

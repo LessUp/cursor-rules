@@ -312,6 +312,203 @@ test('catalog runtime resolves repo subpath assets without relying on a base tag
   );
 });
 
+test('homepage portal entry points opt into catalog triggers', () => {
+  assert.match(indexMd, /data-catalog-trigger/);
+  assert.match(indexMd, /action\.href === '#catalog' \? '' : null/);
+  assert.match(indexMd, /filter\.href\.replace\('\?cat=', ''\)/);
+});
+
+test('catalog runtime applies portal triggers without clearing active search', async () => {
+  const fetchCalls = [];
+  const historyCalls = [];
+  const focusCalls = [];
+  const scrollCalls = [];
+
+  const createElement = (overrides = {}) => {
+    const listeners = new Map();
+    return {
+      style: {},
+      value: '',
+      textContent: '',
+      innerHTML: '',
+      dataset: {},
+      children: [],
+      tagName: 'DIV',
+      addEventListener(type, handler) {
+        const handlers = listeners.get(type) ?? [];
+        handlers.push(handler);
+        listeners.set(type, handlers);
+      },
+      dispatch(type, event = {}) {
+        for (const handler of listeners.get(type) ?? []) {
+          handler({
+            preventDefault() {},
+            stopPropagation() {},
+            currentTarget: this,
+            target: this,
+            ...event,
+          });
+        }
+      },
+      appendChild(child) {
+        this.children.push(child);
+      },
+      querySelector() { return null; },
+      querySelectorAll() { return []; },
+      focus() {
+        focusCalls.push(this);
+      },
+      scrollIntoView(options) {
+        scrollCalls.push(options);
+      },
+      setAttribute(name, value) {
+        this[name] = value;
+      },
+      getAttribute(name) {
+        return this[name] ?? null;
+      },
+      ...overrides,
+      listeners,
+    };
+  };
+
+  const elements = {
+    'catalog': createElement(),
+    'search-input': createElement({ tagName: 'INPUT' }),
+    'search-clear': createElement(),
+    'chip-row': createElement(),
+    'result-count': createElement(),
+    'copy-status': createElement(),
+    'skeleton-grid': createElement(),
+    'rule-grid': createElement(),
+    'rule-cards': createElement(),
+    'empty-state': createElement(),
+    'stat-rules': createElement(),
+    'stat-categories': createElement(),
+    'stat-global': createElement(),
+  };
+
+  const browseTrigger = createElement({
+    tagName: 'A',
+    href: '#catalog',
+    dataset: { catalogTrigger: '' },
+  });
+  const quickFilterTrigger = createElement({
+    tagName: 'A',
+    href: '?cat=backend',
+    dataset: { catalogTrigger: 'backend' },
+  });
+
+  const context = {
+    window: {
+      location: {
+        href: 'https://lessup.github.io/cursor-rules/',
+        search: '',
+        pathname: '/cursor-rules/',
+      },
+      history: {
+        replaceState(_state, _title, url) {
+          historyCalls.push(url);
+        },
+      },
+    },
+    document: {
+      readyState: 'complete',
+      currentScript: { src: 'https://lessup.github.io/cursor-rules/assets/catalog.js' },
+      getElementById(id) { return elements[id] ?? null; },
+      addEventListener() {},
+      querySelector() { return null; },
+      querySelectorAll(selector) {
+        if (selector === '[data-catalog-trigger]') {
+          return [browseTrigger, quickFilterTrigger];
+        }
+        return [];
+      },
+      createElement,
+    },
+    navigator: {},
+    fetch: async (url) => {
+      fetchCalls.push(String(url));
+      if (String(url).endsWith('/assets/rules.json')) {
+        return {
+          ok: true,
+          json: async () => [
+            {
+              slug: 'alpha-backend',
+              title: 'Alpha Backend',
+              description: 'Alpha rule',
+              fileName: 'alpha-backend.mdc',
+              category: 'backend',
+              globs: [],
+            },
+            {
+              slug: 'beta-language',
+              title: 'Beta Language',
+              description: 'Beta rule',
+              fileName: 'beta-language.mdc',
+              category: 'language',
+              globs: [],
+            },
+          ],
+        };
+      }
+      return {
+        ok: true,
+        json: async () => ({
+          backend: { label: '后端', order: 3 },
+          language: { label: '语言', order: 1 },
+        }),
+      };
+    },
+    URL,
+    URLSearchParams,
+    console,
+    setTimeout,
+    clearTimeout,
+  };
+
+  context.window.document = context.document;
+  context.window.navigator = context.navigator;
+
+  vm.runInNewContext(catalogJs, context);
+  await Promise.resolve();
+  await Promise.resolve();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
+  elements['search-input'].value = 'Alpha';
+  elements['search-input'].dispatch('input', { target: elements['search-input'] });
+
+  let prevented = false;
+  quickFilterTrigger.dispatch('click', {
+    preventDefault() {
+      prevented = true;
+    },
+  });
+
+  assert.equal(prevented, true);
+  assert.equal(elements['search-input'].value, 'Alpha');
+  assert.equal(elements['result-count'].textContent, 1);
+  assert.equal(historyCalls.at(-1), '/cursor-rules/?q=Alpha&cat=backend');
+  assert.equal(focusCalls.length, 1);
+  assert.equal(scrollCalls.length, 1);
+
+  let heroPrevented = false;
+  browseTrigger.dispatch('click', {
+    preventDefault() {
+      heroPrevented = true;
+    },
+  });
+
+  assert.equal(heroPrevented, true);
+  assert.equal(elements['search-input'].value, 'Alpha');
+  assert.equal(focusCalls.length, 2);
+  assert.equal(scrollCalls.length, 2);
+  assert.deepEqual(
+    fetchCalls.map((url) => new URL(url, 'https://lessup.github.io').pathname),
+    ['/cursor-rules/assets/rules.json', '/cursor-rules/assets/categories.json'],
+  );
+});
+
 test('site content exports populated portal content collections', () => {
   assert.ok(Array.isArray(siteContent.heroStats));
   assert.deepEqual(
