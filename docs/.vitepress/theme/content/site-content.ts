@@ -11,9 +11,9 @@ export const homeHero = {
 };
 
 export const heroStats = [
-  { label: '规则', value: '--' },
-  { label: '路径', value: '3' },
-  { label: '资源分组', value: '4' },
+  { label: '规则', value: '26' },
+  { label: '分类', value: '6' },
+  { label: '代码行', value: '1,721' },
 ];
 
 export const philosophySection = {

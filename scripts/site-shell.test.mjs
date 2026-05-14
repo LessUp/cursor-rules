@@ -100,7 +100,7 @@ test('homepage portal links preserve repo-subpath safety', () => {
 
 test('public portal contract exposes pathways and resources surfaces', () => {
   assert.match(configTs, /text:\s*'采用路径'/);
-  assert.match(configTs, /text:\s*'资源'/);
+  assert.match(configTs, /text:\s*'技术白皮书'/);
   assert.match(configTs, /src:\s*`\$\{base\}assets\/catalog\.js`/);
   assert.doesNotMatch(configTs, /src:\s*'\/assets\/catalog\.js'/);
   assert.match(indexMd, /id="home-philosophy"/);
@@ -1067,7 +1067,7 @@ test('site content exports populated portal content collections', () => {
   assert.ok(Array.isArray(siteContent.heroStats));
   assert.deepEqual(
     siteContent.heroStats.map(({ label }) => label),
-    ['规则', '路径', '资源分组'],
+    ['规则', '分类', '代码行'],
   );
   assert.equal(typeof siteContent.homeHero.eyebrow, 'string');
   assert.equal(siteContent.homeHero.actions.length, 3);
