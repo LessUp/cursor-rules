@@ -1,4 +1,10 @@
 import DefaultTheme from 'vitepress/theme'
 import './style.css'
+import SvgIcon from './components/SvgIcon.vue'
 
-export default DefaultTheme
+export default {
+  extends: DefaultTheme,
+  enhanceApp({ app }) {
+    app.component('SvgIcon', SvgIcon)
+  },
+}

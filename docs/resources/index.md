@@ -17,16 +17,10 @@ const toPortalHref = (href) => {
   return href
 }
 
-const resourceIcons = {
-  resources: withBase('/icons/resources.svg'),
-  pathways: withBase('/icons/pathways.svg'),
-  engineering: withBase('/icons/engineering.svg'),
-}
-
 const getResourceIcon = (title) => {
-  if (title.includes('项目控制') || title.includes('维护者')) return resourceIcons.engineering
-  if (title.includes('采用')) return resourceIcons.pathways
-  return resourceIcons.resources
+  if (title.includes('项目控制') || title.includes('维护者')) return 'engineering'
+  if (title.includes('采用')) return 'pathways'
+  return 'resources'
 }
 </script>
 
@@ -34,7 +28,7 @@ const getResourceIcon = (title) => {
   <section class="panel portal-hero">
     <div class="section-heading">
       <div class="portal-section-title">
-        <img class="portal-icon" :src="resourceIcons.resources" alt="" />
+        <span class="portal-icon"><SvgIcon name="resources" /></span>
         <div>
         <p class="eyebrow">{{ resourcesPage.eyebrow }}</p>
         <h1>{{ resourcesPage.title }}</h1>
@@ -61,7 +55,7 @@ const getResourceIcon = (title) => {
     <div class="feature-map">
       <article v-for="group in resourceGroups" :key="group.title" class="feature-card resource-group">
         <div class="portal-card-heading">
-          <img class="portal-icon" :src="getResourceIcon(group.title)" alt="" />
+          <span class="portal-icon"><SvgIcon :name="getResourceIcon(group.title)" /></span>
           <div class="feature-card-title">{{ group.title }}</div>
         </div>
         <p class="feature-card-desc">{{ group.summary }}</p>

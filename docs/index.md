@@ -14,27 +14,21 @@ import {
   pathways,
   resourceGroups,
   resourcesSection,
+  docsSection,
 } from './.vitepress/theme/content/site-content'
 
 const toPortalHref = (href) => href.startsWith('/') ? withBase(href) : href
-const portalIcons = {
-  philosophy: withBase('/icons/philosophy.svg'),
-  pathways: withBase('/icons/pathways.svg'),
-  languages: withBase('/icons/languages.svg'),
-  engineering: withBase('/icons/engineering.svg'),
-  resources: withBase('/icons/resources.svg'),
-}
 
 const getPathwayIcon = (title) => {
-  if (title.includes('共识')) return portalIcons.languages
-  if (title.includes('迁')) return portalIcons.engineering
-  return portalIcons.pathways
+  if (title.includes('共识')) return 'languages'
+  if (title.includes('迁')) return 'engineering'
+  return 'pathways'
 }
 
 const getResourceIcon = (title) => {
-  if (title.includes('项目控制') || title.includes('维护者')) return portalIcons.engineering
-  if (title.includes('采用')) return portalIcons.pathways
-  return portalIcons.resources
+  if (title.includes('项目控制') || title.includes('维护者')) return 'engineering'
+  if (title.includes('采用')) return 'pathways'
+  return 'resources'
 }
 </script>
 
@@ -81,7 +75,7 @@ const getResourceIcon = (title) => {
     <div class="feature-map">
       <article v-for="card in philosophyCards" :key="card.title" class="feature-card">
         <div class="portal-card-heading">
-          <img class="portal-icon" :src="portalIcons.philosophy" alt="" />
+          <span class="portal-icon"><SvgIcon name="philosophy" /></span>
           <div class="feature-card-title">{{ card.title }}</div>
         </div>
         <div class="feature-card-desc">{{ card.body }}</div>
@@ -89,10 +83,37 @@ const getResourceIcon = (title) => {
     </div>
   </section>
 
+  <section id="home-docs" class="panel">
+    <div class="section-heading">
+      <div class="portal-section-title">
+        <span class="portal-icon"><SvgIcon name="engineering" /></span>
+        <div>
+          <p class="eyebrow">{{ docsSection.eyebrow }}</p>
+          <h2>{{ docsSection.title }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="feature-map docs-grid">
+      <a v-for="item in docsSection.items" :key="item.href" :href="toPortalHref(item.href)" class="feature-card doc-nav-card">
+        <div class="portal-card-heading">
+          <span class="portal-icon"><SvgIcon :name="item.icon" /></span>
+          <div>
+            <div class="feature-card-title">{{ item.title }}</div>
+            <div class="portal-card-subtitle">{{ item.badge }}</div>
+          </div>
+        </div>
+        <div class="feature-card-desc">{{ item.summary }}</div>
+        <div class="feature-tags">
+          <span v-for="tag in item.tags" :key="tag" class="feature-tag">{{ tag }}</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
   <section id="home-path-map" class="panel">
     <div class="section-heading">
       <div class="portal-section-title">
-        <img class="portal-icon" :src="portalIcons.pathways" alt="" />
+        <span class="portal-icon"><SvgIcon name="pathways" /></span>
         <div>
         <p class="eyebrow">{{ pathwaysSection.eyebrow }}</p>
         <h2>{{ pathwaysSection.title }}</h2>
@@ -103,7 +124,7 @@ const getResourceIcon = (title) => {
     <div class="feature-map pathway-grid">
       <article v-for="pathway in pathways" :key="pathway.title" class="feature-card">
         <div class="portal-card-heading">
-          <img class="portal-icon" :src="getPathwayIcon(pathway.title)" alt="" />
+          <span class="portal-icon"><SvgIcon :name="getPathwayIcon(pathway.title)" /></span>
           <div>
             <div class="feature-card-title">{{ pathway.kicker }}</div>
             <div class="portal-card-subtitle">{{ pathway.title }}</div>
@@ -121,7 +142,7 @@ const getResourceIcon = (title) => {
   <section id="home-resource-atlas" class="panel">
     <div class="section-heading">
       <div class="portal-section-title">
-        <img class="portal-icon" :src="portalIcons.resources" alt="" />
+        <span class="portal-icon"><SvgIcon name="resources" /></span>
         <div>
         <p class="eyebrow">{{ resourcesSection.eyebrow }}</p>
         <h2>{{ resourcesSection.title }}</h2>
@@ -132,7 +153,7 @@ const getResourceIcon = (title) => {
     <div class="feature-map">
       <article v-for="group in resourceGroups" :key="group.title" class="feature-card resource-group">
         <div class="portal-card-heading">
-          <img class="portal-icon" :src="getResourceIcon(group.title)" alt="" />
+          <span class="portal-icon"><SvgIcon :name="getResourceIcon(group.title)" /></span>
           <div class="feature-card-title">{{ group.title }}</div>
         </div>
         <div class="feature-card-desc">{{ group.summary }}</div>

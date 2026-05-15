@@ -568,11 +568,19 @@
   width: 44px;
   height: 44px;
   flex: none;
-  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
   border-radius: 14px;
   border: 1px solid var(--portal-icon-border);
   background: var(--portal-icon-bg);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+.portal-icon svg {
+  width: 24px;
+  height: 24px;
 }
 
 .pathway-grid {
@@ -1058,4 +1066,173 @@
   .portal-card-heading {
     align-items: center;
   }
+}
+
+/* ========================================
+   Whitepaper / Doc-Page Typography
+   ======================================== */
+
+.VPDoc .content-container {
+  max-width: 860px;
+}
+
+.VPDoc h1 {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.6px;
+  line-height: 1.25;
+  border-bottom: 2px solid var(--vp-c-brand-soft);
+  padding-bottom: 16px;
+  margin-bottom: 32px;
+}
+
+.VPDoc h2 {
+  font-size: 24px;
+  font-weight: 650;
+  letter-spacing: -0.3px;
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--vp-c-divider);
+}
+
+.VPDoc h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 32px;
+  color: var(--vp-c-brand-1);
+}
+
+.VPDoc p {
+  line-height: 1.8;
+}
+
+.VPDoc a:not(.header-anchor) {
+  color: var(--vp-c-brand-1);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--vp-c-brand-soft);
+}
+
+.VPDoc a:not(.header-anchor):hover {
+  text-decoration-color: var(--vp-c-brand-1);
+}
+
+/* Academic blockquote / citation style */
+.VPDoc blockquote {
+  border-left: 3px solid var(--vp-c-brand-1);
+  background: var(--vp-c-bg-soft);
+  margin: 24px 0;
+  padding: 12px 20px;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-style: italic;
+  color: var(--vp-c-text-2);
+}
+
+.VPDoc blockquote strong {
+  color: var(--vp-c-text-1);
+  font-style: normal;
+}
+
+/* Table — academic style */
+.VPDoc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 14px;
+}
+
+.VPDoc th {
+  background: var(--vp-c-bg-soft);
+  font-weight: 600;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--vp-c-brand-soft);
+  color: var(--vp-c-text-1);
+}
+
+.VPDoc td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--vp-c-divider);
+  color: var(--vp-c-text-2);
+}
+
+.VPDoc tr:last-child td {
+  border-bottom: none;
+}
+
+.VPDoc :not(pre) > code {
+  background: var(--vp-c-bg-mute);
+  color: var(--vp-c-brand-1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.88em;
+  border: 1px solid var(--vp-c-divider);
+}
+
+/* ========================================
+   Doc Nav Cards
+   ======================================== */
+
+.docs-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.doc-nav-card {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.doc-nav-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--portal-shadow);
+  border-color: var(--vp-c-brand-1);
+  text-decoration: none;
+}
+
+/* ========================================
+   Mermaid — Improved Dark Mode
+   ======================================== */
+
+.mermaid {
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin: 24px 0;
+  text-align: center;
+  overflow-x: auto;
+}
+
+.dark .mermaid {
+  background: var(--vp-c-bg-alt);
+  border-color: var(--vp-c-border);
+}
+
+.mermaid svg {
+  max-width: 100%;
+}
+
+/* ========================================
+   Academic Reference Styles
+   ======================================== */
+
+.ref-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--vp-c-divider);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--vp-c-text-2);
+}
+
+.ref-item:last-child {
+  border-bottom: none;
+}
+
+.ref-number {
+  color: var(--vp-c-brand-1);
+  font-weight: 600;
+  margin-right: 6px;
 }

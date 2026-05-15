@@ -1,12 +1,12 @@
 export const homeHero = {
-  eyebrow: 'Portal 首页',
-  title: '先讲理念、再给路径、再配资源，最后才进入规则目录。',
+  eyebrow: '工程级 Cursor 规则库',
+  title: '把 AI 编码约束变成可维护的工程资产。',
   subtitle:
-    '这是一个以中文使用场景为先的 Cursor Rules 门户：帮助团队理解为什么要用规则、该从哪条采用路径开始，以及接下来该看哪些材料。',
+    '26 条经过实践验证的 .mdc 规则，覆盖 Python、TypeScript、Go、React 等主流技术栈。从哲学理念到架构设计，为严苛的工程团队提供完整的 AI 编码规范体系。',
   actions: [
-    { component: 'VPButton', label: '进入采用路径', href: '/pathways/' },
-    { component: 'VPButton', label: '查看资源总览', href: '/resources/', theme: 'alt' },
-    { component: 'a', label: '直接浏览规则目录', href: '#catalog', theme: 'alt' },
+    { component: 'VPButton', label: '采用路径', href: '/pathways/' },
+    { component: 'VPButton', label: '架构文档', href: '/architecture/', theme: 'alt' },
+    { component: 'a', label: '浏览规则目录', href: '#catalog', theme: 'alt' },
   ],
 };
 
@@ -168,5 +168,44 @@ export const catalogSection = {
     { key: '/', label: '搜索' },
     { key: 'Esc', label: '清空' },
     { key: '1-8', label: '切换分类' },
+  ],
+};
+
+export const docsSection = {
+  eyebrow: '技术文档',
+  title: '从快速上手到架构深度——系统掌握规则工程体系。',
+  items: [
+    {
+      title: '指南',
+      badge: 'Guide',
+      icon: 'pathways',
+      href: '/guide/',
+      summary: '从"为什么需要规则"到"如何编写 .mdc 文件"，提供完整的入门与进阶路径。',
+      tags: ['快速开始', '编写规则', '最佳实践'],
+    },
+    {
+      title: '架构',
+      badge: 'Architecture',
+      icon: 'engineering',
+      href: '/architecture/',
+      summary: '深入解析构建流水线、目录系统与 MDC 规范——附系统架构图与数据流图。',
+      tags: ['系统架构', 'Mermaid 图示', '设计决策'],
+    },
+    {
+      title: '参考手册',
+      badge: 'Reference',
+      icon: 'languages',
+      href: '/reference/',
+      summary: '完整的 Frontmatter 字段说明、规则分类体系与规范速查表。',
+      tags: ['Frontmatter', '分类速查', '字段参考'],
+    },
+    {
+      title: '进阶',
+      badge: 'Advanced',
+      icon: 'philosophy',
+      href: '/advanced/',
+      summary: '相关工作比较、学术引用与演进思考——为深度研究者准备的知识层。',
+      tags: ['相关工作', '学术引用', '演进路线'],
+    },
   ],
 };

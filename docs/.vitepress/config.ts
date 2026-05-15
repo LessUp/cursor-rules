@@ -12,7 +12,7 @@ const base = rawBase
 export default withMermaid(defineConfig({
   base,
   title: 'Cursor Rules',
-  description: 'Archive-grade Cursor .mdc 规则库',
+  description: '面向 AI 时代的工程级 Cursor .mdc 规则库——架构展示站与技术白皮书',
   lang: 'zh-CN',
 
   head: [
@@ -22,6 +22,7 @@ export default withMermaid(defineConfig({
     ['meta', { property: 'og:image', content: `${base}og-image.png` }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['script', { src: `${base}assets/catalog.js`, defer: '' }],
+    ['meta', { name: 'theme-color', content: '#3476f6' }],
   ],
 
   srcExclude: ['superpowers/**'],
@@ -33,26 +34,59 @@ export default withMermaid(defineConfig({
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
-      { text: '技术白皮书', link: '/whitepaper/', activeMatch: '/whitepaper/' },
-      { text: '采用路径', link: '/pathways/' },
-      { text: '项目文档', link: '/openspec/architecture', activeMatch: '/openspec/' },
-      { text: 'GitHub', link: 'https://github.com/LessUp/cursor-rules' },
+      { text: '指南', link: '/guide/', activeMatch: '/guide/' },
+      { text: '架构', link: '/architecture/', activeMatch: '/architecture/' },
+      { text: '参考手册', link: '/reference/', activeMatch: '/reference/' },
+      { text: '技术白皮书', link: '/advanced/', activeMatch: '/advanced/' },
+      { text: 'OpenSpec', link: '/openspec/architecture', activeMatch: '/openspec/' },
     ],
     sidebar: {
-      '/whitepaper/': [
+      '/guide/': [
+        {
+          text: '指南',
+          items: [
+            { text: '简介', link: '/guide/' },
+            { text: '快速开始', link: '/guide/getting-started' },
+            { text: '为什么需要规则', link: '/guide/why-rules' },
+            { text: '编写规则', link: '/guide/writing-rules' },
+          ],
+        },
+      ],
+      '/architecture/': [
+        {
+          text: '架构',
+          items: [
+            { text: '系统概览', link: '/architecture/' },
+            { text: '目录构建系统', link: '/architecture/catalog-system' },
+            { text: 'MDC 规范', link: '/architecture/mdc-spec' },
+            { text: '设计决策', link: '/architecture/design-decisions' },
+          ],
+        },
+      ],
+      '/reference/': [
+        {
+          text: '参考手册',
+          items: [
+            { text: '概览', link: '/reference/' },
+            { text: '规则分类', link: '/reference/categories' },
+            { text: 'Frontmatter 字段', link: '/reference/frontmatter' },
+          ],
+        },
+      ],
+      '/advanced/': [
         {
           text: '技术白皮书',
           items: [
-            { text: '概述', link: '/whitepaper/' },
-            { text: '设计原则', link: '/whitepaper/design-principles' },
-            { text: '实现架构', link: '/whitepaper/implementation' },
-            { text: '.mdc 格式规范', link: '/whitepaper/rule-format-spec' },
+            { text: '概览', link: '/advanced/' },
+            { text: '相关工作', link: '/advanced/related-work' },
+            { text: '学术参考', link: '/advanced/academic-references' },
+            { text: '演进思考', link: '/advanced/evolution' },
           ],
         },
       ],
       '/openspec/': [
         {
-          text: '项目文档',
+          text: 'OpenSpec',
           items: [
             { text: '架构', link: '/openspec/architecture' },
             { text: '数据流架构', link: '/openspec/data-flow' },
@@ -72,11 +106,31 @@ export default withMermaid(defineConfig({
           ],
         },
       ],
+      '/pathways/': [
+        {
+          text: '采用路径',
+          items: [
+            { text: '路径总览', link: '/pathways/' },
+          ],
+        },
+      ],
+      '/resources/': [
+        {
+          text: '资源',
+          items: [
+            { text: '资源地图', link: '/resources/' },
+          ],
+        },
+      ],
     },
     outline: [2, 3],
     search: { provider: 'local' },
     socialLinks: [
       { icon: 'github', link: 'https://github.com/LessUp/cursor-rules' },
     ],
+    footer: {
+      message: '以根目录 .mdc 文件为产品，以工程约束为哲学',
+      copyright: 'MIT License © LessUp',
+    },
   },
 }))

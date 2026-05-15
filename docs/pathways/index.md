@@ -13,16 +13,10 @@ const toPortalHref = (href) => {
   return href
 }
 
-const pathwayIcons = {
-  overview: withBase('/icons/pathways.svg'),
-  language: withBase('/icons/languages.svg'),
-  engineering: withBase('/icons/engineering.svg'),
-}
-
 const getPathwayIcon = (title) => {
-  if (title.includes('共识')) return pathwayIcons.language
-  if (title.includes('迁')) return pathwayIcons.engineering
-  return pathwayIcons.overview
+  if (title.includes('共识')) return 'languages'
+  if (title.includes('迁')) return 'engineering'
+  return 'pathways'
 }
 </script>
 
@@ -30,7 +24,7 @@ const getPathwayIcon = (title) => {
   <section class="panel portal-hero">
     <div class="section-heading">
       <div class="portal-section-title">
-        <img class="portal-icon" :src="pathwayIcons.overview" alt="" />
+        <span class="portal-icon"><SvgIcon name="pathways" /></span>
         <div>
         <p class="eyebrow">{{ pathwaysPage.eyebrow }}</p>
         <h1>{{ pathwaysPage.title }}</h1>
@@ -57,7 +51,7 @@ const getPathwayIcon = (title) => {
     <div class="feature-map pathway-grid">
       <article v-for="pathway in pathways" :key="pathway.title" class="feature-card">
         <div class="portal-card-heading">
-          <img class="portal-icon" :src="getPathwayIcon(pathway.title)" alt="" />
+          <span class="portal-icon"><SvgIcon :name="getPathwayIcon(pathway.title)" /></span>
           <div>
             <div class="feature-card-title">{{ pathway.title }}</div>
             <div class="portal-card-subtitle">{{ pathway.kicker }}</div>
