@@ -113,6 +113,7 @@ export default withMermaid(defineConfig({
         nav: [
           { text: 'Home', link: '/en/' },
           { text: 'Reading Map', link: '/en/guides/reading-map', activeMatch: '/en/guides/' },
+          { text: 'Academy', link: '/en/academy/rule-philosophy', activeMatch: '/en/academy/' },
           { text: 'Architecture', link: '/en/architecture/system-overview', activeMatch: '/en/architecture/' },
           { text: 'Research', link: '/en/research/related-work', activeMatch: '/en/research/' },
           { text: 'OpenSpec', link: '/openspec/architecture', activeMatch: '/openspec/' },
@@ -123,6 +124,14 @@ export default withMermaid(defineConfig({
               text: 'Guides',
               items: [
                 { text: 'Reading Map', link: '/en/guides/reading-map' },
+              ],
+            },
+          ],
+          '/en/academy/': [
+            {
+              text: 'Academy',
+              items: [
+                { text: 'Rule Philosophy', link: '/en/academy/rule-philosophy' },
               ],
             },
           ],
@@ -139,6 +148,8 @@ export default withMermaid(defineConfig({
               text: 'Research',
               items: [
                 { text: 'Related Work', link: '/en/research/related-work' },
+                { text: 'References', link: '/en/research/references' },
+                { text: 'Evolution', link: '/en/research/evolution' },
               ],
             },
           ],

@@ -19,10 +19,11 @@ import { useRouter } from 'vitepress'
 onMounted(() => {
   const router = useRouter()
   const lang = navigator.language || navigator.userLanguage
+  const suffix = `${window.location.search}${window.location.hash}`
   if (lang.startsWith('zh')) {
-    router.go('/zh/')
+    router.go(`/zh/${suffix}`)
   } else {
-    router.go('/en/')
+    router.go(`/en/${suffix}`)
   }
 })
 </script>

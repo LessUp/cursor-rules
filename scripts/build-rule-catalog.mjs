@@ -31,13 +31,18 @@ const staticPages = [
   { path: '', changefreq: 'weekly', priority: '1.0' },
   { path: 'zh/', changefreq: 'weekly', priority: '1.0' },
   { path: 'en/', changefreq: 'weekly', priority: '0.9' },
-  { path: 'zh/guides/reading-map', changefreq: 'monthly', priority: '0.9' },
-  { path: 'zh/academy/rule-philosophy', changefreq: 'monthly', priority: '0.8' },
-  { path: 'zh/architecture/system-overview', changefreq: 'monthly', priority: '0.8' },
-  { path: 'zh/research/related-work', changefreq: 'monthly', priority: '0.7' },
-  { path: 'en/guides/reading-map', changefreq: 'monthly', priority: '0.7' },
-  { path: 'en/architecture/system-overview', changefreq: 'monthly', priority: '0.7' },
-  { path: 'en/research/related-work', changefreq: 'monthly', priority: '0.6' },
+  { path: 'zh/guides/reading-map.html', changefreq: 'monthly', priority: '0.9' },
+  { path: 'zh/academy/rule-philosophy.html', changefreq: 'monthly', priority: '0.8' },
+  { path: 'zh/architecture/system-overview.html', changefreq: 'monthly', priority: '0.8' },
+  { path: 'zh/research/related-work.html', changefreq: 'monthly', priority: '0.7' },
+  { path: 'zh/research/references.html', changefreq: 'monthly', priority: '0.6' },
+  { path: 'zh/research/evolution.html', changefreq: 'monthly', priority: '0.6' },
+  { path: 'en/guides/reading-map.html', changefreq: 'monthly', priority: '0.7' },
+  { path: 'en/academy/rule-philosophy.html', changefreq: 'monthly', priority: '0.6' },
+  { path: 'en/architecture/system-overview.html', changefreq: 'monthly', priority: '0.7' },
+  { path: 'en/research/related-work.html', changefreq: 'monthly', priority: '0.6' },
+  { path: 'en/research/references.html', changefreq: 'monthly', priority: '0.5' },
+  { path: 'en/research/evolution.html', changefreq: 'monthly', priority: '0.5' },
   { path: 'pathways/', changefreq: 'monthly', priority: '0.7' },
   { path: 'resources/', changefreq: 'monthly', priority: '0.7' },
   { path: 'openspec/architecture.html', changefreq: 'monthly', priority: '0.6' },
@@ -68,6 +73,9 @@ console.log(`Wrote ${path.relative(rootDir, categoriesOutputPath)}`);
 
 // 生成规则 Markdown 页面供 VitePress locale 索引
 await fs.rm(path.join(rootDir, 'docs/rules'), { recursive: true, force: true });
+await Promise.all(
+  localizedRuleTargets.map(({ dir }) => fs.rm(dir, { recursive: true, force: true })),
+);
 await Promise.all(
   localizedRuleTargets.map(({ dir }) => fs.mkdir(dir, { recursive: true })),
 );
@@ -108,7 +116,7 @@ ${staticPages.map(page => `  <url>
   </url>`).join('\n')}
 ${localizedRuleTargets.flatMap(({ routePrefix }) =>
   catalog.map(rule => `  <url>
-    <loc>${baseUrl}${routePrefix}/${rule.slug}</loc>
+    <loc>${baseUrl}${routePrefix}/${rule.slug}.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>`),

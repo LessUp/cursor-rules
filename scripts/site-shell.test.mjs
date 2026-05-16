@@ -64,6 +64,7 @@ test('VitePress config is locale-first with zh and en trees', () => {
   assert.match(configTs, /\/zh\/architecture\/system-overview/);
   assert.match(configTs, /\/zh\/research\/related-work/);
   assert.match(configTs, /\/en\/guides\/reading-map/);
+  assert.match(configTs, /\/en\/academy\/rule-philosophy/);
   assert.match(configTs, /\/en\/architecture\/system-overview/);
   assert.match(configTs, /\/en\/research\/related-work/);
   assert.match(configTs, /\/zh\/rules\//);
@@ -71,8 +72,11 @@ test('VitePress config is locale-first with zh and en trees', () => {
 });
 
 test('root index redirects visitors into locale entry points', () => {
-  assert.match(rootIndexMd, /router\.go\('\/zh\/'\)/);
-  assert.match(rootIndexMd, /router\.go\('\/en\/'\)/);
+  assert.match(rootIndexMd, /navigator\.language \|\| navigator\.userLanguage/);
+  assert.match(rootIndexMd, /window\.location\.search/);
+  assert.match(rootIndexMd, /window\.location\.hash/);
+  assert.match(rootIndexMd, /router\.go\(`\/zh\/\$\{suffix\}`\)/);
+  assert.match(rootIndexMd, /router\.go\(`\/en\/\$\{suffix\}`\)/);
   assert.match(enIndexMd, /layout:\s*home/);
   assert.match(zhIndexMd, /layout:\s*home/);
 });
@@ -86,8 +90,11 @@ test('locale documentation tree exposes guide, academy, architecture, and resear
     '../docs/zh/research/references.md',
     '../docs/zh/research/evolution.md',
     '../docs/en/guides/reading-map.md',
+    '../docs/en/academy/rule-philosophy.md',
     '../docs/en/architecture/system-overview.md',
     '../docs/en/research/related-work.md',
+    '../docs/en/research/references.md',
+    '../docs/en/research/evolution.md',
   ]) {
     assert.equal(fs.existsSync(new URL(docPath, import.meta.url)), true, `${docPath} should exist`);
   }
@@ -113,6 +120,15 @@ test('index.md has catalog container elements', () => {
   assert.match(indexMd, /id="catalog"/);
   assert.match(indexMd, /id="rule-cards"/);
   assert.match(indexMd, /id="search-input"/);
+});
+
+test('english homepage mirrors the whitepaper shell and catalog surface', () => {
+  assert.match(enIndexMd, /id="home-hero"/);
+  assert.match(enIndexMd, /id="home-thesis"/);
+  assert.match(enIndexMd, /id="home-curriculum"/);
+  assert.match(enIndexMd, /id="home-architecture-lab"/);
+  assert.match(enIndexMd, /id="home-research"/);
+  assert.match(enIndexMd, /id="catalog"/);
 });
 
 test('homepage promotes whitepaper, curriculum, architecture, and research surfaces before catalog', () => {
@@ -215,8 +231,12 @@ test('resource group CTAs do not self-link back to the resources index', () => {
 test('build script sitemap includes locale surfaces and key OpenSpec docs', () => {
   assert.match(buildScript, /path:\s*'zh\/'/);
   assert.match(buildScript, /path:\s*'en\/'/);
-  assert.match(buildScript, /path:\s*'zh\/guides\/reading-map'/);
-  assert.match(buildScript, /path:\s*'zh\/research\/related-work'/);
+  assert.match(buildScript, /path:\s*'zh\/guides\/reading-map\.html'/);
+  assert.match(buildScript, /path:\s*'zh\/research\/related-work\.html'/);
+  assert.match(buildScript, /path:\s*'zh\/research\/references\.html'/);
+  assert.match(buildScript, /path:\s*'zh\/research\/evolution\.html'/);
+  assert.match(buildScript, /path:\s*'en\/research\/related-work\.html'/);
+  assert.match(buildScript, /routePrefix\}\/\$\{rule\.slug\}\.html/);
   assert.match(buildScript, /path:\s*'openspec\/architecture\.html'/);
   assert.match(buildScript, /path:\s*'openspec\/ai-tooling\.html'/);
   assert.match(buildScript, /path:\s*'openspec\/workflow\.html'/);
