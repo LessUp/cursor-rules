@@ -20,7 +20,7 @@ flowchart TB
 
     subgraph Output["输出层"]
         json["rules.json<br/>categories.json"]
-        pages["规则详情页<br/>docs/rules/*.md"]
+        pages["规则详情页<br/>docs/{zh,en}/rules/*.md"]
         sitemap["sitemap.xml"]
     end
 
@@ -165,10 +165,8 @@ cursor-rules/
 │   │   ├── rules.json       # 生成物
 │   │   ├── categories.json  # 生成物
 │   │   └── catalog.js       # 运行时
-│   └── rules/               # 生成物
-│       ├── python.md
-│       ├── react.md
-│       └── ...
+│   ├── zh/rules/            # 中文规则页生成物
+│   └── en/rules/            # 英文规则页生成物（原文视图）
 └── .github/workflows/
     └── pages.yml            # CI/CD
 ```

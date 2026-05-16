@@ -18,7 +18,7 @@
 
 - `scripts/validate-rules.mjs` 校验 `.mdc` 结构
 - `scripts/lib/rule-catalog.mjs` 把规则元信息规范化为统一目录项
-- `scripts/build-rule-catalog.mjs` 生成 `docs/public/assets/rules.json` 和规则 Markdown 页面
+- `scripts/build-rule-catalog.mjs` 生成 `docs/public/assets/rules.json`、`docs/public/assets/categories.json`，以及 locale-aware 规则 Markdown 页面
 
 ### 3. Static Pages surface
 
@@ -44,7 +44,7 @@ flowchart TB
 
     subgraph Output["生成物"]
         json["rules.json<br/>categories.json"]
-        pages["docs/rules/*.md<br/>详情页"]
+        pages["docs/{zh,en}/rules/*.md<br/>locale 规则页"]
         sitemap["sitemap.xml"]
     end
 
