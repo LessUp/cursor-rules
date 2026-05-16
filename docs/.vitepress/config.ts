@@ -12,19 +12,26 @@ const base = rawBase
 export default withMermaid(defineConfig({
   base,
   title: 'Cursor Rules',
-  description: '面向 AI 时代的工程级 Cursor .mdc 规则库——架构展示站与技术白皮书',
+  description: 'Technical whitepaper and architecture showcase for the Cursor Rules library',
 
   head: [
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:title', content: 'Cursor Rules - 技术白皮书' }],
-    ['meta', { property: 'og:description', content: 'Archive-grade Cursor .mdc 规则库' }],
+    ['meta', { property: 'og:title', content: 'Cursor Rules - Technical Whitepaper' }],
+    ['meta', { property: 'og:description', content: 'Archive-grade Cursor .mdc rule library' }],
     ['meta', { property: 'og:image', content: `${base}og-image.png` }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['script', { src: `${base}assets/catalog.js`, defer: '' }],
     ['meta', { name: 'theme-color', content: '#3476f6' }],
   ],
 
-  srcExclude: ['superpowers/**'],
+  srcExclude: [
+    'superpowers/**',
+    'guide/**',
+    'architecture/**',
+    'reference/**',
+    'advanced/**',
+    'whitepaper/**',
+  ],
 
   locales: {
     zh: {
@@ -173,7 +180,7 @@ export default withMermaid(defineConfig({
       { icon: 'github', link: 'https://github.com/LessUp/cursor-rules' },
     ],
     footer: {
-      message: '以根目录 .mdc 文件为产品，以工程约束为哲学',
+      message: 'Root-level rules as product, engineering discipline throughout.',
       copyright: 'MIT License © LessUp',
     },
   },

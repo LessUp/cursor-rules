@@ -10,21 +10,48 @@
   const REPO_URL = 'https://github.com/LessUp/cursor-rules';
   const RAW_URL = 'https://raw.githubusercontent.com/LessUp/cursor-rules/master';
   const SITE_BASE = resolveBase();
+  const IS_ENGLISH = window.location.pathname.includes('/en/');
+  const CATEGORY_LABELS_EN = {
+    all: 'All',
+    general: 'General',
+    language: 'Languages',
+    backend: 'Backend',
+    frontend: 'Frontend',
+    mobile: 'Mobile',
+    engineering: 'Engineering',
+    other: 'Other',
+  };
 
   // === 文本 ===
-  const TEXTS = {
-    installSnippet: '复制接入命令',
-    copyContent: '复制规则内容',
-    openOnGithub: '在 GitHub 中打开',
-    globalLabel: '全局规则',
-    fileLabel: '文件',
-    globLabel: '适用范围',
-    expandHint: '点击展开详情',
-    collapseHint: '点击收起',
-    copiedInstall: '已复制接入命令',
-    copiedRule: '规则内容已复制',
-    copyFailed: '复制失败，请稍后重试',
-  };
+  const TEXTS = IS_ENGLISH
+    ? {
+        installSnippet: 'Copy install snippet',
+        copyContent: 'Copy rule content',
+        openOnGithub: 'Open on GitHub',
+        globalLabel: 'Global rule',
+        fileLabel: 'File',
+        globLabel: 'Scope',
+        expandHint: 'Click to expand details',
+        collapseHint: 'Click to collapse',
+        copiedInstall: 'Install snippet copied',
+        copiedRule: 'Rule content copied',
+        copyFailed: 'Copy failed. Please try again.',
+        sourceView: 'Source view',
+      }
+    : {
+        installSnippet: '复制接入命令',
+        copyContent: '复制规则内容',
+        openOnGithub: '在 GitHub 中打开',
+        globalLabel: '全局规则',
+        fileLabel: '文件',
+        globLabel: '适用范围',
+        expandHint: '点击展开详情',
+        collapseHint: '点击收起',
+        copiedInstall: '已复制接入命令',
+        copiedRule: '规则内容已复制',
+        copyFailed: '复制失败，请稍后重试',
+        sourceView: '原文视图',
+      };
 
   // === 状态 ===
   let rules = [];
@@ -214,6 +241,7 @@
   }
 
   function categoryLabel(cat) {
+    if (IS_ENGLISH) return CATEGORY_LABELS_EN[cat] || cat;
     if (cat === 'all') return '全部';
     return categories[cat]?.label || cat;
   }
@@ -342,6 +370,7 @@
           <button class="secondary-link button-reset btn-install">${TEXTS.installSnippet}</button>
           <button class="secondary-link button-reset btn-content">${TEXTS.copyContent}</button>
           <a class="secondary-link" href="${REPO_URL}/blob/master/${encodeURIComponent(rule.fileName)}" target="_blank" rel="noopener">${TEXTS.openOnGithub}</a>
+          <span class="secondary-link source-view-label">${TEXTS.sourceView}</span>
         </div>
       </article>
     `;

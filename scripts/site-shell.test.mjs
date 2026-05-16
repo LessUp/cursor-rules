@@ -69,14 +69,22 @@ test('VitePress config is locale-first with zh and en trees', () => {
   assert.match(configTs, /\/en\/research\/related-work/);
   assert.match(configTs, /\/zh\/rules\//);
   assert.match(configTs, /\/en\/rules\//);
+  assert.match(configTs, /guide\/\*\*/);
+  assert.match(configTs, /architecture\/\*\*/);
+  assert.match(configTs, /reference\/\*\*/);
+  assert.match(configTs, /advanced\/\*\*/);
+  assert.match(configTs, /whitepaper\/\*\*/);
 });
 
 test('root index redirects visitors into locale entry points', () => {
+  assert.match(rootIndexMd, /import \{ onMounted \} from 'vue'/);
+  assert.match(rootIndexMd, /import \{ withBase \} from 'vitepress'/);
   assert.match(rootIndexMd, /navigator\.language \|\| navigator\.userLanguage/);
   assert.match(rootIndexMd, /window\.location\.search/);
   assert.match(rootIndexMd, /window\.location\.hash/);
-  assert.match(rootIndexMd, /router\.go\(`\/zh\/\$\{suffix\}`\)/);
-  assert.match(rootIndexMd, /router\.go\(`\/en\/\$\{suffix\}`\)/);
+  assert.match(rootIndexMd, /window\.location\.replace/);
+  assert.match(rootIndexMd, /withBase\('\/zh\/'\)/);
+  assert.match(rootIndexMd, /withBase\('\/en\/'\)/);
   assert.match(enIndexMd, /layout:\s*home/);
   assert.match(zhIndexMd, /layout:\s*home/);
 });
@@ -180,8 +188,6 @@ test('public portal contract exposes whitepaper surfaces and generated catalog a
   assert.equal(fs.existsSync(new URL('../docs/pathways/index.md', import.meta.url)), true);
   assert.equal(fs.existsSync(new URL('../docs/resources/index.md', import.meta.url)), true);
   assert.equal(fs.existsSync(catalogJsUrl), true);
-  assert.match(buildScript, /pathways/);
-  assert.match(buildScript, /resources/);
 });
 
 test('pathways and resources page links send visitors to filtered homepage catalog anchors', () => {
@@ -260,6 +266,9 @@ test('catalog runtime asset contract stays in sync with homepage shell', () => {
   assert.match(catalogJs, /document\.getElementById\('rule-cards'\)/);
   assert.match(catalogJs, /fetch\(`\$\{base\}assets\/rules\.json`/);
   assert.match(catalogJs, /fetch\(`\$\{base\}assets\/categories\.json`/);
+  assert.match(catalogJs, /window\.location\.pathname\.includes\('\/en\/'\)/);
+  assert.match(catalogJs, /Copy rule content/);
+  assert.match(catalogJs, /Source view/);
 });
 
 test('catalog runtime stays inert when the catalog shell is absent', async () => {

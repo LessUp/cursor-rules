@@ -24,7 +24,7 @@ const localizedRuleTargets = [
     locale: 'en',
     dir: path.join(rootDir, 'docs/en/rules'),
     routePrefix: 'en/rules',
-    intro: (fileName) => `> Source rule: \`${fileName}\`\n\n`,
+    intro: (fileName) => `> Source view: \`${fileName}\`. The original rule body below is preserved as authored and may not be fully localized.\n\n`,
   },
 ];
 const staticPages = [
@@ -43,8 +43,6 @@ const staticPages = [
   { path: 'en/research/related-work.html', changefreq: 'monthly', priority: '0.6' },
   { path: 'en/research/references.html', changefreq: 'monthly', priority: '0.5' },
   { path: 'en/research/evolution.html', changefreq: 'monthly', priority: '0.5' },
-  { path: 'pathways/', changefreq: 'monthly', priority: '0.7' },
-  { path: 'resources/', changefreq: 'monthly', priority: '0.7' },
   { path: 'openspec/architecture.html', changefreq: 'monthly', priority: '0.6' },
   { path: 'openspec/ai-tooling.html', changefreq: 'monthly', priority: '0.6' },
   { path: 'openspec/workflow.html', changefreq: 'monthly', priority: '0.6' },
