@@ -13,8 +13,31 @@ const rulesOutputPath = path.join(publicAssetsDir, 'rules.json');
 const categoriesOutputPath = path.join(publicAssetsDir, 'categories.json');
 const sitemapPath = path.join(rootDir, 'docs/public/sitemap.xml');
 const baseUrl = 'https://lessup.github.io/cursor-rules/';
+const localizedRuleTargets = [
+  {
+    locale: 'zh',
+    dir: path.join(rootDir, 'docs/zh/rules'),
+    routePrefix: 'zh/rules',
+    intro: (fileName) => `> 来源规则：\`${fileName}\`\n\n`,
+  },
+  {
+    locale: 'en',
+    dir: path.join(rootDir, 'docs/en/rules'),
+    routePrefix: 'en/rules',
+    intro: (fileName) => `> Source rule: \`${fileName}\`\n\n`,
+  },
+];
 const staticPages = [
   { path: '', changefreq: 'weekly', priority: '1.0' },
+  { path: 'zh/', changefreq: 'weekly', priority: '1.0' },
+  { path: 'en/', changefreq: 'weekly', priority: '0.9' },
+  { path: 'zh/guides/reading-map', changefreq: 'monthly', priority: '0.9' },
+  { path: 'zh/academy/rule-philosophy', changefreq: 'monthly', priority: '0.8' },
+  { path: 'zh/architecture/system-overview', changefreq: 'monthly', priority: '0.8' },
+  { path: 'zh/research/related-work', changefreq: 'monthly', priority: '0.7' },
+  { path: 'en/guides/reading-map', changefreq: 'monthly', priority: '0.7' },
+  { path: 'en/architecture/system-overview', changefreq: 'monthly', priority: '0.7' },
+  { path: 'en/research/related-work', changefreq: 'monthly', priority: '0.6' },
   { path: 'pathways/', changefreq: 'monthly', priority: '0.7' },
   { path: 'resources/', changefreq: 'monthly', priority: '0.7' },
   { path: 'openspec/architecture.html', changefreq: 'monthly', priority: '0.6' },
@@ -43,9 +66,11 @@ console.log(`Wrote ${path.relative(rootDir, rulesOutputPath)} (${catalog.length}
 await fs.writeFile(categoriesOutputPath, `${JSON.stringify(CATEGORIES, null, 2)}\n`);
 console.log(`Wrote ${path.relative(rootDir, categoriesOutputPath)}`);
 
-// 生成规则 Markdown 页面供 VitePress 索引
-const rulesDir = path.join(rootDir, 'docs/rules');
-await fs.mkdir(rulesDir, { recursive: true });
+// 生成规则 Markdown 页面供 VitePress locale 索引
+await fs.rm(path.join(rootDir, 'docs/rules'), { recursive: true, force: true });
+await Promise.all(
+  localizedRuleTargets.map(({ dir }) => fs.mkdir(dir, { recursive: true })),
+);
 
 for (const rule of catalog) {
   const filePath = path.join(rootDir, rule.fileName);
@@ -63,11 +88,15 @@ description: "${safeDesc}"
 
 `;
 
-  const pagePath = path.join(rulesDir, `${rule.slug}.md`);
-  await fs.writeFile(pagePath, pageFrontmatter + body);
+  await Promise.all(
+    localizedRuleTargets.map(({ dir, intro }) => {
+      const pagePath = path.join(dir, `${rule.slug}.md`);
+      return fs.writeFile(pagePath, pageFrontmatter + intro(rule.fileName) + body);
+    }),
+  );
 }
 
-console.log(`Wrote ${catalog.length} rule pages to docs/rules/`);
+console.log(`Wrote ${catalog.length} localized rule pages to docs/zh/rules/ and docs/en/rules/`);
 
 // Generate sitemap
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -77,11 +106,13 @@ ${staticPages.map(page => `  <url>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
   </url>`).join('\n')}
-${catalog.map(rule => `  <url>
-    <loc>${baseUrl}rules/${rule.slug}</loc>
+${localizedRuleTargets.flatMap(({ routePrefix }) =>
+  catalog.map(rule => `  <url>
+    <loc>${baseUrl}${routePrefix}/${rule.slug}</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
-  </url>`).join('\n')}
+  </url>`),
+).join('\n')}
 </urlset>
 `;
 

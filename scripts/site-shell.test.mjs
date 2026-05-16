@@ -13,10 +13,22 @@ const buildScript = fs.readFileSync(
   'utf8',
 );
 
-const indexMd = fs.readFileSync(
+const rootIndexMd = fs.readFileSync(
   new URL('../docs/index.md', import.meta.url),
   'utf8',
 );
+
+const zhIndexMd = fs.readFileSync(
+  new URL('../docs/zh/index.md', import.meta.url),
+  'utf8',
+);
+
+const enIndexMd = fs.readFileSync(
+  new URL('../docs/en/index.md', import.meta.url),
+  'utf8',
+);
+
+const indexMd = zhIndexMd;
 
 const pathwaysMd = fs.readFileSync(
   new URL('../docs/pathways/index.md', import.meta.url),
@@ -41,19 +53,60 @@ const siteContent = await import(
   `data:text/javascript,${encodeURIComponent(siteContentTs)}`,
 );
 
-test('VitePress config is Chinese-only without locales', () => {
-  assert.match(configTs, /lang:\s*'zh-CN'/);
-  assert.match(configTs, /\/rules\//);
-  assert.doesNotMatch(configTs, /locales:/);
-  assert.doesNotMatch(configTs, /\/zh\//);
-  assert.doesNotMatch(configTs, /\/en\//);
+test('VitePress config is locale-first with zh and en trees', () => {
+  assert.match(configTs, /locales:\s*\{/);
+  assert.match(configTs, /zh:\s*\{/);
+  assert.match(configTs, /en:\s*\{/);
+  assert.match(configTs, /link:\s*'\/zh\/'/);
+  assert.match(configTs, /link:\s*'\/en\/'/);
+  assert.match(configTs, /\/zh\/guides\/reading-map/);
+  assert.match(configTs, /\/zh\/academy\/rule-philosophy/);
+  assert.match(configTs, /\/zh\/architecture\/system-overview/);
+  assert.match(configTs, /\/zh\/research\/related-work/);
+  assert.match(configTs, /\/en\/guides\/reading-map/);
+  assert.match(configTs, /\/en\/architecture\/system-overview/);
+  assert.match(configTs, /\/en\/research\/related-work/);
+  assert.match(configTs, /\/zh\/rules\//);
+  assert.match(configTs, /\/en\/rules\//);
+});
+
+test('root index redirects visitors into locale entry points', () => {
+  assert.match(rootIndexMd, /router\.go\('\/zh\/'\)/);
+  assert.match(rootIndexMd, /router\.go\('\/en\/'\)/);
+  assert.match(enIndexMd, /layout:\s*home/);
+  assert.match(zhIndexMd, /layout:\s*home/);
+});
+
+test('locale documentation tree exposes guide, academy, architecture, and research entry pages', () => {
+  for (const docPath of [
+    '../docs/zh/guides/reading-map.md',
+    '../docs/zh/academy/rule-philosophy.md',
+    '../docs/zh/architecture/system-overview.md',
+    '../docs/zh/research/related-work.md',
+    '../docs/zh/research/references.md',
+    '../docs/zh/research/evolution.md',
+    '../docs/en/guides/reading-map.md',
+    '../docs/en/architecture/system-overview.md',
+    '../docs/en/research/related-work.md',
+  ]) {
+    assert.equal(fs.existsSync(new URL(docPath, import.meta.url)), true, `${docPath} should exist`);
+  }
+
+  const zhGuideMd = fs.readFileSync(new URL('../docs/zh/guides/reading-map.md', import.meta.url), 'utf8');
+  const zhArchitectureMd = fs.readFileSync(new URL('../docs/zh/architecture/system-overview.md', import.meta.url), 'utf8');
+  const zhResearchMd = fs.readFileSync(new URL('../docs/zh/research/related-work.md', import.meta.url), 'utf8');
+
+  assert.match(zhGuideMd, /# 项目导读/);
+  assert.match(zhArchitectureMd, /# 系统架构总览/);
+  assert.match(zhResearchMd, /# 相关工作/);
 });
 
 test('build script generates site catalog artifacts and rule pages', () => {
   assert.match(buildScript, /rules\.json/);
   assert.match(buildScript, /categories\.json/);
   assert.match(buildScript, /sitemap\.xml/);
-  assert.match(buildScript, /docs\/rules/);
+  assert.match(buildScript, /docs\/zh\/rules/);
+  assert.match(buildScript, /docs\/en\/rules/);
 });
 
 test('index.md has catalog container elements', () => {
@@ -62,13 +115,14 @@ test('index.md has catalog container elements', () => {
   assert.match(indexMd, /id="search-input"/);
 });
 
-test('homepage promotes philosophy, pathway map, and resource atlas before catalog', () => {
+test('homepage promotes whitepaper, curriculum, architecture, and research surfaces before catalog', () => {
   assert.match(indexMd, /id="home-hero"/);
-  assert.match(indexMd, /id="home-philosophy"/);
-  assert.match(indexMd, /id="home-path-map"/);
-  assert.match(indexMd, /id="home-resource-atlas"/);
-  assert.match(indexMd, /toPortalHref\(pathwaysSection\.linkHref\)/);
-  assert.match(indexMd, /toPortalHref\(resourcesSection\.linkHref\)/);
+  assert.match(indexMd, /id="home-thesis"/);
+  assert.match(indexMd, /id="home-curriculum"/);
+  assert.match(indexMd, /id="home-architecture-lab"/);
+  assert.match(indexMd, /id="home-research"/);
+  assert.match(indexMd, /toPortalHref\(curriculumSection\.linkHref\)/);
+  assert.match(indexMd, /toPortalHref\(researchSection\.linkHref\)/);
   assert.match(indexMd, /id="catalog"/);
 });
 
@@ -94,18 +148,19 @@ test('homepage category shortcuts stay repo-subpath safe', () => {
 test('homepage portal links preserve repo-subpath safety', () => {
   assert.match(indexMd, /import\s*\{[^}]*withBase[^}]*\}\s*from 'vitepress'/);
   assert.match(indexMd, /const toPortalHref = \(href\) => href\.startsWith\('\/'\) \? withBase\(href\) : href/);
-  assert.match(indexMd, /:href="toPortalHref\(pathway\.href\)"/);
-  assert.match(indexMd, /:href="toPortalHref\(group\.href\)"/);
+  assert.match(indexMd, /:href="toPortalHref\(track\.href\)"/);
+  assert.match(indexMd, /:href="toPortalHref\(item\.href\)"/);
 });
 
-test('public portal contract exposes pathways and resources surfaces', () => {
+test('public portal contract exposes whitepaper surfaces and generated catalog assets', () => {
   assert.match(configTs, /text:\s*'采用路径'/);
   assert.match(configTs, /text:\s*'技术白皮书'/);
   assert.match(configTs, /src:\s*`\$\{base\}assets\/catalog\.js`/);
   assert.doesNotMatch(configTs, /src:\s*'\/assets\/catalog\.js'/);
-  assert.match(indexMd, /id="home-philosophy"/);
-  assert.match(indexMd, /id="home-path-map"/);
-  assert.match(indexMd, /id="home-resource-atlas"/);
+  assert.match(indexMd, /id="home-thesis"/);
+  assert.match(indexMd, /id="home-curriculum"/);
+  assert.match(indexMd, /id="home-architecture-lab"/);
+  assert.match(indexMd, /id="home-research"/);
   assert.equal(fs.existsSync(new URL('../docs/pathways/index.md', import.meta.url)), true);
   assert.equal(fs.existsSync(new URL('../docs/resources/index.md', import.meta.url)), true);
   assert.equal(fs.existsSync(catalogJsUrl), true);
@@ -130,29 +185,24 @@ test('resources page renders resource groups and highlights OpenSpec', () => {
   assert.match(resourcesMd, /OpenSpec/);
 });
 
-test('portal design system contract exposes shared layouts and icon assets', () => {
+test('portal design system contract exposes whitepaper grids and figure treatments', () => {
   assert.match(styleCss, /\.portal-hero\s*\{/);
-  assert.match(styleCss, /\.pathway-grid\s*\{/);
-  assert.match(styleCss, /\.resource-group\s*\{/);
+  assert.match(styleCss, /\.thesis-grid\s*\{/);
+  assert.match(styleCss, /\.curriculum-grid\s*\{/);
+  assert.match(styleCss, /\.architecture-grid\s*\{/);
+  assert.match(styleCss, /\.citation-card\s*\{/);
+  assert.match(styleCss, /\.diagram-frame\s*\{/);
   assert.match(styleCss, /\.portal-icon\s*\{/);
 
   assert.match(indexMd, /class="panel portal-hero"/);
-  assert.match(indexMd, /class="feature-map pathway-grid"/);
-  assert.match(indexMd, /class="feature-card resource-group"/);
+  assert.match(indexMd, /class="feature-map thesis-grid"/);
+  assert.match(indexMd, /class="feature-map curriculum-grid"/);
+  assert.match(indexMd, /class="feature-map architecture-grid"/);
+  assert.match(indexMd, /class="feature-card citation-card"/);
   assert.match(indexMd, /class="portal-icon"/);
   assert.match(pathwaysMd, /class="feature-map pathway-grid"/);
   assert.match(resourcesMd, /class="feature-card resource-group"/);
   assert.match(resourcesMd, /class="portal-icon"/);
-
-  for (const iconPath of [
-    '../docs/public/icons/philosophy.svg',
-    '../docs/public/icons/pathways.svg',
-    '../docs/public/icons/languages.svg',
-    '../docs/public/icons/engineering.svg',
-    '../docs/public/icons/resources.svg',
-  ]) {
-    assert.equal(fs.existsSync(new URL(iconPath, import.meta.url)), true, `${iconPath} should exist`);
-  }
 });
 
 test('resource group CTAs do not self-link back to the resources index', () => {
@@ -162,16 +212,18 @@ test('resource group CTAs do not self-link back to the resources index', () => {
   );
 });
 
-test('build script sitemap includes portal surfaces and key OpenSpec docs', () => {
-  assert.match(buildScript, /path:\s*'pathways\/'/);
-  assert.match(buildScript, /path:\s*'resources\/'/);
+test('build script sitemap includes locale surfaces and key OpenSpec docs', () => {
+  assert.match(buildScript, /path:\s*'zh\/'/);
+  assert.match(buildScript, /path:\s*'en\/'/);
+  assert.match(buildScript, /path:\s*'zh\/guides\/reading-map'/);
+  assert.match(buildScript, /path:\s*'zh\/research\/related-work'/);
   assert.match(buildScript, /path:\s*'openspec\/architecture\.html'/);
   assert.match(buildScript, /path:\s*'openspec\/ai-tooling\.html'/);
   assert.match(buildScript, /path:\s*'openspec\/workflow\.html'/);
 });
 
-test('homepage raw HTML OpenSpec links stay static-export safe', () => {
-  assert.match(indexMd, /toPortalHref\(link\.href\)/);
+test('resources page raw HTML OpenSpec links stay static-export safe', () => {
+  assert.match(resourcesMd, /toPortalHref\(link\.href\)/);
   assert.deepEqual(
     siteContent.resourcesSection.links.map(({ href }) => href),
     [
@@ -1063,7 +1115,7 @@ test('catalog runtime applies portal triggers without clearing active search', a
   );
 });
 
-test('site content exports populated portal content collections', () => {
+test('site content exports populated whitepaper content collections', () => {
   assert.ok(Array.isArray(siteContent.heroStats));
   assert.deepEqual(
     siteContent.heroStats.map(({ label }) => label),
@@ -1071,41 +1123,38 @@ test('site content exports populated portal content collections', () => {
   );
   assert.equal(typeof siteContent.homeHero.eyebrow, 'string');
   assert.equal(siteContent.homeHero.actions.length, 3);
-  assert.equal(siteContent.homeHero.actions[0].href, '/pathways/');
-  assert.equal(typeof siteContent.philosophySection.title, 'string');
-  assert.ok(siteContent.philosophyCards.length >= 1);
-  assert.equal(typeof siteContent.philosophyCards[0].icon, 'string');
-  assert.ok(siteContent.philosophyCards[0].icon.length > 0);
-  assert.doesNotMatch(siteContent.philosophyCards[0].icon, /^\//);
-  assert.equal(siteContent.philosophyCards[0].title, '不是 prompts 杂货铺');
-  assert.ok(Array.isArray(siteContent.pathways));
-  assert.equal(siteContent.pathways.length, 3);
-  assert.equal(siteContent.pathways[0].href, '/pathways/');
-  assert.equal(typeof siteContent.pathways[0].summary, 'string');
-  assert.equal(typeof siteContent.pathwaysSection.linkLabel, 'string');
-  assert.ok(Array.isArray(siteContent.resourceGroups));
-  assert.equal(siteContent.resourceGroups.length, 4);
-  assert.equal(siteContent.resourceGroups[0].href, 'https://github.com/LessUp/cursor-rules#readme');
-  assert.equal(typeof siteContent.resourceGroups[0].items[0], 'string');
-  assert.equal(siteContent.resourcesSection.links.length, 3);
+  assert.equal(siteContent.homeHero.actions[0].href, '/zh/guides/reading-map');
+  assert.equal(typeof siteContent.thesisSection.title, 'string');
+  assert.ok(siteContent.thesisCards.length >= 3);
+  assert.equal(siteContent.thesisCards[0].title, '规则文件是产品本体');
+  assert.equal(typeof siteContent.curriculumSection.title, 'string');
+  assert.ok(Array.isArray(siteContent.curriculumTracks));
+  assert.equal(siteContent.curriculumTracks.length, 4);
+  assert.equal(siteContent.curriculumTracks[0].href, '/zh/guides/reading-map');
+  assert.equal(typeof siteContent.architectureSection.title, 'string');
+  assert.ok(siteContent.architectureHighlights.length >= 3);
+  assert.equal(typeof siteContent.researchSection.linkLabel, 'string');
+  assert.ok(Array.isArray(siteContent.researchHighlights));
+  assert.equal(siteContent.researchHighlights.length, 3);
   assert.equal(siteContent.catalogSection.quickFilters[0].href, '?cat=language');
   assert.equal(siteContent.catalogSection.shortcuts.length, 3);
   assert.equal(siteContent.catalogSection.emptyState.title, '没有匹配的规则');
 });
 
-test('homepage template renders homepage copy from site content exports', () => {
+test('homepage template renders homepage copy from whitepaper content exports', () => {
   assert.match(indexMd, /homeHero,/);
-  assert.match(indexMd, /philosophySection,/);
-  assert.match(indexMd, /pathwaysSection,/);
-  assert.match(indexMd, /resourcesSection,/);
+  assert.match(indexMd, /thesisSection,/);
+  assert.match(indexMd, /curriculumSection,/);
+  assert.match(indexMd, /architectureSection,/);
+  assert.match(indexMd, /researchSection,/);
   assert.match(indexMd, /catalogSection,/);
   assert.match(indexMd, /v-for="action in homeHero\.actions"/);
   assert.match(indexMd, /{{ homeHero\.eyebrow }}/);
-  assert.match(indexMd, /{{ philosophySection\.title }}/);
-  assert.match(indexMd, /{{ pathwaysSection\.linkLabel }}/);
-  assert.match(indexMd, /{{ resourcesSection\.linksLabel }}/);
+  assert.match(indexMd, /{{ thesisSection\.title }}/);
+  assert.match(indexMd, /{{ curriculumSection\.linkLabel }}/);
+  assert.match(indexMd, /{{ architectureSection\.title }}/);
+  assert.match(indexMd, /{{ researchSection\.linkLabel }}/);
   assert.match(indexMd, /{{ catalogSection\.footer }}/);
-  assert.doesNotMatch(indexMd, /先讲理念、再给路径、再配资源，最后才进入规则目录。/);
   assert.doesNotMatch(indexMd, /为什么是门户而不是清单/);
-  assert.doesNotMatch(indexMd, /已经理解理念、选好路径、拿到资源后，再按主题筛选规则。/);
+  assert.doesNotMatch(indexMd, /把仓库文档、策展入口与维护触点放在同一个资源图谱里/);
 });

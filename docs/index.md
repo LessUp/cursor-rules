@@ -1,242 +1,28 @@
 ---
 layout: home
+hero:
+  name: Cursor Rules
+  text: ' '
+  actions:
+    - theme: brand
+      text: 简体中文
+      link: /zh/
+    - theme: alt
+      text: English
+      link: /en/
 ---
 
 <script setup>
-import { withBase } from 'vitepress'
-import {
-  catalogSection,
-  heroStats,
-  homeHero,
-  pathwaysSection,
-  philosophyCards,
-  philosophySection,
-  pathways,
-  resourceGroups,
-  resourcesSection,
-  docsSection,
-} from './.vitepress/theme/content/site-content'
+import { onMounted } from 'vue'
+import { useRouter } from 'vitepress'
 
-const toPortalHref = (href) => href.startsWith('/') ? withBase(href) : href
-
-const getPathwayIcon = (title) => {
-  if (title.includes('共识')) return 'languages'
-  if (title.includes('迁')) return 'engineering'
-  return 'pathways'
-}
-
-const getResourceIcon = (title) => {
-  if (title.includes('项目控制') || title.includes('维护者')) return 'engineering'
-  if (title.includes('采用')) return 'pathways'
-  return 'resources'
-}
+onMounted(() => {
+  const router = useRouter()
+  const lang = navigator.language || navigator.userLanguage
+  if (lang.startsWith('zh')) {
+    router.go('/zh/')
+  } else {
+    router.go('/en/')
+  }
+})
 </script>
-
-<div class="home-container">
-  <section id="home-hero" class="panel portal-hero">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">{{ homeHero.eyebrow }}</p>
-        <h1>{{ homeHero.title }}</h1>
-        <p class="subtitle">{{ homeHero.subtitle }}</p>
-      </div>
-      <div class="hero-actions">
-        <template v-for="action in homeHero.actions" :key="action.label">
-          <VPButton
-            v-if="action.component === 'VPButton'"
-            :text="action.label"
-            :href="toPortalHref(action.href)"
-            :theme="action.theme"
-          />
-          <a
-            v-else
-            class="vp-button alt"
-            :href="toPortalHref(action.href)"
-            :data-catalog-trigger="action.href === '#catalog' ? '' : null"
-          >{{ action.label }}</a>
-        </template>
-      </div>
-    </div>
-    <div class="home-stats" id="home-stats">
-      <span v-for="stat in heroStats" :key="stat.label">
-        <strong>{{ stat.value }}</strong>
-        {{ stat.label }}
-      </span>
-    </div>
-  </section>
-
-  <section id="home-philosophy" class="panel">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">{{ philosophySection.eyebrow }}</p>
-        <h2>{{ philosophySection.title }}</h2>
-      </div>
-    </div>
-    <div class="feature-map">
-      <article v-for="card in philosophyCards" :key="card.title" class="feature-card">
-        <div class="portal-card-heading">
-          <span class="portal-icon"><SvgIcon name="philosophy" /></span>
-          <div class="feature-card-title">{{ card.title }}</div>
-        </div>
-        <div class="feature-card-desc">{{ card.body }}</div>
-      </article>
-    </div>
-  </section>
-
-  <section id="home-docs" class="panel">
-    <div class="section-heading">
-      <div class="portal-section-title">
-        <span class="portal-icon"><SvgIcon name="engineering" /></span>
-        <div>
-          <p class="eyebrow">{{ docsSection.eyebrow }}</p>
-          <h2>{{ docsSection.title }}</h2>
-        </div>
-      </div>
-    </div>
-    <div class="feature-map docs-grid">
-      <a v-for="item in docsSection.items" :key="item.href" :href="toPortalHref(item.href)" class="feature-card doc-nav-card">
-        <div class="portal-card-heading">
-          <span class="portal-icon"><SvgIcon :name="item.icon" /></span>
-          <div>
-            <div class="feature-card-title">{{ item.title }}</div>
-            <div class="portal-card-subtitle">{{ item.badge }}</div>
-          </div>
-        </div>
-        <div class="feature-card-desc">{{ item.summary }}</div>
-        <div class="feature-tags">
-          <span v-for="tag in item.tags" :key="tag" class="feature-tag">{{ tag }}</span>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <section id="home-path-map" class="panel">
-    <div class="section-heading">
-      <div class="portal-section-title">
-        <span class="portal-icon"><SvgIcon name="pathways" /></span>
-        <div>
-        <p class="eyebrow">{{ pathwaysSection.eyebrow }}</p>
-        <h2>{{ pathwaysSection.title }}</h2>
-        </div>
-      </div>
-      <a class="feature-tag" :href="toPortalHref(pathwaysSection.linkHref)">{{ pathwaysSection.linkLabel }}</a>
-    </div>
-    <div class="feature-map pathway-grid">
-      <article v-for="pathway in pathways" :key="pathway.title" class="feature-card">
-        <div class="portal-card-heading">
-          <span class="portal-icon"><SvgIcon :name="getPathwayIcon(pathway.title)" /></span>
-          <div>
-            <div class="feature-card-title">{{ pathway.kicker }}</div>
-            <div class="portal-card-subtitle">{{ pathway.title }}</div>
-          </div>
-        </div>
-        <div class="feature-card-desc">{{ pathway.summary }}</div>
-        <div class="feature-tags">
-          <a :href="toPortalHref(pathway.href)" class="feature-tag">{{ pathway.cta }}</a>
-          <span v-for="outcome in pathway.outcomes" :key="outcome" class="feature-tag">{{ outcome }}</span>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <section id="home-resource-atlas" class="panel">
-    <div class="section-heading">
-      <div class="portal-section-title">
-        <span class="portal-icon"><SvgIcon name="resources" /></span>
-        <div>
-        <p class="eyebrow">{{ resourcesSection.eyebrow }}</p>
-        <h2>{{ resourcesSection.title }}</h2>
-        </div>
-      </div>
-      <a class="feature-tag" :href="toPortalHref(resourcesSection.linkHref)">{{ resourcesSection.linkLabel }}</a>
-    </div>
-    <div class="feature-map">
-      <article v-for="group in resourceGroups" :key="group.title" class="feature-card resource-group">
-        <div class="portal-card-heading">
-          <span class="portal-icon"><SvgIcon :name="getResourceIcon(group.title)" /></span>
-          <div class="feature-card-title">{{ group.title }}</div>
-        </div>
-        <div class="feature-card-desc">{{ group.summary }}</div>
-        <div class="feature-tags">
-          <a :href="toPortalHref(group.href)" class="feature-tag">{{ group.cta }}</a>
-          <span v-for="item in group.items" :key="item" class="feature-tag">{{ item }}</span>
-        </div>
-      </article>
-    </div>
-    <div class="feature-tags">
-      <span class="feature-tag">{{ resourcesSection.linksLabel }}</span>
-      <a
-        v-for="link in resourcesSection.links"
-        :key="link.href"
-        :href="toPortalHref(link.href)"
-        class="feature-tag"
-      >{{ link.label }}</a>
-    </div>
-  </section>
-
-  <div id="catalog" class="panel">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">{{ catalogSection.eyebrow }}</p>
-        <h2>{{ catalogSection.title }}</h2>
-      </div>
-      <div class="status-pill">{{ catalogSection.resultLabel }}: <span id="result-count">--</span></div>
-    </div>
-    <div id="catalog-stats" class="home-stats catalog-stats">
-      <span v-for="stat in catalogSection.stats" :key="stat.id">
-        <strong :id="stat.id">{{ stat.value }}</strong>
-        {{ stat.label }}
-      </span>
-    </div>
-    <div class="feature-tags">
-        <a
-          v-for="filter in catalogSection.quickFilters"
-          :key="filter.href"
-          :href="filter.href"
-          data-catalog-trigger
-          :data-catalog-category="filter.href.replace('?cat=', '')"
-          class="feature-tag"
-        >{{ filter.label }}</a>
-      </div>
-    <div class="toolbar">
-      <div class="search-wrapper">
-        <input
-          id="search-input"
-          class="search-input"
-          type="search"
-          :placeholder="catalogSection.searchPlaceholder"
-        />
-        <button id="search-clear" class="search-clear" style="display: none;">×</button>
-      </div>
-      <div class="chip-row" id="chip-row"></div>
-    </div>
-    <p id="copy-status" class="copy-status" style="display: none;"></p>
-  </div>
-
-  <div id="skeleton-grid" class="grid">
-    <div class="skeleton-card"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line long"></div><div class="skeleton-line long"></div></div>
-    <div class="skeleton-card"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line long"></div><div class="skeleton-line long"></div></div>
-    <div class="skeleton-card"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line long"></div><div class="skeleton-line long"></div></div>
-    <div class="skeleton-card"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line long"></div><div class="skeleton-line long"></div></div>
-    <div class="skeleton-card"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line long"></div><div class="skeleton-line long"></div></div>
-    <div class="skeleton-card"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line long"></div><div class="skeleton-line long"></div></div>
-  </div>
-
-  <div id="rule-grid" class="grid-shell" style="display: none;">
-    <div id="rule-cards" class="grid"></div>
-    <footer class="catalog-footer">
-      <p>{{ catalogSection.footer }}</p>
-    </footer>
-  </div>
-
-  <div id="empty-state" class="panel empty-state" style="display: none;">
-    <h2>{{ catalogSection.emptyState.title }}</h2>
-    <p class="subtitle">{{ catalogSection.emptyState.subtitle }}</p>
-  </div>
-
-  <div class="shortcut-hint">
-    <template v-for="shortcut in catalogSection.shortcuts" :key="shortcut.key">
-      <span class="shortcut-key">{{ shortcut.key }}</span> {{ shortcut.label }}
-    </template>
-  </div>
-</div>

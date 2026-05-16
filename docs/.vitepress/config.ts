@@ -13,7 +13,6 @@ export default withMermaid(defineConfig({
   base,
   title: 'Cursor Rules',
   description: '面向 AI 时代的工程级 Cursor .mdc 规则库——架构展示站与技术白皮书',
-  lang: 'zh-CN',
 
   head: [
     ['meta', { property: 'og:type', content: 'website' }],
@@ -27,102 +26,136 @@ export default withMermaid(defineConfig({
 
   srcExclude: ['superpowers/**'],
 
-  vite: {
-    plugins: [llmstxt()]
+  locales: {
+    zh: {
+      label: '简体中文',
+      lang: 'zh-CN',
+      link: '/zh/',
+      title: 'Cursor Rules 技术白皮书',
+      description: 'Archive-grade Cursor .mdc 规则库的项目导读、架构展示与技术白皮书',
+      themeConfig: {
+        nav: [
+          { text: '首页', link: '/zh/' },
+          { text: '项目导读', link: '/zh/guides/reading-map', activeMatch: '/zh/guides/' },
+          { text: '规则学院', link: '/zh/academy/rule-philosophy', activeMatch: '/zh/academy/' },
+          { text: '系统架构', link: '/zh/architecture/system-overview', activeMatch: '/zh/architecture/' },
+          { text: '技术白皮书', link: '/zh/research/related-work', activeMatch: '/zh/research/' },
+          { text: '采用路径', link: '/zh/guides/reading-map', activeMatch: '/zh/guides/' },
+          { text: 'OpenSpec', link: '/openspec/architecture', activeMatch: '/openspec/' },
+        ],
+        sidebar: {
+          '/zh/guides/': [
+            {
+              text: '项目导读',
+              items: [
+                { text: '阅读地图', link: '/zh/guides/reading-map' },
+              ],
+            },
+          ],
+          '/zh/academy/': [
+            {
+              text: '规则学院',
+              items: [
+                { text: '规则哲学', link: '/zh/academy/rule-philosophy' },
+              ],
+            },
+          ],
+          '/zh/architecture/': [
+            {
+              text: '系统架构',
+              items: [
+                { text: '架构总览', link: '/zh/architecture/system-overview' },
+              ],
+            },
+          ],
+          '/zh/research/': [
+            {
+              text: '技术白皮书',
+              items: [
+                { text: '相关工作', link: '/zh/research/related-work' },
+                { text: '参考文献', link: '/zh/research/references' },
+                { text: '演进思考', link: '/zh/research/evolution' },
+              ],
+            },
+          ],
+          '/openspec/': [
+            {
+              text: 'OpenSpec',
+              items: [
+                { text: '架构', link: '/openspec/architecture' },
+                { text: '数据流架构', link: '/openspec/data-flow' },
+                { text: 'Glob 重叠矩阵', link: '/openspec/glob-overlap-matrix' },
+                { text: '规则覆盖矩阵', link: '/openspec/coverage-matrix' },
+                { text: 'AI 工具', link: '/openspec/ai-tooling' },
+                { text: '项目定位', link: '/openspec/project-positioning' },
+                { text: '工作流', link: '/openspec/workflow' },
+              ],
+            },
+          ],
+          '/zh/rules/': [
+            {
+              text: '规则详情',
+              items: [
+                { text: '← 返回首页', link: '/zh/' },
+              ],
+            },
+          ],
+        },
+      },
+    },
+    en: {
+      label: 'English',
+      lang: 'en-US',
+      link: '/en/',
+      title: 'Cursor Rules Whitepaper',
+      description: 'Architecture showcase and technical whitepaper for the Cursor Rules library',
+      themeConfig: {
+        nav: [
+          { text: 'Home', link: '/en/' },
+          { text: 'Reading Map', link: '/en/guides/reading-map', activeMatch: '/en/guides/' },
+          { text: 'Architecture', link: '/en/architecture/system-overview', activeMatch: '/en/architecture/' },
+          { text: 'Research', link: '/en/research/related-work', activeMatch: '/en/research/' },
+          { text: 'OpenSpec', link: '/openspec/architecture', activeMatch: '/openspec/' },
+        ],
+        sidebar: {
+          '/en/guides/': [
+            {
+              text: 'Guides',
+              items: [
+                { text: 'Reading Map', link: '/en/guides/reading-map' },
+              ],
+            },
+          ],
+          '/en/architecture/': [
+            {
+              text: 'Architecture',
+              items: [
+                { text: 'System Overview', link: '/en/architecture/system-overview' },
+              ],
+            },
+          ],
+          '/en/research/': [
+            {
+              text: 'Research',
+              items: [
+                { text: 'Related Work', link: '/en/research/related-work' },
+              ],
+            },
+          ],
+          '/en/rules/': [
+            {
+              text: 'Rule Pages',
+              items: [
+                { text: '← Back to home', link: '/en/' },
+              ],
+            },
+          ],
+        },
+      },
+    },
   },
 
   themeConfig: {
-    nav: [
-      { text: '首页', link: '/' },
-      { text: '指南', link: '/guide/', activeMatch: '/guide/' },
-      { text: '架构', link: '/architecture/', activeMatch: '/architecture/' },
-      { text: '参考手册', link: '/reference/', activeMatch: '/reference/' },
-      { text: '技术白皮书', link: '/advanced/', activeMatch: '/advanced/' },
-      { text: 'OpenSpec', link: '/openspec/architecture', activeMatch: '/openspec/' },
-    ],
-    sidebar: {
-      '/guide/': [
-        {
-          text: '指南',
-          items: [
-            { text: '简介', link: '/guide/' },
-            { text: '快速开始', link: '/guide/getting-started' },
-            { text: '为什么需要规则', link: '/guide/why-rules' },
-            { text: '编写规则', link: '/guide/writing-rules' },
-          ],
-        },
-      ],
-      '/architecture/': [
-        {
-          text: '架构',
-          items: [
-            { text: '系统概览', link: '/architecture/' },
-            { text: '目录构建系统', link: '/architecture/catalog-system' },
-            { text: 'MDC 规范', link: '/architecture/mdc-spec' },
-            { text: '设计决策', link: '/architecture/design-decisions' },
-          ],
-        },
-      ],
-      '/reference/': [
-        {
-          text: '参考手册',
-          items: [
-            { text: '概览', link: '/reference/' },
-            { text: '规则分类', link: '/reference/categories' },
-            { text: 'Frontmatter 字段', link: '/reference/frontmatter' },
-          ],
-        },
-      ],
-      '/advanced/': [
-        {
-          text: '技术白皮书',
-          items: [
-            { text: '概览', link: '/advanced/' },
-            { text: '相关工作', link: '/advanced/related-work' },
-            { text: '学术参考', link: '/advanced/academic-references' },
-            { text: '演进思考', link: '/advanced/evolution' },
-          ],
-        },
-      ],
-      '/openspec/': [
-        {
-          text: 'OpenSpec',
-          items: [
-            { text: '架构', link: '/openspec/architecture' },
-            { text: '数据流架构', link: '/openspec/data-flow' },
-            { text: 'Glob 重叠矩阵', link: '/openspec/glob-overlap-matrix' },
-            { text: '规则覆盖矩阵', link: '/openspec/coverage-matrix' },
-            { text: 'AI 工具', link: '/openspec/ai-tooling' },
-            { text: '项目定位', link: '/openspec/project-positioning' },
-            { text: '工作流', link: '/openspec/workflow' },
-          ],
-        },
-      ],
-      '/rules/': [
-        {
-          text: '规则详情',
-          items: [
-            { text: '← 返回规则库', link: '/' },
-          ],
-        },
-      ],
-      '/pathways/': [
-        {
-          text: '采用路径',
-          items: [
-            { text: '路径总览', link: '/pathways/' },
-          ],
-        },
-      ],
-      '/resources/': [
-        {
-          text: '资源',
-          items: [
-            { text: '资源地图', link: '/resources/' },
-          ],
-        },
-      ],
-    },
     outline: [2, 3],
     search: { provider: 'local' },
     socialLinks: [
@@ -132,5 +165,9 @@ export default withMermaid(defineConfig({
       message: '以根目录 .mdc 文件为产品，以工程约束为哲学',
       copyright: 'MIT License © LessUp',
     },
+  },
+
+  vite: {
+    plugins: [llmstxt()],
   },
 }))

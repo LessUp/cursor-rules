@@ -1,50 +1,142 @@
 export const homeHero = {
-  eyebrow: '工程级 Cursor 规则库',
-  title: '把 AI 编码约束变成可维护的工程资产。',
+  eyebrow: '高级技术白皮书 / 架构展示站 / 项目学院',
+  title: '把 Cursor 规则库呈现为可验证、可采用、可维护的工程知识体系。',
   subtitle:
-    '26 条经过实践验证的 .mdc 规则，覆盖 Python、TypeScript、Go、React 等主流技术栈。从哲学理念到架构设计，为严苛的工程团队提供完整的 AI 编码规范体系。',
+    '26 条经过实践验证的 `.mdc` 规则不只是提示词集合，而是一套可审视的规则工程方法论。站点围绕项目导读、学院化解释、架构拆解、研究背书与动态目录五条主线组织，让严苛面试官和高级开发者都能快速判断它的设计密度。',
   actions: [
-    { component: 'VPButton', label: '采用路径', href: '/pathways/' },
-    { component: 'VPButton', label: '架构文档', href: '/architecture/', theme: 'alt' },
+    { component: 'VPButton', label: '进入项目导读', href: '/zh/guides/reading-map' },
+    { component: 'VPButton', label: '查看系统架构', href: '/zh/architecture/system-overview', theme: 'alt' },
     { component: 'a', label: '浏览规则目录', href: '#catalog', theme: 'alt' },
   ],
-};
+}
 
 export const heroStats = [
   { label: '规则', value: '26' },
   { label: '分类', value: '6' },
   { label: '代码行', value: '1,721' },
-];
+]
 
-export const philosophySection = {
-  eyebrow: '为什么是门户而不是清单',
-  title: '先统一规则观，再开始接入。',
-};
+export const thesisSection = {
+  eyebrow: '项目论题',
+  title: '这不是“给 AI 一些提示词”，而是把规则变成工程资产的策展系统。',
+}
 
-export const philosophyCards = [
+export const thesisCards = [
   {
-    icon: '🧭',
-    title: '不是 prompts 杂货铺',
-    body: '规则库强调长期可维护、可复制和可审视的工程约束。',
+    icon: 'engineering',
+    title: '规则文件是产品本体',
+    body: '仓库根目录的 `.mdc` 文件是对外契约；GitHub Pages、OpenSpec 与生成脚本只负责解释、证明和传播这组工程规则。',
   },
   {
-    icon: '🗂️',
-    title: '首页先做导览再做检索',
-    body: '入口页先解释仓库哲学、采用顺序与资源地图，让团队知道何时进入目录筛选。',
+    icon: 'philosophy',
+    title: '规则库必须可审视',
+    body: '每条规则都有明确 frontmatter、分类与可复用语义，让团队能像审查代码一样审查 AI 协作约束。',
   },
   {
-    icon: '🧱',
-    title: '根目录 .mdc 才是产品',
-    body: 'GitHub Pages、OpenSpec 与脚本只是围绕规则库提供发现、采用和维护体验。',
+    icon: 'languages',
+    title: '采用路径比规则堆叠更重要',
+    body: '站点先讲“为什么、何时、如何采用”，再引导读者进入动态目录，避免仓库沦为无序的提示词大卖场。',
   },
-];
+]
+
+export const curriculumSection = {
+  eyebrow: '学院路径',
+  title: '让访客沿着“导读 → 学院 → 架构 → 研究”逐层进入，而不是被导航项淹没。',
+  linkLabel: '进入项目导读',
+  linkHref: '/zh/guides/reading-map',
+}
+
+export const curriculumTracks = [
+  {
+    kicker: 'Guide',
+    title: '项目导读',
+    href: '/zh/guides/reading-map',
+    summary: '回答“先看什么、后看什么、为什么这套规则值得采用”。',
+    bullets: ['定位', '采用顺序', '阅读地图'],
+  },
+  {
+    kicker: 'Academy',
+    title: '规则学院',
+    href: '/zh/academy/rule-philosophy',
+    summary: '把规则方法论、策展模式与常见误区讲清楚，解释库为何能长期维护。',
+    bullets: ['哲学', '模式', '反模式'],
+  },
+  {
+    kicker: 'Architecture',
+    title: '系统架构',
+    href: '/zh/architecture/system-overview',
+    summary: '展开规则来源、验证脚本、目录生成与展示层之间的数据链路。',
+    bullets: ['数据流', '生成物', '契约'],
+  },
+  {
+    kicker: 'Research',
+    title: '研究与背书',
+    href: '/zh/research/related-work',
+    summary: '用相关开源项目、引用文献与演进思考支撑项目说服力。',
+    bullets: ['相关工作', '参考文献', '演进路线'],
+  },
+]
+
+export const architectureSection = {
+  eyebrow: '架构实验室',
+  title: '把产物层、生成层与展示层拆开，展示这个仓库如何保持低漂移和高可信。',
+}
+
+export const architectureHighlights = [
+  {
+    icon: 'engineering',
+    title: 'Source of Truth',
+    summary: '根目录 `.mdc` 文件是唯一事实来源，避免文档副本与规则内容分叉。',
+    details: ['根目录规则文件', 'frontmatter 校验', '公共分类体系'],
+  },
+  {
+    icon: 'pathways',
+    title: 'Build Pipeline',
+    summary: 'Node 脚本负责解析、归类、生成 JSON 与规则页壳，把站点变成规则的可视化投影。',
+    details: ['validate-rules', 'build-rule-catalog', 'VitePress build'],
+  },
+  {
+    icon: 'resources',
+    title: 'Display Surfaces',
+    summary: '首页、学院、架构页和动态目录分工明确：一个负责论证，一个负责采用，一个负责检索。',
+    details: ['知识链路', '规则目录', 'OpenSpec 入口'],
+  },
+]
+
+export const researchSection = {
+  eyebrow: '研究与参考',
+  title: '把项目放进更广的规则工程语境：比较、引用、演进都要能被公开讨论。',
+  linkLabel: '进入研究章节',
+  linkHref: '/zh/research/related-work',
+}
+
+export const researchHighlights = [
+  {
+    icon: 'philosophy',
+    title: '相关工作',
+    href: '/zh/research/related-work',
+    summary: '将 Cursor Rules 与 Awesome Prompt、Copilot Instructions、Claude Code 技能体系等实践放在同一视野下比较。',
+  },
+  {
+    icon: 'languages',
+    title: '参考文献',
+    href: '/zh/research/references',
+    summary: '通过 HCI、software architecture、developer productivity 领域的论文与文章增强论证密度。',
+  },
+  {
+    icon: 'pathways',
+    title: '演进思考',
+    href: '/zh/research/evolution',
+    summary: '讨论从规则库到治理体系的未来路线：更少漂移、更强验证、更好的采用体验。',
+  },
+]
 
 export const pathwaysSection = {
   eyebrow: '采用路径图',
   title: '按团队成熟度选择起点，而不是被完整目录淹没。',
   linkLabel: '查看完整采用路径页',
   linkHref: '/pathways/',
-};
+}
 
 export const pathways = [
   {
@@ -80,7 +172,7 @@ export const pathways = [
     outcomes: ['同步站点内容', '控制规则漂移'],
     steps: ['用 OpenSpec 记录边界', '用脚本重建目录与 sitemap', '定期复核首页与规则一致性'],
   },
-];
+]
 
 export const pathwaysPage = {
   eyebrow: '采用路径总览',
@@ -89,7 +181,7 @@ export const pathwaysPage = {
     '这页承接首页的路径图，把不同团队阶段需要先看什么、再做什么、最后回到目录选哪些规则串成公开路径。',
   catalogLabel: '直接返回规则目录',
   catalogHref: '/?cat=general#catalog',
-};
+}
 
 export const resourcesSection = {
   eyebrow: '资源地图',
@@ -102,7 +194,7 @@ export const resourcesSection = {
     { label: 'AI 工具', href: './openspec/ai-tooling.html' },
     { label: '工作流', href: './openspec/workflow.html' },
   ],
-};
+}
 
 export const resourceGroups = [
   {
@@ -133,7 +225,7 @@ export const resourceGroups = [
     cta: '查看维护资源',
     items: ['build:catalog', 'rules.json 生成物', '仓库契约'],
   },
-];
+]
 
 export const resourcesPage = {
   eyebrow: '资源总览',
@@ -142,11 +234,11 @@ export const resourcesPage = {
     '资源页不重复 README，而是把采用过程中真正要跳转的入口组织起来，让访客知道哪里是公开导览，哪里是项目控制文档。',
   catalogLabel: '返回规则目录',
   catalogHref: '/?cat=engineering#catalog',
-};
+}
 
 export const catalogSection = {
   eyebrow: '规则目录',
-  title: '已经理解理念、选好路径、拿到资源后，再按主题筛选规则。',
+  title: '完成导读、学院与架构阅读后，再进入可执行规则目录。',
   resultLabel: '结果',
   stats: [
     { id: 'stat-rules', label: '规则', value: '--' },
@@ -159,7 +251,7 @@ export const catalogSection = {
     { href: '?cat=backend', label: '后端' },
   ],
   searchPlaceholder: '搜索规则、描述或文件名',
-  footer: 'README 负责快速开始，门户首页负责导览，规则目录负责筛选，OpenSpec 负责项目控制文档。',
+  footer: '首页负责论证项目定位，学院负责建立共识，架构页负责解释系统，目录页负责完成筛选与复制接入。',
   emptyState: {
     title: '没有匹配的规则',
     subtitle: '试试清空关键词，或者切换到其他分类。',
@@ -169,43 +261,43 @@ export const catalogSection = {
     { key: 'Esc', label: '清空' },
     { key: '1-8', label: '切换分类' },
   ],
-};
+}
 
 export const docsSection = {
   eyebrow: '技术文档',
-  title: '从快速上手到架构深度——系统掌握规则工程体系。',
+  title: '从项目导读到白皮书研究，形成完整的知识链。',
   items: [
     {
-      title: '指南',
+      title: '项目导读',
       badge: 'Guide',
       icon: 'pathways',
-      href: '/guide/',
-      summary: '从"为什么需要规则"到"如何编写 .mdc 文件"，提供完整的入门与进阶路径。',
-      tags: ['快速开始', '编写规则', '最佳实践'],
+      href: '/zh/guides/reading-map',
+      summary: '解释项目定位、阅读顺序与采用路径，帮助团队在进入目录前建立共识。',
+      tags: ['导读', '阅读地图', '采用'],
     },
     {
-      title: '架构',
+      title: '规则学院',
+      badge: 'Academy',
+      icon: 'philosophy',
+      href: '/zh/academy/rule-philosophy',
+      summary: '系统讲解规则设计哲学、策展模式与协作边界，强调长期可维护性。',
+      tags: ['方法论', '模式', '边界'],
+    },
+    {
+      title: '架构实验室',
       badge: 'Architecture',
       icon: 'engineering',
-      href: '/architecture/',
-      summary: '深入解析构建流水线、目录系统与 MDC 规范——附系统架构图与数据流图。',
-      tags: ['系统架构', 'Mermaid 图示', '设计决策'],
+      href: '/zh/architecture/system-overview',
+      summary: '拆解验证脚本、目录生成、数据契约与展示层，让站点具备架构展示价值。',
+      tags: ['架构', '数据流', '设计决策'],
     },
     {
-      title: '参考手册',
-      badge: 'Reference',
+      title: '研究与参考',
+      badge: 'Research',
       icon: 'languages',
-      href: '/reference/',
-      summary: '完整的 Frontmatter 字段说明、规则分类体系与规范速查表。',
-      tags: ['Frontmatter', '分类速查', '字段参考'],
-    },
-    {
-      title: '进阶',
-      badge: 'Advanced',
-      icon: 'philosophy',
-      href: '/advanced/',
-      summary: '相关工作比较、学术引用与演进思考——为深度研究者准备的知识层。',
-      tags: ['相关工作', '学术引用', '演进路线'],
+      href: '/zh/research/related-work',
+      summary: '通过相关工作、参考文献与演进思考，为规则库建立学术感与行业语境。',
+      tags: ['相关工作', '文献', '演进'],
     },
   ],
-};
+}
