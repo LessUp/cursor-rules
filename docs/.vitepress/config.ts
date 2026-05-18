@@ -14,6 +14,20 @@ export default withMermaid(defineConfig({
   title: 'Cursor Rules',
   description: 'Technical whitepaper and architecture showcase for the Cursor Rules library',
 
+  mermaid: {
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#3476f6',
+      primaryTextColor: '#162033',
+      primaryBorderColor: '#3476f6',
+      lineColor: '#71809d',
+      secondaryColor: '#f4f8ff',
+      tertiaryColor: '#e7efff',
+      fontSize: '14px',
+      fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+    },
+  },
+
   head: [
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'Cursor Rules - Technical Whitepaper' }],
@@ -26,11 +40,15 @@ export default withMermaid(defineConfig({
 
   srcExclude: [
     'superpowers/**',
-    'guide/**',
-    'architecture/**',
-    'reference/**',
-    'advanced/**',
-    'whitepaper/**',
+  ],
+
+  ignoreDeadLinks: [
+    // 旧目录中的链接指向已迁移的新路径
+    '/architecture/index',
+    '/architecture/design-decisions',
+    '/architecture/mdc-spec',
+    '/architecture/catalog-system',
+    '../architecture/system-overview',
   ],
 
   locales: {
@@ -45,10 +63,8 @@ export default withMermaid(defineConfig({
           { text: '首页', link: '/zh/' },
           { text: '项目导读', link: '/zh/guides/reading-map', activeMatch: '/zh/guides/' },
           { text: '规则学院', link: '/zh/academy/rule-philosophy', activeMatch: '/zh/academy/' },
-          { text: '系统架构', link: '/zh/architecture/system-overview', activeMatch: '/zh/architecture/' },
-          { text: '技术白皮书', link: '/zh/research/related-work', activeMatch: '/zh/research/' },
-          { text: '采用路径', link: '/zh/guides/reading-map', activeMatch: '/zh/guides/' },
-          { text: 'OpenSpec', link: '/openspec/architecture', activeMatch: '/openspec/' },
+          { text: '系统架构', link: '/zh/architecture/', activeMatch: '/zh/architecture/' },
+          { text: '研究参考', link: '/zh/research/', activeMatch: '/zh/research/' },
         ],
         sidebar: {
           '/zh/guides/': [
@@ -56,6 +72,16 @@ export default withMermaid(defineConfig({
               text: '项目导读',
               items: [
                 { text: '阅读地图', link: '/zh/guides/reading-map' },
+                { text: '快速开始', link: '/zh/guides/getting-started' },
+                { text: '为什么需要规则', link: '/zh/guides/why-rules' },
+                { text: '编写规则', link: '/zh/guides/writing-rules' },
+              ],
+            },
+            {
+              text: '参考手册',
+              items: [
+                { text: 'Frontmatter 字段', link: '/zh/guides/frontmatter-ref' },
+                { text: '规则分类', link: '/zh/guides/categories-ref' },
               ],
             },
           ],
@@ -71,14 +97,16 @@ export default withMermaid(defineConfig({
             {
               text: '系统架构',
               items: [
-                { text: '架构总览', link: '/zh/architecture/system-overview' },
+                { text: '架构总览', link: '/zh/architecture/' },
+                { text: '数据流架构', link: '/zh/architecture/data-flow' },
               ],
             },
           ],
           '/zh/research/': [
             {
-              text: '技术白皮书',
+              text: '研究与参考',
               items: [
+                { text: '研究索引', link: '/zh/research/' },
                 { text: '相关工作', link: '/zh/research/related-work' },
                 { text: '参考文献', link: '/zh/research/references' },
                 { text: '演进思考', link: '/zh/research/evolution' },
@@ -121,9 +149,8 @@ export default withMermaid(defineConfig({
           { text: 'Home', link: '/en/' },
           { text: 'Reading Map', link: '/en/guides/reading-map', activeMatch: '/en/guides/' },
           { text: 'Academy', link: '/en/academy/rule-philosophy', activeMatch: '/en/academy/' },
-          { text: 'Architecture', link: '/en/architecture/system-overview', activeMatch: '/en/architecture/' },
-          { text: 'Research', link: '/en/research/related-work', activeMatch: '/en/research/' },
-          { text: 'OpenSpec', link: '/openspec/architecture', activeMatch: '/openspec/' },
+          { text: 'Architecture', link: '/en/architecture/', activeMatch: '/en/architecture/' },
+          { text: 'Research', link: '/en/research/', activeMatch: '/en/research/' },
         ],
         sidebar: {
           '/en/guides/': [
@@ -146,7 +173,8 @@ export default withMermaid(defineConfig({
             {
               text: 'Architecture',
               items: [
-                { text: 'System Overview', link: '/en/architecture/system-overview' },
+                { text: 'System Overview', link: '/en/architecture/' },
+                { text: 'Data Flow', link: '/en/architecture/data-flow' },
               ],
             },
           ],
@@ -154,6 +182,7 @@ export default withMermaid(defineConfig({
             {
               text: 'Research',
               items: [
+                { text: 'Research Index', link: '/en/research/' },
                 { text: 'Related Work', link: '/en/research/related-work' },
                 { text: 'References', link: '/en/research/references' },
                 { text: 'Evolution', link: '/en/research/evolution' },

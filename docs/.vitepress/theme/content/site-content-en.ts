@@ -5,7 +5,7 @@ export const homeHero = {
     'The 26 curated `.mdc` rules are framed here as a governed rule library rather than a loose prompt collection. The site guides readers through thesis, curriculum, architecture, research, and then the live catalog.',
   actions: [
     { component: 'VPButton', label: 'Start with the reading map', href: '/en/guides/reading-map' },
-    { component: 'VPButton', label: 'Inspect the architecture', href: '/en/architecture/system-overview', theme: 'alt' },
+    { component: 'VPButton', label: 'Inspect the architecture', href: '/en/architecture/', theme: 'alt' },
     { component: 'a', label: 'Browse the rule catalog', href: '#catalog', theme: 'alt' },
   ],
 }
@@ -64,14 +64,14 @@ export const curriculumTracks = [
   {
     kicker: 'Architecture',
     title: 'System Overview',
-    href: '/en/architecture/system-overview',
+    href: '/en/architecture/',
     summary: 'Trace the path from root `.mdc` files to generated catalog artifacts and Pages output.',
     bullets: ['source of truth', 'pipeline', 'surfaces'],
   },
   {
     kicker: 'Research',
     title: 'Related Work',
-    href: '/en/research/related-work',
+    href: '/en/research/',
     summary: 'Place Cursor Rules in context against prompt collections, repo instruction files, and skills.',
     bullets: ['comparisons', 'references', 'evolution'],
   },
@@ -107,7 +107,7 @@ export const researchSection = {
   eyebrow: 'Research Layer',
   title: 'Tie the project to adjacent open-source practice, references, and future evolution.',
   linkLabel: 'Open the research section',
-  linkHref: '/en/research/related-work',
+  linkHref: '/en/research/',
 }
 
 export const researchHighlights = [

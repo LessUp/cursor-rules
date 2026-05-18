@@ -5,7 +5,7 @@ export const homeHero = {
     '26 条经过实践验证的 `.mdc` 规则不只是提示词集合，而是一套可审视的规则工程方法论。站点围绕项目导读、学院化解释、架构拆解、研究背书与动态目录五条主线组织，让严苛面试官和高级开发者都能快速判断它的设计密度。',
   actions: [
     { component: 'VPButton', label: '进入项目导读', href: '/zh/guides/reading-map' },
-    { component: 'VPButton', label: '查看系统架构', href: '/zh/architecture/system-overview', theme: 'alt' },
+    { component: 'VPButton', label: '查看系统架构', href: '/zh/architecture/', theme: 'alt' },
     { component: 'a', label: '浏览规则目录', href: '#catalog', theme: 'alt' },
   ],
 }
@@ -51,7 +51,7 @@ export const curriculumTracks = [
     kicker: 'Guide',
     title: '项目导读',
     href: '/zh/guides/reading-map',
-    summary: '回答“先看什么、后看什么、为什么这套规则值得采用”。',
+    summary: '回答”先看什么、后看什么、为什么这套规则值得采用”。',
     bullets: ['定位', '采用顺序', '阅读地图'],
   },
   {
@@ -64,14 +64,14 @@ export const curriculumTracks = [
   {
     kicker: 'Architecture',
     title: '系统架构',
-    href: '/zh/architecture/system-overview',
+    href: '/zh/architecture/',
     summary: '展开规则来源、验证脚本、目录生成与展示层之间的数据链路。',
     bullets: ['数据流', '生成物', '契约'],
   },
   {
     kicker: 'Research',
     title: '研究与背书',
-    href: '/zh/research/related-work',
+    href: '/zh/research/',
     summary: '用相关开源项目、引用文献与演进思考支撑项目说服力。',
     bullets: ['相关工作', '参考文献', '演进路线'],
   },
@@ -107,7 +107,7 @@ export const researchSection = {
   eyebrow: '研究与参考',
   title: '把项目放进更广的规则工程语境：比较、引用、演进都要能被公开讨论。',
   linkLabel: '进入研究章节',
-  linkHref: '/zh/research/related-work',
+  linkHref: '/zh/research/',
 }
 
 export const researchHighlights = [
@@ -287,7 +287,7 @@ export const docsSection = {
       title: '架构实验室',
       badge: 'Architecture',
       icon: 'engineering',
-      href: '/zh/architecture/system-overview',
+      href: '/zh/architecture/',
       summary: '拆解验证脚本、目录生成、数据契约与展示层，让站点具备架构展示价值。',
       tags: ['架构', '数据流', '设计决策'],
     },
@@ -295,7 +295,7 @@ export const docsSection = {
       title: '研究与参考',
       badge: 'Research',
       icon: 'languages',
-      href: '/zh/research/related-work',
+      href: '/zh/research/',
       summary: '通过相关工作、参考文献与演进思考，为规则库建立学术感与行业语境。',
       tags: ['相关工作', '文献', '演进'],
     },
